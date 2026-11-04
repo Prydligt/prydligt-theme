@@ -1,5 +1,8 @@
 # Ändringslogg
 
+## v1.1.0 – 2026-11-05
+- Antalsknappar − / + i varukorgen med automatisk uppdatering; minus blir papperskorg vid 1.
+
 ## v1.0.0 – 2026-11-05
 - Första versionen av master-CSS:en: kategori, produktsida, kassa, startsida,
   informationssidor, sidfot, varukorgsrutan och köpknapp i listor.

@@ -152,3 +152,130 @@
   // För test: window.prydligtTimer.state()
   window.prydligtTimer = { state: state, isShipDay: isShipDay, holidays: holidays };
 })();
+
+/*!
+ * Prydligt – antalsknappar i varukorgen:  [ − ]  2  [ + ]
+ * Ändrar antalet och uppdaterar varukorgen direkt (Abicarts egen uppdatera-knapp
+ * trycks i bakgrunden). Vid antal 1 blir minus en papperskorg som tar bort varan.
+ */
+(function () {
+  'use strict';
+
+  var DELAY = 450;   // ms att vänta efter sista klicket innan varukorgen uppdateras
+
+  var L = {
+    sv: { minus: 'Minska antal', plus: 'Öka antal', remove: 'Ta bort' },
+    nb: { minus: 'Reduser antall', plus: 'Øk antall', remove: 'Fjern' },
+    da: { minus: 'Formindsk antal', plus: 'Forøg antal', remove: 'Fjern' },
+    fi: { minus: 'Vähennä', plus: 'Lisää', remove: 'Poista' },
+    de: { minus: 'Menge verringern', plus: 'Menge erhöhen', remove: 'Entfernen' },
+    nl: { minus: 'Aantal verlagen', plus: 'Aantal verhogen', remove: 'Verwijderen' }
+  };
+  function t() {
+    var l = (document.documentElement.getAttribute('lang') || 'sv').toLowerCase().slice(0, 2);
+    if (l === 'no' || l === 'nn') l = 'nb';
+    return L[l] || L.sv;
+  }
+
+  var ICON_MINUS = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>';
+  var ICON_PLUS  = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14M12 5v14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>';
+  var ICON_TRASH = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>';
+
+  // Sätt värdet så att Abicarts React-komponent märker ändringen
+  var setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set;
+  function setValue(input, v) {
+    setter.call(input, String(v));
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+
+  function refreshButton(box) {
+    var btns = box.querySelectorAll('button:not(.p-qty__btn)');
+    return btns.length ? btns[btns.length - 1] : null;
+  }
+  function removeButton(box) {
+    var item = box.closest('.tws-opc-cart--item');
+    return item ? item.querySelector('.tws-opc-cart--item-remove-action') : null;
+  }
+
+  function sync(box) {
+    var input = box.querySelector('input[type="number"]');
+    var minus = box.querySelector('.p-qty__minus');
+    if (!input || !minus) return;
+    var v = parseInt(input.value, 10) || 1;
+    var atOne = v <= 1;
+    if (minus.__atOne !== atOne) {
+      minus.innerHTML = atOne ? ICON_TRASH : ICON_MINUS;
+      minus.setAttribute('aria-label', atOne ? t().remove : t().minus);
+      minus.classList.toggle('p-qty__minus--remove', atOne);
+      minus.__atOne = atOne;
+    }
+  }
+
+  function scheduleRefresh(box) {
+    clearTimeout(box.__pTimer);
+    box.__pTimer = setTimeout(function () {
+      var r = refreshButton(box);
+      if (r) r.click();
+    }, DELAY);
+  }
+
+  function enhance(box) {
+    if (box.__pQty) return;
+    var input = box.querySelector('input[type="number"]');
+    if (!input) return;
+    box.__pQty = true;
+    box.classList.add('p-qty');
+
+    var minus = document.createElement('button');
+    minus.type = 'button';
+    minus.className = 'p-qty__btn p-qty__minus';
+    var plus = document.createElement('button');
+    plus.type = 'button';
+    plus.className = 'p-qty__btn p-qty__plus';
+    plus.innerHTML = ICON_PLUS;
+    plus.setAttribute('aria-label', t().plus);
+
+    input.insertAdjacentElement('beforebegin', minus);
+    input.insertAdjacentElement('afterend', plus);
+    input.setAttribute('inputmode', 'numeric');
+
+    minus.addEventListener('click', function (e) {
+      e.preventDefault();
+      var v = parseInt(input.value, 10) || 1;
+      if (v <= 1) {
+        var rm = removeButton(box);
+        if (rm) rm.click();
+        return;
+      }
+      setValue(input, v - 1); sync(box); scheduleRefresh(box);
+    });
+    plus.addEventListener('click', function (e) {
+      e.preventDefault();
+      var v = parseInt(input.value, 10) || 0;
+      var max = parseInt(input.getAttribute('max'), 10);
+      if (max && v >= max) return;
+      setValue(input, v + 1); sync(box); scheduleRefresh(box);
+    });
+    // Skriver kunden en siffra själv uppdateras varukorgen också automatiskt
+    input.addEventListener('change', function (e) { if (e.isTrusted) { sync(box); scheduleRefresh(box); } });
+    input.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); sync(box); scheduleRefresh(box); } });
+
+    sync(box);
+  }
+
+  function scan() {
+    var boxes = document.querySelectorAll('.tws-opc-cart--item-info-quantity');
+    for (var i = 0; i < boxes.length; i++) {
+      if (!boxes[i].__pQty || !boxes[i].querySelector('.p-qty__minus')) { boxes[i].__pQty = false; enhance(boxes[i]); }
+      else sync(boxes[i]);
+    }
+  }
+
+  function start() {
+    scan();
+    new MutationObserver(function () { scan(); }).observe(document.body, { childList: true, subtree: true });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
+})();

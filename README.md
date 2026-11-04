@@ -26,6 +26,11 @@ Laddas i Abicart där egen kod kan läggas in före `</body>`:
 <script src="https://cdn.jsdelivr.net/gh/Prydligt/prydligt-theme@v1.0.0/prydligt-leveranstimer.js" defer></script>
 ```
 
+## Antalsknappar i varukorgen
+
+Samma JS-fil ersätter Abicarts sifferfält + ⟳ med  − 1 +. Varukorgen uppdateras
+automatiskt efter klick; vid antal 1 blir minus en papperskorg som tar bort varan.
+
 ## Släppa en ny version
 
 1. Ändra `prydligt-master.css` och skriv vad som ändrats i `CHANGELOG.md`.

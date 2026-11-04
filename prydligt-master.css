@@ -1214,3 +1214,56 @@ body.article .p-ship-timer::before {
 }
 body.article .p-ship-timer strong { font-weight: 700; }
 body.article .p-ship-timer__time { font-variant-numeric: tabular-nums; color: var(--p-ok); }
+
+
+/* =====================================================================
+   13. ANTALSKNAPPAR I VARUKORGEN  [ − ] 2 [ + ]  (prydligt-leveranstimer.js)
+   ===================================================================== */
+body.brew .tws-opc-cart--item-quantity { width: auto !important; }
+body.brew .tws-opc-cart--item-info-quantity.p-qty {
+  display: inline-flex !important;
+  align-items: stretch;
+  border: 1px solid var(--p-field);
+  background: #fff;
+  height: 44px;
+}
+body.brew .p-qty > button:not(.p-qty__btn) { display: none !important; }   /* Abicarts uppdatera-knapp (⟳) – trycks i bakgrunden */
+body.brew .p-qty input[type="number"] {
+  width: 40px !important;
+  height: 42px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  text-align: center;
+  font-size: 16px !important;
+  font-weight: 600;
+  color: var(--p-ink) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  -moz-appearance: textfield;
+}
+body.brew .p-qty input[type="number"]::-webkit-outer-spin-button,
+body.brew .p-qty input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+body.brew .p-qty__btn {
+  width: 44px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--p-ink) !important;
+  cursor: pointer;
+  padding: 0 !important;
+  margin: 0 !important;
+  min-height: 0 !important;
+}
+body.brew .p-qty__btn:hover { background: var(--p-sand) !important; }
+body.brew .p-qty__minus--remove { color: var(--p-muted) !important; }
+/* Papperskorgen till höger behövs fortfarande på dator, men kan döljas på mobil där minus tar bort */
+@media (max-width: 767px) {
+  body.checkout .tws-opc-cart--item .tws-opc-cart--item-remove { display: none !important; }
+}
