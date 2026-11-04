@@ -1,0 +1,1216 @@
+/* =====================================================================
+   PRYDLIGT – MASTER-CSS (CRO-redesign, svart/beige, Noly-inspirerad)
+   ---------------------------------------------------------------------
+   Ersätter prydligt-kassa.css, prydligt-produktsida.css och
+   prydligt-kategorisida.css. Klistras in SIST i er egen CSS i Abicart.
+
+   Innehåll
+     0. Färger och mått (ändra här, så slår det igenom överallt)
+     1. Hela sajten: topprad, knappar, formulär, fokus
+     2. Produktkort (kategorisidor + "Andra köpte också" + "Du har besökt")
+     3. Kategorisidor            (body.articlegroup)
+     4. Produktsida              (body.article)
+     5. Kassa                    (body.checkout)
+     6. Startsida                (body.startpage)
+     7. Informationssidor        (body.custompage)
+     8. Sidfot                   (alla sidor)
+     9. "Lagd i varukorgen"-rutan (alla sidor)
+
+   CRO-principer som används
+     - Tydlig hierarki: pris och köpknapp är det mest synliga på varje sida
+     - En enda handlingsfärg (svart) för allt man ska klicka på
+     - Förtroende (öppet köp, frakt, betyg) placerat vid köpknappen och i kassan
+     - Mindre brus: art.nr, momsrader, kolumnrubriker, "Töm varukorg" bort
+     - Avskärmad kassa: ingen meny eller sidomeny som lockar bort kunden
+     - Mobil först: fast köpknapp, 44px+ klickytor, 16px i fält (ingen iOS-zoom)
+   ===================================================================== */
+
+
+/* =====================================================================
+   0. FÄRGER OCH MÅTT
+   ===================================================================== */
+body.brew {
+  --p-ink: #111111;      /* svart – handlingsfärg och text */
+  --p-muted: #5f6368;    /* grå text (klarar kontrastkrav) */
+  --p-sand: #f5f3ef;     /* beige yta för bilder och kort */
+  --p-line: #e6e3dd;     /* tunna linjer */
+  --p-field: #c9c5bc;    /* ramar på fält och rutor */
+  --p-ok: #1e7f4f;       /* grön lagerstatus */
+  --p-rek: "Rek. pris ";  /* etikett före ordinarie pris (per språk nedan) */
+  --p-shop: "Handla nu";  /* knapptext på startsidans bildrutor (per språk nedan) */
+}
+
+/* Samma tema används på flera språk: texterna som CSS:en skriver ut översätts här */
+html:lang(sv) body.brew { --p-rek: "Rek. pris ";   --p-shop: "Handla nu"; }
+html:lang(nb) body.brew,
+html:lang(no) body.brew { --p-rek: "Veil. pris ";  --p-shop: "Handle n\0000E5"; }
+html:lang(da) body.brew { --p-rek: "Vejl. pris ";  --p-shop: "Shop nu"; }
+html:lang(fi) body.brew { --p-rek: "Norm. ";       --p-shop: "Osta nyt"; }
+html:lang(de) body.brew { --p-rek: "Reg. Preis ";  --p-shop: "Jetzt shoppen"; }
+html:lang(nl) body.brew { --p-rek: "Norm. ";       --p-shop: "Shop nu"; }
+html:lang(pl) body.brew { --p-rek: "Cena reg. ";   --p-shop: "Kup teraz"; }
+html:lang(fr) body.brew { --p-rek: "R\0000E9g. ";        --p-shop: "Acheter"; }
+
+
+/* =====================================================================
+   1. HELA SAJTEN
+   ===================================================================== */
+
+/* Toppraden med fri frakt / leverans: svart, centrerad, tydlig */
+body.brew .brew--top-bar {
+  background: var(--p-ink) !important;
+  box-shadow: none !important;
+}
+body.brew .brew--top-bar,
+body.brew .brew--top-bar a,
+body.brew .brew--top-bar .tws-audience-selector--audience-button,
+body.brew .brew--top-bar .tws-unique-selling-points--text {
+  color: #fff !important;
+}
+body.brew .brew--top-bar .tws-unique-selling-points li {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+body.brew .brew--top-bar .tws-accept-cookies--icon { filter: invert(1); }
+
+/* Alla primärknappar svarta och fyrkantiga (köp, lägg till, rabattkod …) */
+body.brew .btn-primary {
+  background: var(--p-ink) !important;
+  border-color: var(--p-ink) !important;
+  color: #fff !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+body.brew .btn-primary:hover,
+body.brew .btn-primary:focus { background: #000 !important; opacity: .9; }
+
+/* Tydlig fokusmarkering för tangentbord (tillgänglighet) */
+body.brew a:focus-visible,
+body.brew button:focus-visible,
+body.brew input:focus-visible {
+  outline: 2px solid var(--p-ink) !important;
+  outline-offset: 2px;
+}
+
+/* Mobil: 16px i alla fält så att iPhone inte zoomar in när man skriver */
+@media (max-width: 767px) {
+  body.brew input[type="text"],
+  body.brew input[type="email"],
+  body.brew input[type="tel"],
+  body.brew input[type="number"],
+  body.brew input[type="search"],
+  body.brew select { font-size: 16px !important; }
+}
+
+/* Rabattetiketter (-81 %) överallt: svarta och fyrkantiga */
+body.brew .tws-article-labels--special-offer .tws-article-labels--label-text {
+  background: var(--p-ink) !important;
+  color: #fff !important;
+  border-radius: 0 !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.04em;
+  padding: 6px 10px !important;
+}
+
+/* Förtroendepunkter som svart checklista (produktsida och kassa) */
+body.brew .slot--unique-selling-points li,
+body.brew .slot--checkout-cart-usps li {
+  position: relative;
+  padding: 6px 0 6px 28px !important;
+  font-size: 15px !important;
+  line-height: 1.35;
+  color: var(--p-ink) !important;
+  list-style: none;
+}
+body.brew .slot--unique-selling-points li .tws-unique-selling-points--icon,
+body.brew .slot--checkout-cart-usps li .tws-unique-selling-points--icon { display: none !important; }
+body.brew .slot--unique-selling-points li::before,
+body.brew .slot--checkout-cart-usps li::before {
+  content: "";
+  position: absolute; left: 2px; top: 9px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--p-ink);
+}
+body.brew .slot--unique-selling-points li::after,
+body.brew .slot--checkout-cart-usps li::after {
+  content: "";
+  position: absolute; left: 7px; top: 12px;
+  width: 4px; height: 8px;
+  border: solid #fff; border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+body.brew .slot--unique-selling-points ul,
+body.brew .slot--checkout-cart-usps ul { margin: 0 !important; padding: 0 !important; }
+
+
+/* Sidomeny och mobilhuvud: helt svarta */
+body.brew .brew--sidebar,
+body.brew .brew--sidebar-wrapper,
+body.brew .brew--sidebar-header,
+body.brew .brew--sidebar-content,
+body.brew .brew--header,
+body.brew .slot--header-search { background: var(--p-ink) !important; }
+
+/* "Mest populära" i sidomenyn: ljus text på svart */
+body.brew .brew--sidebar .tws-article-list--list .thumbnail,
+body.brew .brew--sidebar .tws-article-list--list .tws-list--list-item {
+  background: transparent !important;
+  border-color: #2a2a2a !important;
+  box-shadow: none !important;
+}
+body.brew .brew--sidebar .tws-article-list--list .tws-article-list--article-name,
+body.brew .brew--sidebar .tws-article-list--list .tws-article-list--article-name a,
+body.brew .brew--sidebar .tws-article-list--list .twsPriceCurrent,
+body.brew .brew--sidebar .tws-util-heading--heading { color: #fff !important; }
+body.brew .brew--sidebar .tws-article-list--list .twsPriceRegular { color: #a9a9a9 !important; }
+body.brew .brew--sidebar .tws-article-list--list .tws-img--wrapper { background: #fff !important; }
+body.brew .brew--sidebar .tws-article-labels--special-offer .tws-article-labels--label-text {
+  background: #fff !important;
+  color: var(--p-ink) !important;
+}
+
+
+/* =====================================================================
+   2. PRODUKTKORT – samma kort överallt där produkter listas
+   ===================================================================== */
+body.brew .tws-article-list--list .tws-list--grid-item .thumbnail {
+  background: var(--p-sand) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 12px 12px 16px 12px !important;
+  height: 100%;
+  position: relative;
+}
+/* Bilden: vit bildbakgrund smälter in i beige */
+body.brew .tws-article-list--list .tws-list--grid-item .tws-article-list--grid-item-link,
+body.brew .tws-article-list--list .tws-list--grid-item .tws-article-list--product-image,
+body.brew .tws-article-list--list .tws-list--grid-item .tws-article-list--product-image .tws-img--wrapper {
+  background: var(--p-sand) !important;
+  border: 0 !important;
+}
+body.brew .tws-article-list--list .tws-list--grid-item .tws-article-list--product-image img { mix-blend-mode: multiply; }
+
+/* Text under bilden */
+body.brew .tws-article-list--list .tws-list--grid-item .caption {
+  padding: 14px 0 0 0 !important;
+  text-align: left !important;
+}
+body.brew .tws-article-list--list .tws-list--grid-item .tws-article-list--article-name h2,
+body.brew .tws-article-list--list .tws-list--grid-item .tws-article-list--article-name a {
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  line-height: 1.25 !important;
+  color: var(--p-ink) !important;
+  text-decoration: none !important;
+  margin: 0 !important;
+}
+body.brew .tws-article-list--list .tws-list--grid-item .tws-article-list--article-name h2 {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.5em;
+  max-height: 2.5em;   /* reserv om temat stör line-clamp: max två rader */
+}
+
+/* Pris: stort svart pris först, "Rek. pris" under utan överstrykning */
+body.brew .tws-article-list--list .tws-list--grid-item .tws-article-list--price { margin-top: 10px !important; }
+body.brew .tws-article-list--list .tws-list--grid-item .tws-article-list--price .tws-api-price {
+  display: flex !important;
+  flex-direction: column-reverse;
+  align-items: flex-start;
+  gap: 1px;
+}
+body.brew .tws-article-list--list .tws-list--grid-item .tws-article-list--price .tws-api--price-current.twsPriceCurrent {
+  color: var(--p-ink) !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  line-height: 1.1;
+}
+body.brew .tws-article-list--list .tws-list--grid-item .tws-article-list--price .tws-api--price-regular {
+  text-decoration: none !important;
+  color: var(--p-muted) !important;
+  font-size: 13px !important;
+}
+body.brew .tws-article-list--list .tws-list--grid-item .tws-article-list--price .tws-api--price-regular::before {
+  content: var(--p-rek) !important;
+}
+@media (min-width: 768px) {
+  body.brew .tws-article-list--list .tws-list--grid-item:hover .tws-article-list--article-name a { text-decoration: underline !important; }
+}
+
+/* Rubriker för "Andra köpte också" / "Produkter du besökt" */
+body.brew .brew--article-footer .tws-articles-two--heading .tws-util-heading--heading,
+body.brew .slot--checkout-related .tws-articles-two--heading .tws-util-heading--heading {
+  font-size: 24px !important;
+  font-weight: 600 !important;
+  text-align: left !important;
+  color: var(--p-ink) !important;
+}
+
+
+/* =====================================================================
+   3. KATEGORISIDOR
+   ===================================================================== */
+
+/* Rubrik: vänsterställd och stor */
+body.articlegroup .tws-articlegroup-list--top-heading .tws-util-heading--heading {
+  font-size: 28px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.015em !important;
+  text-align: left !important;
+  color: var(--p-ink) !important;
+  margin: 6px 0 4px 0 !important;
+}
+body.articlegroup .tws-articlegroup-list--info > div { margin-left: 0 !important; width: 100% !important; }
+
+/* Underkategorier som knappar i en rad (snabbare att hitta rätt) */
+body.articlegroup .slot--article-groups .tws-list--type-grid {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0 4px 0;
+}
+body.articlegroup .slot--article-groups .tws-list--grid-item {
+  width: auto !important; max-width: none !important; flex-basis: auto !important;
+  float: none !important; padding: 0 !important; margin: 0 !important;
+}
+body.articlegroup .slot--article-groups .thumbnail {
+  border: 0 !important; border-radius: 0 !important; box-shadow: none !important;
+  background: var(--p-sand) !important; margin: 0 !important; padding: 0 !important;
+}
+body.articlegroup .slot--article-groups .tws-articlegroup-list--grid-img-wrapper { display: none !important; }
+body.articlegroup .slot--article-groups .caption { padding: 0 !important; }
+body.articlegroup .slot--article-groups .caption h2 { margin: 0 !important; }
+body.articlegroup .slot--article-groups .caption a {
+  display: block;
+  padding: 12px 18px;
+  min-height: 44px;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  color: var(--p-ink) !important;
+  text-decoration: none !important;
+}
+
+/* Sortering och visning: fyrkantiga, 44px höga */
+body.articlegroup .tws-list-controls .btn {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border-color: var(--p-field) !important;
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Rutnät: 2 kolumner på mobil, 3 på dator (större bilder säljer bättre) */
+@media (max-width: 767px) {
+  body.articlegroup .slot--articles .tws-list--grid-item { margin-bottom: 14px !important; }
+  body.articlegroup .slot--articles .tws-list--grid-item .thumbnail { padding: 10px 10px 14px 10px !important; }
+}
+@media (min-width: 992px) {
+  body.articlegroup .slot--articles .tws-list--grid-item {
+    max-width: calc(33.333% - 10px) !important;
+    flex-basis: calc(33.333% - 10px) !important;
+    width: calc(33.333% - 10px) !important;
+    margin-bottom: 20px !important;
+  }
+  body.articlegroup .slot--articles .tws-list--grid-item .thumbnail { padding: 20px 20px 22px 20px !important; }
+  body.articlegroup .slot--articles .tws-article-list--article-name h2,
+  body.articlegroup .slot--articles .tws-article-list--article-name a { font-size: 19px !important; }
+  body.articlegroup .slot--articles .tws-article-list--price .tws-api--price-current.twsPriceCurrent { font-size: 26px !important; }
+  body.articlegroup .slot--articles .tws-article-list--price .tws-api--price-regular { font-size: 14px !important; }
+  body.articlegroup .tws-articlegroup-list--top-heading .tws-util-heading--heading { font-size: 42px !important; }
+}
+
+
+/* =====================================================================
+   4. PRODUKTSIDA
+   ===================================================================== */
+
+/* Bilder på beige platta. Plattan ligger inne i bildspelet så att "multiply" fungerar */
+body.article .tws-article-images--current-image { background: var(--p-sand) !important; border: 0 !important; border-radius: 0 !important; }
+body.article .tws-article-images--slick-big .slick-slide > div,
+body.article .tws-article-images--slick-nav .slick-slide > div { background: var(--p-sand) !important; }
+body.article .tws-article-images .tws-img { border: 0 !important; background: transparent !important; }
+body.article .tws-article-images img { mix-blend-mode: multiply; }
+body.article .tws-article-images--slick-nav .slick-slide { padding: 0 4px !important; }
+
+/* Produktnamn */
+body.article .slot--article-name h1 {
+  font-size: 34px !important;
+  font-weight: 700 !important;
+  line-height: 1.12 !important;
+  letter-spacing: -0.015em;
+  color: var(--p-ink) !important;
+  margin: 0 0 12px 0 !important;
+}
+@media (max-width: 767px) {
+  body.article .slot--article-name h1 { font-size: 26px !important; }
+}
+
+/* Pris: stort svart pris, "Rek. pris" under utan överstrykning */
+body.article .slot--article-price .tws-article-price--price {
+  display: flex !important;
+  flex-direction: column-reverse;
+  align-items: flex-start;
+  gap: 2px;
+}
+body.article .slot--article-price .tws-article-price--price .twsPriceCurrent,
+body.article .slot--article-price .tws-api--price-current.tws-api--price-both-shown {
+  color: var(--p-ink) !important;
+  font-size: 34px !important;
+  font-weight: 700 !important;
+  line-height: 1.05;
+}
+body.article .slot--article-price .tws-api--price-regular {
+  text-decoration: none !important;
+  color: var(--p-muted) !important;
+  font-size: 15px !important;
+  margin: 0 !important;
+}
+body.article .slot--article-price .tws-api--price-regular::before { content: var(--p-rek) !important; }
+
+/* Lägsta pris senaste 30 dagarna – krävs när en sänkning (-%) visas. Diskret men synligt. */
+body.article .slot--article-price .tws-article-price--compare-at-price {
+  display: block !important;
+  margin-top: 6px;
+  font-size: 12px !important;
+  color: var(--p-muted) !important;
+}
+body.article .slot--article-price .tws-article-price--compare-at-price .tws-article-price--compare-at-price-title { display: inline !important; }
+body.article .slot--article-price .tws-article-price--compare-at-price .tws-api--price-current.twsPriceCurrent {
+  font-size: 12px !important; font-weight: 400 !important; color: var(--p-muted) !important; display: inline !important;
+}
+
+/* Lagerstatus: grön prick + text */
+body.article .tws-article-stock-shipping--wrapper { margin: 14px 0 0 0 !important; }
+/* Tomma platser mellan pris och lagerstatus ska inte ta plats */
+body.article .brew--article-right-col > div:empty,
+body.article .slot--article-introduction:has(.tws-article-introduction--read-more:only-child) { display: none !important; }
+body.article .slot--article-price { margin-bottom: 0 !important; }
+body.article .tws-article-stock-shipping--delivery-message {
+  font-size: 0 !important;
+  margin: 0 !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+body.article .tws-article-stock-shipping--delivery-message::before {
+  content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--p-ok); flex-shrink: 0;
+}
+body.article .tws-article-stock-shipping--delivery-message span {
+  font-size: 15px !important; font-weight: 500; color: var(--p-ok) !important; text-transform: lowercase;
+}
+body.article .tws-article-stock-shipping--delivery-message span::first-letter { text-transform: uppercase; }
+
+/* Köpknappen: det mest synliga på sidan */
+body.article .brew--buy-button-group { margin: 14px 0 0 0 !important; gap: 8px; }
+body.article .tws-article-buy-button-with-modal--buy-button {
+  background: var(--p-ink) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  height: 58px !important;
+  width: 100% !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: none !important;
+  clip-path: polygon(14px 0, 100% 0, 100% 100%, 0 100%, 0 14px);
+}
+body.article .slot--article-quantity .control-label { display: none !important; }
+body.article .slot--article-quantity .input-group .form-control,
+body.article .slot--article-quantity .input-group .btn {
+  height: 58px !important;
+  border-radius: 0 !important;
+  border-color: var(--p-field) !important;
+  box-shadow: none !important;
+  background: #fff !important;
+  color: var(--p-ink) !important;
+}
+body.article .slot--article-quantity .input-group .form-control { text-align: center; font-size: 16px !important; }
+
+/* Mobil: köpknappen ligger alltid fast längst ner */
+@media (max-width: 767px) {
+  body.article .brew--buy-button-group {
+    position: fixed !important;
+    left: 0; right: 0; bottom: 0;
+    z-index: 900;
+    margin: 0 !important;
+    background: #fff;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom)) 16px;
+    box-shadow: 0 -4px 14px rgba(0,0,0,.12);
+  }
+  body.article .slot--article-quantity .input-group .form-control,
+  body.article .slot--article-quantity .input-group .btn,
+  body.article .tws-article-buy-button-with-modal--buy-button { height: 52px !important; }
+  body.article { padding-bottom: 78px; }
+  /* "Till toppen"-knappen flyttas upp så den inte ligger över köpknappen */
+  body.article .brew--back-to-top { bottom: 92px !important; }
+}
+
+/* Förtroendepunkter direkt under köpknappen */
+body.article .slot--unique-selling-points .tws-unique-selling-points {
+  background: var(--p-sand) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 10px 16px !important;
+  margin: 16px 0 0 0 !important;
+}
+/* Temat lägger 25px luft ovanför listan – bort, så att rutan blir jämn */
+body.article .slot--unique-selling-points .tws-unique-selling-points--wrapper { margin: 0 !important; padding: 0 !important; }
+
+/* Beskrivning: lättläst */
+body.article .slot--article-description { border-top: 1px solid var(--p-line); padding-top: 22px; margin-top: 24px; }
+body.article .tws-article-description--heading { font-size: 22px !important; font-weight: 600 !important; margin: 0 0 6px 0 !important; }
+body.article .tws-article-description--article-number { font-size: 12px !important; color: var(--p-muted) !important; }
+body.article .tws-article-description--text { font-size: 16px !important; line-height: 1.6 !important; color: #2a2d31; max-width: 68ch; }
+body.article .tws-article-attributes ul,
+body.article .tws-article-attributes li { border-radius: 0 !important; border-color: var(--p-line) !important; }
+
+
+/* =====================================================================
+   5. KASSA
+   ===================================================================== */
+
+body.checkout { background: #fff; color: var(--p-ink); }
+
+/* Avskärmad kassa: ingen meny som lockar bort kunden (logga + "Fortsätt handla" finns kvar) */
+body.checkout .brew--sidebar .slot--sidebar,
+body.checkout .brew--header .brew--mobile-menu-button,
+body.checkout .brew--sidebar-header .brew--mobile-menu-button,
+body.checkout .brew--footer-mid-right,
+body.checkout .brew--footer-right { display: none !important; }
+
+/* Rubriker */
+body.checkout .tws-opc-cart--cart-heading,
+body.checkout .tws-cart-summary--header,
+body.checkout .tws-checkout--select-delivery-heading,
+body.checkout .tws-checkout--complete-heading {
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em;
+  color: var(--p-ink) !important;
+  margin: 0 0 14px 0 !important;
+}
+
+/* Bort med skuggor och "kort i kort" */
+body.checkout .tws-opc-cart--wrapper,
+body.checkout .opc-checkout--shortcuts,
+body.checkout .tws-checkout--select-delivery-list-wrapper,
+body.checkout .tws-cart-summary,
+body.checkout .tws-discount-field,
+body.checkout .slot--checkout-discount,
+body.checkout .slot--checkout-cart-usps,
+body.checkout .slot--checkout-cart-usps .tws-unique-selling-points {
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+body.checkout .slot--checkout-discount,
+body.checkout .slot--checkout-cart-usps { background: transparent !important; padding-left: 0 !important; padding-right: 0 !important; }
+body.checkout .tws-opc-cart--wrapper { padding: 4px 0 0 0 !important; background: transparent !important; }
+body.checkout .tws-opc-cart--heading { display: none !important; }
+
+/* Varukorgsrader */
+body.checkout .tws-opc-cart--rows .tws-opc-cart--item { border-bottom: 1px solid var(--p-line) !important; padding-top: 16px !important; margin: 0 !important; }
+body.checkout .tws-opc-cart--rows .tws-opc-cart--item:first-child { border-top: 1px solid var(--p-line); }
+body.checkout .tws-opc-cart--item-image .tws-img--wrapper { background: var(--p-sand); border: 0 !important; padding: 6px; }
+body.checkout .tws-opc-cart--item-image .tws-img,
+body.checkout .tws-opc-cart--item-image picture,
+body.checkout .tws-opc-cart--item-image img { border: 0 !important; mix-blend-mode: multiply; }
+body.checkout .tws-opc-cart--item-info-name a {
+  font-size: 16px !important; font-weight: 600 !important; line-height: 1.25; color: var(--p-ink) !important; text-decoration: none !important;
+}
+body.checkout .tws-opc-cart--item-info-artno,
+body.checkout .tws-opc-cart--item-info-deliveryInfo-label { display: none !important; }
+body.checkout .tws-opc-cart--item-info-deliveryInfo { margin-top: 4px; }
+body.checkout .tws-opc-cart--item-info-deliveryInfo-msg {
+  color: var(--p-ok) !important; font-size: 13px !important; font-weight: 500; text-transform: lowercase;
+}
+body.checkout .tws-opc-cart--item-info-deliveryInfo-msg::first-letter { text-transform: uppercase; }
+
+/* Radpris: bara "Rek. pris" + nytt pris, inga moms- och enhetsrader */
+body.checkout .tws-opc-cart--unit-costs .tws-opc-cart--uc-title,
+body.checkout .tws-opc-cart--unit-costs-vat,
+body.checkout .tws-opc-cart--unit-costs-total { display: none !important; }
+body.checkout .tws-opc-cart--unit-costs { margin: 6px 0 0 0 !important; padding: 0 !important; }
+body.checkout .tws-opc-cart--unit-costs .tws-api-price { display: flex !important; flex-direction: column-reverse; align-items: flex-start; }
+body.checkout .tws-opc-cart--unit-costs .twsPriceCurrent { font-size: 18px !important; font-weight: 700 !important; color: var(--p-ink) !important; }
+body.checkout .tws-opc-cart--unit-costs .twsPriceRegular {
+  font-size: 13px !important; color: var(--p-muted) !important; text-decoration: none !important;
+}
+body.checkout .tws-opc-cart--unit-costs .twsPriceRegular::before { content: var(--p-rek) !important; }
+
+/* Antal och ta bort */
+body.checkout .tws-opc-cart--item-info-quantity input[type="number"] {
+  height: 44px !important; border: 1px solid var(--p-field) !important; border-radius: 0 !important;
+  box-shadow: none !important; text-align: center; font-size: 16px !important; color: var(--p-ink);
+}
+body.checkout .tws-opc-cart--item-info-quantity button { border-radius: 0 !important; box-shadow: none !important; min-height: 44px; }
+body.checkout .tws-opc-cart--item .tws-opc-cart--item-remove-action {
+  border: 0 !important; background: transparent !important; box-shadow: none !important; color: var(--p-muted) !important;
+  min-width: 44px; min-height: 44px;
+}
+body.checkout .tws-opc-cart--remove-all-items-wrapper { display: none !important; }
+
+/* Sammanfattning: totalen är det tydligaste */
+body.checkout .tws-cart-summary { background: var(--p-sand) !important; padding: 18px 16px !important; }
+body.checkout .tws-cart-summary--wrapper { background: transparent !important; padding: 0 !important; box-shadow: none !important; }
+body.checkout .tws-cart-summary--items-count {
+  font-size: 13px; color: var(--p-muted) !important;
+  border-bottom: 1px solid var(--p-line) !important; padding-bottom: 10px !important; margin-bottom: 10px !important;
+}
+body.checkout .tws-cart-summary--value-secondary,
+body.checkout .tws-cart-summary--sum-row-vat-total { display: none !important; }
+body.checkout .tws-cart-summary--sum-row { border-top: 1px solid var(--p-ink) !important; margin-top: 10px !important; padding-top: 12px !important; }
+body.checkout .tws-cart-summary--sum-row .tws-cart-summary--name,
+body.checkout .tws-cart-summary--sum-row .twsPriceCurrent { font-size: 22px !important; font-weight: 700 !important; color: var(--p-ink) !important; }
+body.checkout .tws-cart-summary--sum-row-vat .tws-cart-summary--name,
+body.checkout .tws-cart-summary--sum-row-vat .twsPriceCurrent { font-size: 12px !important; color: var(--p-muted) !important; font-weight: 400 !important; }
+
+/* Mobil: fast totalrad längst ner (Abicarts egen), svart */
+body.checkout .tws-cart-summary--sticky-summary { background: var(--p-ink) !important; color: #fff !important; box-shadow: none !important; border: 0 !important; }
+body.checkout .tws-cart-summary--sticky-summary * { color: #fff !important; }
+
+/* Rabattkod: nedtonad länk (minskar avhopp för att leta koder) */
+body.checkout .tws-discount-field { background: transparent !important; padding: 10px 0 !important; }
+body.checkout .tws-discount-field--enter-discount-btn {
+  font-size: 14px !important; font-weight: 400 !important; color: var(--p-muted) !important;
+  text-decoration: underline !important; padding: 0 !important; min-height: 44px;
+}
+body.checkout .tws-discount-field--input { border-radius: 0 !important; height: 44px !important; border: 1px solid var(--p-field) !important; box-shadow: none !important; }
+body.checkout .tws-discount-field--add { height: 44px !important; }
+
+/* Förtroende i kassan */
+body.checkout .slot--checkout-cart-usps .tws-unique-selling-points {
+  background: #fff !important; border: 1px solid var(--p-line) !important; padding: 14px 16px !important;
+}
+
+/* Leveransland och leveranssätt */
+body.checkout .opc-checkout--shortcuts { background: transparent !important; padding: 0 !important; margin: 0 0 24px 0 !important; }
+body.checkout .opc-checkout--shortcuts .tws-checkout-shortcuts--button.btn-default {
+  border-radius: 0 !important; border-color: var(--p-field) !important; height: 48px !important; line-height: 48px !important; font-weight: 500 !important;
+}
+body.checkout .tws-checkout--select-delivery-list-wrapper { background: transparent !important; padding: 0 !important; }
+body.checkout .tws-checkout--delivery-method { border: 1px solid var(--p-field) !important; border-radius: 0 !important; padding: 14px !important; background: #fff; }
+body.checkout .tws-checkout--delivery-method-selected { border: 2px solid var(--p-ink) !important; }
+body.checkout .tws-checkout--delivery-method-check { border-right: 0 !important; }
+body.checkout .tws-checkout--delivery-method-selected .tws-checkout--delivery-method-check i {
+  background: var(--p-ink) !important; border-color: var(--p-ink) !important; color: #fff !important;
+}
+body.checkout .tws-checkout--delivery-method-title { font-weight: 600 !important; font-size: 15px !important; }
+body.checkout .tws-checkout--delivery-method-description { color: var(--p-muted) !important; }
+
+/* Betalrutan (Klarna/Kustom) får hela bredden */
+body.checkout .tws-checkout--checkout-container,
+body.checkout .tws-checkout--html { background: transparent !important; box-shadow: none !important; padding: 0 !important; border: 0 !important; }
+
+@media (max-width: 767px) {
+  body.checkout .brew--content { padding-left: 16px !important; padding-right: 16px !important; }
+  body.checkout .tws-opc-cart--cart-heading,
+  body.checkout .tws-cart-summary--header,
+  body.checkout .tws-checkout--select-delivery-heading,
+  body.checkout .tws-checkout--complete-heading { font-size: 22px !important; }
+}
+
+
+/* =====================================================================
+   6. STARTSIDA
+   ===================================================================== */
+
+/* Ordning: bild → kategorier → produkter → nyhetsbrev → välkomsttext.
+   Produkterna kommer före den långa texten, så kunden ser varor direkt. */
+body.startpage .brew--start-page .brew--component-container {
+  display: flex !important;
+  flex-direction: column;
+  gap: 12px;
+}
+body.startpage .brew--start-page .brew--component-container > .tws-container--tws-content-box     { order: 1; }
+body.startpage .brew--start-page .brew--component-container > .tws-container--tws-content-box-2x  { order: 2; }
+body.startpage .brew--start-page .brew--component-container > .tws-container--tws-articles-two    { order: 3; margin-top: 28px; }
+body.startpage .brew--start-page .brew--component-container > .tws-container--tws-custom-html:not(.introduction) { order: 4; }
+body.startpage .brew--start-page .brew--component-container > .newsletter                         { order: 5; }
+body.startpage .brew--start-page .brew--component-container > .introduction                       { order: 6; }
+
+/* Stora bildrutor: mörk toning nertill så att texten alltid går att läsa */
+body.startpage .tws-content-box--with-image .tws-content-box--inner-wrapper {
+  background: linear-gradient(to top, rgba(0,0,0,.55) 0%, rgba(0,0,0,.15) 45%, rgba(0,0,0,0) 70%);
+}
+body.startpage .tws-content-box--with-image .tws-content-box--table {
+  text-decoration: none !important;
+}
+body.startpage .tws-content-box--with-image .tws-content-box--cell {
+  vertical-align: bottom !important;
+  text-align: center !important;
+  padding: 0 20px 28px 20px !important;
+}
+body.startpage .tws-content-box--with-image .tws-util-heading--heading {
+  color: #fff !important;
+  text-shadow: none !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
+  text-transform: none;
+  margin: 0 0 12px 0 !important;
+  line-height: 1.05 !important;
+}
+/* Huvudbilden: rubrik + knapp */
+body.startpage .tws-container--tws-content-box .tws-util-heading--heading { font-size: 56px !important; }
+/* Kategorirutorna */
+body.startpage .tws-content-box-2x .tws-util-heading--heading { font-size: 28px !important; }
+
+/* "Handla nu"-knapp på varje bildruta (hela rutan är redan klickbar) */
+body.startpage .tws-content-box--with-image .wrappContent::after {
+  content: var(--p-shop) "  \002192";
+  display: inline-block;
+  background: #fff;
+  color: var(--p-ink);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1;
+  padding: 15px 22px;
+  clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px);
+}
+body.startpage .tws-content-box--with-image:hover .wrappContent::after { background: var(--p-sand); }
+body.startpage .tws-content-box--with-image img { transition: transform .5s ease; }
+body.startpage .tws-content-box--with-image:hover img { transform: scale(1.03); }
+
+/* Kategorirutorna: liten luft mellan dem */
+body.startpage .tws-content-box-2x { margin-left: -6px !important; margin-right: -6px !important; }
+body.startpage .tws-content-box-2x--box { padding-left: 6px !important; padding-right: 6px !important; margin-bottom: 12px; }
+
+@media (max-width: 767px) {
+  body.startpage .tws-container--tws-content-box .tws-util-heading--heading { font-size: 36px !important; }
+  body.startpage .tws-content-box-2x .tws-util-heading--heading { font-size: 16px !important; letter-spacing: 0 !important; }
+  body.startpage .tws-content-box--with-image .tws-content-box--cell { padding: 0 18px 18px 18px !important; }
+  /* Mobil: kategorierna två och två i stället för en per rad */
+  body.startpage .tws-content-box-2x { display: flex !important; flex-wrap: nowrap; }
+  body.startpage .tws-content-box-2x--box { width: 50% !important; float: none !important; }
+  body.startpage .tws-content-box-2x .wrappContent::after { padding: 12px 12px; font-size: 11px; }
+  /* Huvudbilden lite högre på mobil så att den känns som en riktig startbild */
+  body.startpage .tws-container--tws-content-box .tws-img--container,
+  body.startpage .tws-container--tws-content-box .tws-content-box--inner-wrapper { padding-bottom: 110% !important; }
+}
+
+/* Produktrubrik ("NYHETER") */
+body.startpage .tws-articles-two--heading .tws-util-heading--heading {
+  font-size: 30px !important;
+  font-weight: 700 !important;
+  text-align: left !important;
+  text-transform: none !important;
+  letter-spacing: -0.01em !important;
+  color: var(--p-ink) !important;
+  margin: 0 0 16px 0 !important;
+}
+body.startpage .tws-articles-two--heading .tws-util-heading--heading::first-letter { text-transform: uppercase; }
+@media (min-width: 992px) {
+  body.startpage .tws-container--tws-articles-two .tws-article-list--article-name h2,
+  body.startpage .tws-container--tws-articles-two .tws-article-list--article-name a { font-size: 17px !important; }
+}
+
+/* "Se fler nyheter": tydlig knapp med ram */
+body.startpage .brew--start-page .brew--component-container > .tws-container--tws-custom-html:not(.introduction) a {
+  display: inline-block;
+  border: 2px solid var(--p-ink) !important;
+  background: #fff !important;
+  color: var(--p-ink) !important;
+  padding: 15px 36px !important;
+  min-height: 52px;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none !important;
+  border-radius: 0 !important;
+  margin: 8px 0 24px 0;
+}
+body.startpage .brew--start-page .brew--component-container > .tws-container--tws-custom-html:not(.introduction) a:hover {
+  background: var(--p-ink) !important; color: #fff !important;
+}
+
+/* Nyhetsbrev: beige ruta, stort fält och svart knapp */
+body.startpage .newsletter {
+  background: var(--p-sand) !important;
+  padding: 36px 24px !important;
+  text-align: center;
+}
+body.startpage .newsletter .tws-newsletter-subscribe--html-before {
+  font-size: 18px !important;
+  font-weight: 600;
+  color: var(--p-ink) !important;
+  margin-bottom: 16px;
+}
+body.startpage .newsletter form {
+  display: flex !important;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: nowrap;
+  max-width: 520px;
+  margin: 0 auto;
+}
+body.startpage .newsletter form .form-group { flex: 1; margin: 0 !important; }
+body.startpage .newsletter input[type="email"],
+body.startpage .newsletter input[type="text"] {
+  width: 100% !important;
+  height: 52px !important;
+  border: 1px solid var(--p-field) !important;
+  border-right: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  font-size: 16px !important;
+  background: #fff !important;
+}
+body.startpage .newsletter button,
+body.startpage .newsletter .btn {
+  height: 52px !important;
+  padding: 0 24px !important;
+  background: var(--p-ink) !important;
+  color: #fff !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Välkomsttexten (SEO): lugnare, vänsterställd och smalare */
+body.startpage .introduction {
+  max-width: 760px;
+  margin: 24px auto 0 auto !important;
+  text-align: left !important;
+  padding: 0 4px;
+}
+body.startpage .introduction h1 { font-size: 24px !important; font-weight: 700 !important; text-align: left !important; }
+body.startpage .introduction p,
+body.startpage .introduction span {
+  font-size: 15px !important;
+  line-height: 1.65 !important;
+  color: var(--p-muted) !important;
+  text-align: left !important;
+}
+
+
+/* =====================================================================
+   7. INFORMATIONSSIDOR (Villkor & info, köpinformation m.fl.)
+   ===================================================================== */
+body.custompage .tws-custom-page {
+  max-width: 760px;
+  color: var(--p-ink);
+}
+body.custompage .tws-custom-page h1,
+body.custompage .tws-custom-page h1 * {
+  font-size: 34px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.015em;
+  text-transform: none;
+  line-height: 1.1;
+  margin: 8px 0 16px 0 !important;
+}
+body.custompage .tws-custom-page h2 { font-size: 22px !important; font-weight: 700 !important; margin: 28px 0 10px 0 !important; }
+body.custompage .tws-custom-page h3 { font-size: 18px !important; font-weight: 700 !important; }
+body.custompage .tws-custom-page p,
+body.custompage .tws-custom-page p span,
+body.custompage .tws-custom-page li {
+  font-size: 16px !important;
+  line-height: 1.65 !important;
+}
+body.custompage .tws-custom-page > .customPageItem p > span br:first-child { display: none; }
+
+/* Länklistor blir tydliga klickbara rader med pil */
+body.custompage .tws-custom-page ul {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 18px 0 0 0 !important;
+  border-top: 1px solid var(--p-line);
+}
+body.custompage .tws-custom-page ul li {
+  border-bottom: 1px solid var(--p-line);
+  margin: 0 !important;
+  padding: 0 !important;
+}
+body.custompage .tws-custom-page ul li span { font-size: inherit !important; }
+body.custompage .tws-custom-page ul li a {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 60px;
+  padding: 14px 6px !important;
+  font-size: 17px !important;
+  font-weight: 600 !important;
+  color: var(--p-ink) !important;
+  text-decoration: none !important;
+}
+body.custompage .tws-custom-page ul li a br { display: none; }
+body.custompage .tws-custom-page ul li a::after {
+  content: "\002192";
+  font-size: 20px;
+  font-weight: 400;
+  transition: transform .15s;
+}
+body.custompage .tws-custom-page ul li a:hover { background: var(--p-sand); }
+body.custompage .tws-custom-page ul li a:hover::after { transform: translateX(4px); }
+@media (max-width: 767px) {
+  body.custompage .tws-custom-page h1,
+  body.custompage .tws-custom-page h1 * { font-size: 28px !important; }
+}
+
+
+/* =====================================================================
+   8. SIDFOT (alla sidor)
+   ===================================================================== */
+body.brew .brew--footer {
+  background: var(--p-sand) !important;
+  box-shadow: none !important;
+  color: var(--p-ink) !important;
+  font-size: 14px;
+  margin-top: 64px !important;
+}
+body.brew .brew--footer a { color: var(--p-ink) !important; }
+body.brew .brew--footer a:hover { text-decoration: underline !important; }
+body.brew .brew--footer .tws-custom-html--content p:first-child,
+body.brew .brew--footer .tws-contact-info strong,
+body.brew .brew--footer h4 {
+  font-weight: 700 !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 12px !important;
+}
+body.brew .brew--footer .tws-custom-html--content p { margin: 0 0 10px 0 !important; }
+body.brew .brew--footer .brew--footer--brand-logos { border-top-color: var(--p-line) !important; }
+body.brew .brew--footer .tws-brand-logos--logo-image { mix-blend-mode: multiply; }
+body.brew .brew--footer .tws-social-icons-logo-image { filter: grayscale(1) contrast(1.2); }
+
+
+/* =====================================================================
+   9. "ARTIKELN LAGD I VARUKORG"-RUTAN
+   CRO: "Till kassan" är huvudknappen, "Fortsätt handla" är sekundär.
+   ===================================================================== */
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .modal-content {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25) !important;
+}
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .modal-header {
+  border-bottom: 1px solid var(--p-line) !important;
+  padding: 18px 20px !important;
+}
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .modal-title,
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .modal-header h4 {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: var(--p-ink) !important;
+}
+/* Bocken framför rubriken – ritad som bild, inte som tecken, så den alltid visas rätt */
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .modal-title::before,
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .modal-header h4::before {
+  content: "";
+  display: inline-block;
+  width: 22px; height: 22px;
+  margin-right: 10px;
+  border-radius: 50%;
+  vertical-align: -4px;
+  background: #1e7f4f url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 14px 14px no-repeat;
+}
+
+/* Produktbilden: utan ram (ingen beige platta här, bilden ska alltid synas) */
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .modal-body .tws-img,
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .modal-body .tws-img--wrapper,
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .modal-body .thumbnail,
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .modal-body img {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  mix-blend-mode: normal !important;
+}
+
+/* Namn och pris centrerat, priset på egen rad under namnet */
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .modal-body { text-align: center; }
+body.brew .tws-article-buy-button-with-modal--price {
+  display: block !important;
+  width: 100% !important;
+  float: none !important;
+  margin: 8px 0 0 0 !important;
+  text-align: center !important;
+}
+body.brew .tws-article-buy-button-with-modal--price .tws-api-price {
+  display: inline-flex !important;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 2px;
+}
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .twsPriceCurrent {
+  color: var(--p-ink) !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+}
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .twsPriceRegular {
+  text-decoration: none !important;
+  color: var(--p-muted) !important;
+  font-size: 13px !important;
+}
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .twsPriceRegular::before { content: var(--p-rek) !important; }
+
+/* Knapparna: "Till kassan" stor och svart överst, "Fortsätt handla" under */
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .modal-footer {
+  display: flex !important;
+  flex-direction: column-reverse;
+  gap: 10px;
+  padding: 16px 20px 20px 20px !important;
+  border-top: 1px solid var(--p-line) !important;
+}
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .modal-footer .btn {
+  width: 100% !important;
+  margin: 0 !important;
+  height: 54px !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .modal-footer .btn-default {
+  background: #fff !important;
+  color: var(--p-ink) !important;
+  border: 1px solid var(--p-field) !important;
+}
+body.brew .tws-article-buy-button-with-modal--proceed-to-checkout,
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .modal-footer .btn-primary {
+  background: var(--p-ink) !important;
+  color: #fff !important;
+  border: 0 !important;
+  clip-path: polygon(12px 0, 100% 0, 100% 100%, 0 100%, 0 12px);
+}
+
+/* "Andra köpte också" i rutan: vänsterställd rubrik, mindre kort */
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .tws-articles-two--heading .tws-util-heading--heading {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  text-align: left !important;
+  margin: 8px 0 12px 0 !important;
+}
+
+/* Kassa: tätare avstånd mellan blocken (mindre scroll fram till betalningen) */
+body.checkout .tws-opc-cart--wrapper { margin-bottom: 16px !important; }
+body.checkout .opc-checkout--cart { margin-bottom: 20px !important; }
+body.checkout .slot--checkout-discount { padding: 6px 0 4px 0 !important; }
+body.checkout .tws-discount-field { padding: 0 !important; }
+body.checkout .tws-discount-field--form { margin-top: 6px !important; }
+body.checkout .slot--checkout-cart-usps { padding: 6px 0 0 0 !important; }
+body.checkout .slot--checkout-cart-usps li + li { margin-top: 0 !important; }
+body.checkout .opc-checkout--shortcuts { margin-bottom: 20px !important; }
+body.checkout .opc-checkout--shortcuts .tws-checkout-shortcuts--field-label { margin-bottom: 6px !important; }
+
+/* Mobil: toppraden på en rad. Språk/valuta och cookie-inställningar finns kvar i menyn */
+@media (max-width: 767px) {
+  body.brew .brew--top-bar-right { display: none !important; }
+  body.brew .brew--top-bar .tws-unique-selling-points ul { display: flex !important; justify-content: center; gap: 16px; flex-wrap: nowrap; margin: 0 !important; padding: 8px 0 !important; }
+  body.brew .brew--top-bar .tws-unique-selling-points li { width: auto !important; float: none !important; margin: 0 !important; padding: 0 !important; font-size: 11px !important; white-space: nowrap; }
+  body.brew .brew--top-bar-left { width: 100% !important; float: none !important; padding: 0 !important; }
+}
+
+/* Kassa: mindre tomrum ovanför "Varukorg" och före sidfoten */
+@media (max-width: 767px) {
+  body.checkout .slot--header-search { display: none !important; }
+  body.checkout .brew--body-wrapper { padding-top: 16px !important; }
+}
+body.checkout .brew--body-wrapper { padding-bottom: 0 !important; }
+body.checkout .brew--footer { margin-top: 24px !important; padding-top: 28px !important; padding-bottom: 8px !important; }
+
+/* Informationssidor: jämna rader (radbrytningar i texten ska inte ge extra höjd) och mindre luft före sidfoten */
+body.custompage .tws-custom-page ul li br { display: none !important; }
+body.custompage .tws-custom-page ul li a { min-height: 56px; padding: 12px 6px !important; }
+body.custompage .tws-custom-page p:empty { display: none !important; }
+body.custompage .brew--body-wrapper { padding-bottom: 0 !important; }
+body.custompage .brew--footer { margin-top: 32px !important; }
+/* Temat gör innehållet minst en skärm högt – på korta sidor blir det ett tomt hål före sidfoten */
+body.custompage .brew--body { min-height: 0 !important; }
+
+
+/* =====================================================================
+   10. KÖPKNAPP I PRODUKTLISTOR (aktiveras i Abicart, stylas här)
+   Pris till vänster, knapp till höger på dator – knapp under priset på mobil.
+   ===================================================================== */
+body.brew .tws-article-list--list .tws-list--grid-item .thumbnail,
+body.brew .tws-article-list--list .tws-list--grid-item .caption { overflow: visible !important; }
+
+body.brew .tws-article-list--list .tws-list--grid-item .caption {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  column-gap: 10px;
+}
+body.brew .tws-article-list--list .tws-list--grid-item .caption > * { grid-column: 1 / -1; }
+body.brew .tws-article-list--list .tws-list--grid-item .caption > .tws-article-list--price { grid-column: 1; }
+body.brew .tws-article-list--list .tws-list--grid-item .caption > .tws-article-list--buy-button {
+  grid-column: 2;
+  align-self: end;
+}
+
+body.brew .tws-article-list--list .tws-list--grid-item .tws-article-list--buy-button {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+/* Antalsfältet behövs inte i listan */
+body.brew .tws-article-list--list .tws-list--grid-item .tws-article-list--buy-button .tws-article-list--quantity { display: none !important; }
+
+body.brew .tws-article-list--list .tws-list--grid-item .tws-article-list--buy-button .btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px !important;
+  width: auto !important;
+  padding: 0 18px !important;
+  background: var(--p-ink) !important;
+  color: #fff !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px);
+}
+body.brew .tws-article-list--list .tws-list--grid-item .tws-article-list--buy-button .btn:hover { background: #000 !important; opacity: .88; }
+body.brew .tws-article-list--list .tws-list--grid-item .tws-article-list--buy-button .btn::after {
+  order: -1;            /* ikonen före texten */
+  margin: 0 !important;
+  font-size: 14px !important;
+}
+
+@media (max-width: 767px) {
+  body.brew .tws-article-list--list .tws-list--grid-item .caption > .tws-article-list--buy-button {
+    grid-column: 1 / -1;
+    margin-top: 10px !important;
+  }
+  body.brew .tws-article-list--list .tws-list--grid-item .tws-article-list--buy-button .btn { width: 100% !important; }
+}
+
+/* Köpknapp i sidomenyns "Mest populära" (om den är påslagen): vit på svart */
+body.brew .brew--sidebar .tws-article-list--buy-button { margin: 8px 0 0 0 !important; }
+body.brew .brew--sidebar .tws-article-list--buy-button .btn {
+  background: #fff !important;
+  color: var(--p-ink) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  height: 34px !important;
+  padding: 0 12px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+body.brew .brew--sidebar .tws-article-list--buy-button .btn * { color: var(--p-ink) !important; }
+
+/* Kategorisidor: tätare mellan meny, brödsmulor, rubrik, sortering och produkter */
+body.articlegroup .slot--breadcrumbs { margin-bottom: 6px !important; }
+body.articlegroup .slot--article-groups { margin-top: 0 !important; }
+body.articlegroup .slot--articles { margin-top: 12px !important; }
+body.articlegroup .tws-list-controls { margin-bottom: 12px !important; }
+body.articlegroup .tws-articlegroup-list--top-heading h1 { margin-top: 0 !important; }
+@media (max-width: 767px) {
+  body.articlegroup .brew--body-wrapper { padding-top: 14px !important; }
+}
+
+/* Mobil: lägre topprad och meny (mer plats för produkterna) */
+@media (max-width: 767px) {
+  body.brew .brew--top-bar-wrapper { padding: 0 !important; min-height: 0 !important; }
+  body.brew .brew--top-bar .tws-unique-selling-points ul { padding: 7px 0 !important; }
+  body.brew .brew--top-bar .tws-unique-selling-points li { line-height: 16px !important; }
+  body.brew .brew--header .brew--header-wrapper { padding-top: 4px !important; padding-bottom: 4px !important; }
+  body.brew .brew--header .tws-logo--container,
+  body.brew .brew--header .slot--header-logo { height: 46px !important; }
+  body.brew .brew--header .tws-logo--image { max-height: 46px !important; }
+}
+
+/* Produktlistor i karusell ("Andra köpte också", "Produkter du besökt") och sidfoten: mindre luft */
+body.brew .slot--article-page-footer .tws-container--tws-articles-two .tws-articles-two { margin: 28px 0 0 0 !important; }
+body.brew .tws-articles-two--heading .tws-util-heading--heading { margin-bottom: 12px !important; }
+body.brew .tws-articles-two .slick-dots {
+  position: static !important;
+  margin: 10px 0 0 0 !important;
+  padding: 0 !important;
+  line-height: 0;
+}
+body.brew .tws-articles-two .slick-dots li { margin: 0 3px !important; }
+body.brew .tws-articles-two .slick-slider { margin-bottom: 0 !important; }
+body.article .brew--body-wrapper,
+body.articlegroup .brew--body-wrapper,
+body.startpage .brew--body-wrapper { padding-bottom: 0 !important; }
+body.brew .brew--footer { margin-top: 32px !important; padding-top: 32px !important; }
+body.brew .brew--article-footer { margin-bottom: 0 !important; padding-bottom: 0 !important; }
+
+/* Mobil: ännu tightare topp (topprad 26px + meny 48px). Ikonerna behåller 44px klickyta. */
+@media (max-width: 767px) {
+  body.brew .brew--top-bar .tws-unique-selling-points ul { padding: 5px 0 !important; gap: 14px !important; }
+  body.brew .brew--top-bar .tws-unique-selling-points li { font-size: 10.5px !important; line-height: 16px !important; letter-spacing: 0.06em !important; }
+  body.brew .brew--top-bar .tws-unique-selling-points li i { display: none !important; }
+  body.brew .brew--header .brew--header-wrapper { padding-top: 2px !important; padding-bottom: 2px !important; min-height: 48px; align-items: center; }
+  body.brew .brew--header .tws-logo--container,
+  body.brew .brew--header .slot--header-logo { height: 40px !important; }
+  body.brew .brew--header .tws-logo--image { max-height: 40px !important; }
+}
+
+/* Mobil topprad: stor, tydlig text men nästan ingen luft runt den */
+@media (max-width: 767px) {
+  body.brew .brew--top-bar,
+  body.brew .brew--top-bar-wrapper,
+  body.brew .brew--top-bar-left,
+  body.brew .brew--top-bar .slot--top-bar-selling-points,
+  body.brew .brew--top-bar .tws-unique-selling-points,
+  body.brew .brew--top-bar .tws-unique-selling-points--wrapper { padding: 0 !important; margin: 0 !important; min-height: 0 !important; height: auto !important; }
+  body.brew .brew--top-bar .tws-unique-selling-points ul { padding: 4px 8px !important; gap: 12px !important; }
+  body.brew .brew--top-bar .tws-unique-selling-points li { font-size: 12.5px !important; line-height: 18px !important; letter-spacing: 0.04em !important; }
+  body.brew .brew--top-bar .tws-unique-selling-points li i { display: inline-block !important; margin-right: 4px; }
+  body.brew .brew--header .brew--header-wrapper { padding-top: 0 !important; padding-bottom: 0 !important; }
+}
+
+
+/* =====================================================================
+   11. ÄLDRE REGLER SOM BEHÅLLS (flyttade från Abicarts CSS-ruta)
+   ===================================================================== */
+/* Visa hela produktbeskrivningen direkt, utan "Visa mer" / "Läs mer" */
+.slot--article-description .tws-article-description--text-container { max-height: none !important; }
+.tws-article-description--show-more { display: none !important; }
+.tws-article-introduction--read-more { display: none !important; }
+
+/* Mobil: loggan ligger lågt i sin ruta – knuffa upp den 5px (ändra värdet för att justera) */
+@media (max-width: 767px) {
+  body.brew .brew--header .tws-logo--container { transform: translateY(-5px); }
+}
+
+
+/* =====================================================================
+   12. LEVERANSNEDRÄKNING (prydligt-leveranstimer.js)
+   ===================================================================== */
+body.article .p-ship-timer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0 0 0;
+  padding: 10px 12px;
+  background: #eef6f1;
+  color: var(--p-ink);
+  font-size: 15px;
+  line-height: 1.35;
+}
+body.article .p-ship-timer::before {
+  content: "";
+  flex-shrink: 0;
+  width: 18px; height: 18px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231e7f4f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 7h11v10H3zM14 10h4l3 3v4h-7'/%3E%3Ccircle cx='7' cy='18' r='2'/%3E%3Ccircle cx='17' cy='18' r='2'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+body.article .p-ship-timer strong { font-weight: 700; }
+body.article .p-ship-timer__time { font-variant-numeric: tabular-nums; color: var(--p-ok); }
