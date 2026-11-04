@@ -1246,9 +1246,11 @@ body.brew .p-qty input[type="number"] {
 body.brew .p-qty input[type="number"]::-webkit-outer-spin-button,
 body.brew .p-qty input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 body.brew .p-qty__btn {
-  width: 44px;
-  height: 42px;
-  display: inline-flex;
+  width: 44px !important;
+  height: 42px !important;
+  line-height: 0 !important;
+  align-self: center;
+  display: inline-flex !important;
   align-items: center;
   justify-content: center;
   border: 0 !important;
