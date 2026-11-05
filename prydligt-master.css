@@ -1863,3 +1863,16 @@ body.brew .brew--sidebar .tws-article-list--buy-button .btn:hover { background: 
 html body.brew .tws-api-price:has(.tws-api--price-regular) .tws-api--price-current.twsPriceCurrent,
 html body.brew .tws-api-price:has(.twsPriceRegular) .twsPriceCurrent:not(.twsPriceRegular) { color: var(--p-sale) !important; }
 body.brew .tws-article-list--list .tws-list--grid-item .tws-article-list--price .tws-api-price:has(.twsPriceRegular) .tws-api--price-current.twsPriceCurrent { color: var(--p-sale) !important; }
+
+/* 24. Småfixar 5 nov kväll */
+/* "finns i lager" i varukorgen -> stor begynnelsebokstav */
+body.checkout .tws-opc-cart--item-info-deliveryInfo-msg { display: inline-block; }
+body.checkout .tws-opc-cart--item-info-deliveryInfo-msg::first-letter { text-transform: uppercase; }
+/* Garantiväljaren: "Spara xx %" på fleråriga val */
+body.article .p-warranty__save { font-size: 11.5px; font-weight: 700; color: var(--p-ok); line-height: 1.2; }
+/* Kassan dator: fri frakt-rutan + sammanfattningen följer med när man scrollar,
+   Abicarts svarta "X artiklar / Totalt"-ruta behövs då inte */
+@media (min-width: 992px) {
+  body.checkout .opc-checkout--summary { position: sticky; top: 16px; align-self: flex-start; }
+  body.checkout .tws-cart-summary--sticky-summary { display: none !important; }
+}

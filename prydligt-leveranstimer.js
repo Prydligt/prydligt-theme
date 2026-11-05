@@ -657,7 +657,10 @@
     YEARS.forEach(function (y) {
       opts += '<button type="button" class="p-warranty__opt" data-years="' + y + '" aria-pressed="false">' +
         '<span class="p-warranty__len">' + y + ' ' + (y === 1 ? TXT.year : TXT.yearPl) + '</span>' +
-        '<span class="p-warranty__price">' + band.price[y] + ' ' + TXT.kr + '</span></button>';
+        '<span class="p-warranty__price">' + band.price[y] + ' ' + TXT.kr + '</span>' +
+        (function () { var sv = Math.round((1 - band.price[y] / (band.price[1] * y)) * 100);
+          return y > 1 && sv > 0 ? '<span class="p-warranty__save">Spara ' + sv + ' %</span>' : ''; })() +
+        '</button>';
     });
     el.innerHTML =
       '<div class="p-warranty__head"><span class="p-warranty__title">' + TXT.title + '</span>' +
