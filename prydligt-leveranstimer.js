@@ -827,13 +827,15 @@
    =================================================================== */
 (function () {
   var MAIL = 'support@prydligt.se';
+  var RETURN_URL = 'https://myreturns.postnord.com/Prydligt001';   // svensk returportal
+  var RETURN_LABEL = 'PostNords returportal';
   var T = {
     sv: {
       icons: ['Skickas fr\u00e5n Sverige', '99 dagars \u00f6ppet k\u00f6p', '1 \u00e5rs garanti'],
       head: 'Beh\u00f6ver du mer information?',
       faq: [
         ['N\u00e4r f\u00e5r jag min order?', 'Best\u00e4ller du f\u00f6re kl. 16 en vardag skickar vi samma dag med PostNord. Leveransen tar 1\u20132 arbetsdagar och frakten \u00e4r fri \u00f6ver 600 kr.'],
-        ['Hur returnerar jag?', 'Du har 99 dagars \u00f6ppet k\u00f6p. Mejla {mail} med ditt ordernummer s\u00e5 hj\u00e4lper vi dig med returen och betalar tillbaka pengarna n\u00e4r vi f\u00e5tt varan.'],
+        ['Hur returnerar jag?', 'Du har 99 dagars \u00f6ppet k\u00f6p. Registrera returen i {ret}: fyll i dina orderuppgifter s\u00e5 f\u00e5r du en QR-kod som du visar hos ombudet f\u00f6r att f\u00e5 en retursedel. Vi betalar tillbaka pengarna n\u00e4r vi f\u00e5tt varan.'],
         ['Vilken garanti ing\u00e5r?', 'Alla produkter har 1 \u00e5rs garanti mot fabrikations- och materialfel. Dessutom har du alltid tre \u00e5rs reklamationsr\u00e4tt enligt konsumentk\u00f6plagen. Till klockor kan du l\u00e4gga till f\u00f6rl\u00e4ngd garanti.'],
         ['Hur kan jag betala?', 'Du betalar tryggt med kort, Swish, Apple Pay, Google Pay eller Klarna (faktura och delbetalning). Vi f\u00e5r aldrig se dina kortuppgifter.']
       ]
@@ -933,13 +935,16 @@
       var s = document.createElement('summary');
       s.textContent = t.faq[j][0];
       var p = document.createElement('p');
-      var parts = t.faq[j][1].split('{mail}');
-      p.appendChild(document.createTextNode(parts[0]));
-      if (parts.length > 1) {
-        var a = document.createElement('a');
-        a.href = 'mailto:' + MAIL; a.textContent = MAIL;
-        p.appendChild(a);
-        p.appendChild(document.createTextNode(parts[1]));
+      var parts = t.faq[j][1].split(/(\{mail\}|\{ret\})/);
+      for (var q = 0; q < parts.length; q++) {
+        if (parts[q] === '{mail}' || parts[q] === '{ret}') {
+          var a = document.createElement('a');
+          if (parts[q] === '{mail}') { a.href = 'mailto:' + MAIL; a.textContent = MAIL; }
+          else { a.href = RETURN_URL; a.textContent = RETURN_LABEL; a.target = '_blank'; a.rel = 'noopener'; }
+          p.appendChild(a);
+        } else if (parts[q]) {
+          p.appendChild(document.createTextNode(parts[q]));
+        }
       }
       d.appendChild(s); d.appendChild(p);
       box.appendChild(d);
