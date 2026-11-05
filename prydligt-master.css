@@ -917,10 +917,10 @@ body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-butto
 }
 
 /* Produktbilden: utan ram (ingen beige platta här, bilden ska alltid synas) */
-body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .modal-body .tws-img,
-body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .modal-body .tws-img--wrapper,
-body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .modal-body .thumbnail,
-body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .modal-body img {
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .modal-body .tws-img:not(.tws-article-list--list *),
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .modal-body .tws-img--wrapper:not(.tws-article-list--list *),
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .modal-body .thumbnail:not(.tws-article-list--list *),
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .modal-body img:not(.tws-article-list--list *) {
   border: 0 !important;
   border-radius: 0 !important;
   box-shadow: none !important;
@@ -1328,3 +1328,27 @@ body.custompage .tws-custom-page .p-table td { text-align: left; padding: 10px 1
 body.custompage .tws-custom-page .p-table thead th { background: var(--p-sand); font-weight: 700; }
 body.custompage .tws-custom-page .p-small { font-size: 13px !important; color: var(--p-muted) !important; margin-top: 24px !important; }
 body.custompage .tws-custom-page a[href^="mailto"] { color: var(--p-ink) !important; text-decoration: underline !important; }
+
+
+/* "Lagd i varukorgen"-rutan: produktkorten ("Andra köpte också", "Produkter du besökt")
+   får samma beige kort som på resten av sajten */
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .tws-article-list--list .tws-list--grid-item .thumbnail {
+  background: var(--p-sand) !important;
+  isolation: isolate;                 /* gör att vit bildbakgrund smälter in i beige även i popup-rutan */
+  padding: 10px 10px 14px 10px !important;
+}
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .tws-article-list--list .tws-article-list--grid-item-link,
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .tws-article-list--list .tws-article-list--product-image,
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .tws-article-list--list .tws-img--wrapper,
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .tws-article-list--list .tws-img {
+  background: var(--p-sand) !important;
+  border: 0 !important;
+}
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .tws-article-list--list img { mix-blend-mode: multiply !important; }
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .tws-article-list--list .tws-api--price-regular { white-space: nowrap; }
+/* Smala kort i rutan: köpknappen på egen rad under priset */
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .tws-article-list--list .tws-list--grid-item .caption > .tws-article-list--buy-button {
+  grid-column: 1 / -1 !important;
+  margin-top: 10px !important;
+}
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .tws-article-list--list .tws-list--grid-item .tws-article-list--buy-button .btn { width: 100% !important; }
