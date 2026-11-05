@@ -1363,13 +1363,3 @@ body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-butto
   mix-blend-mode: multiply !important;
   opacity: 1 !important;
 }
-
-/* Kassa: samma beige yta på valt leveranssätt och på förtroenderutan som på sammanfattningen */
-body.checkout .tws-checkout--delivery-method-selected { background: var(--p-sand) !important; }
-body.checkout .slot--checkout-cart-usps .tws-unique-selling-points {
-  background: var(--p-sand) !important;
-  border: 0 !important;
-}
-/* Papperskorgen under antalet behövs inte – minus blir papperskorg vid 1 (alla skärmstorlekar) */
-body.checkout .p-qty ~ .tws-opc-cart--item-remove,
-body.checkout .tws-opc-cart--item:has(.p-qty) .tws-opc-cart--item-remove { display: none !important; }
