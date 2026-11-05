@@ -1857,3 +1857,8 @@ body.brew .brew--sidebar .tws-article-list--buy-button .btn:hover { background: 
   body.brew .tws-newsletter-subscribe--subscribe-button:hover,
   body.brew .brew--sidebar .tws-article-list--buy-button .btn:hover { transform: none; }
 }
+
+/* 23. Rabatterat pris i rött (bara när ett vägledande/rek. pris visas bredvid). Rek. pris behåller sin grå färg. */
+:root { --p-sale: #c8102e; }
+html body.brew .tws-api-price:has(.tws-api--price-regular) .tws-api--price-current.twsPriceCurrent,
+html body.brew .tws-api-price:has(.twsPriceRegular) .twsPriceCurrent:not(.twsPriceRegular) { color: var(--p-sale) !important; }
