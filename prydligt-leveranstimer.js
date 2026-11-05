@@ -265,6 +265,15 @@
     showOwnStock(timerEl);
   }
 
+  // Trustpilot-rad i kassans fri frakt-ruta (visas bara på mobil, på dator står den i högerspalten)
+  var TP = {
+    sv: ['4,5/5 p\u00e5 Trustpilot', 'https://se.trustpilot.com/review/prydligt.se'],
+    nb: ['4,5/5 p\u00e5 Trustpilot', 'https://no.trustpilot.com/review/prydligt.se'],
+    da: ['4,5/5 p\u00e5 Trustpilot', 'https://dk.trustpilot.com/review/prydligt.se'],
+    fi: ['4,5/5 Trustpilotissa', 'https://www.trustpilot.com/review/prydligt.se'],
+    de: ['4,5/5 auf Trustpilot', 'https://de.trustpilot.com/review/prydligt.se'],
+    nl: ['4,5/5 op Trustpilot', 'https://nl.trustpilot.com/review/prydligt.se']
+  };
   // Fri frakt-mätare i varukorgen, ovanför sammanfattningen
   var cartEl = null;
   function mountCart() {
@@ -282,7 +291,8 @@
       ? '<div class="p-ship__free"><span>' + b.free + '</span><span><strong>' + m.fmt(left) + '</strong> ' + b.left + '</span></div>'
       : '<div class="p-ship__free p-ship__free--ok"><span>' + b.reached + '</span></div>') +
       '<div class="p-ship__bar" aria-hidden="true"><span style="width:' + pct + '%"></span></div>' +
-      '<p class="p-ship__when">' + deliveryText(l, TEXT[l], b, m, state()) + '</p>';
+      '<p class="p-ship__when">' + deliveryText(l, TEXT[l], b, m, state()) + '</p>' +
+      '<p class="p-cart-tp"><a href="' + TP[l][1] + '" target="_blank" rel="noopener">' + TP[l][0] + '</a></p>';
     if (cartEl.__last !== html) { cartEl.innerHTML = html; cartEl.__last = html; }
   }
 
