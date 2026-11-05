@@ -819,3 +819,144 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
   else start();
 })();
+
+/* ===================================================================
+   7. KASSAN: trygghetsrad + vanliga fr\u00e5gor under betalningen
+   L\u00e4ggs direkt efter betalrutan (Klarna/Kustom), dvs under knappen
+   "Slutf\u00f6r k\u00f6p". Texterna per spr\u00e5k nedan.
+   =================================================================== */
+(function () {
+  var MAIL = 'support@prydligt.se';
+  var T = {
+    sv: {
+      icons: ['Skickas fr\u00e5n Sverige', '99 dagars \u00f6ppet k\u00f6p', '1 \u00e5rs garanti'],
+      head: 'Beh\u00f6ver du mer information?',
+      faq: [
+        ['N\u00e4r f\u00e5r jag min order?', 'Best\u00e4ller du f\u00f6re kl. 16 en vardag skickar vi samma dag med PostNord. Leveransen tar 1\u20132 arbetsdagar och frakten \u00e4r fri \u00f6ver 600 kr.'],
+        ['Hur returnerar jag?', 'Du har 99 dagars \u00f6ppet k\u00f6p. Mejla {mail} med ditt ordernummer s\u00e5 hj\u00e4lper vi dig med returen och betalar tillbaka pengarna n\u00e4r vi f\u00e5tt varan.'],
+        ['Vilken garanti ing\u00e5r?', 'Alla produkter har 1 \u00e5rs garanti mot fabrikations- och materialfel. Dessutom har du alltid tre \u00e5rs reklamationsr\u00e4tt enligt konsumentk\u00f6plagen. Till klockor kan du l\u00e4gga till f\u00f6rl\u00e4ngd garanti.'],
+        ['Hur kan jag betala?', 'Du betalar tryggt via Klarna med kort, faktura eller delbetalning. Vi f\u00e5r aldrig se dina kortuppgifter.']
+      ]
+    },
+    da: {
+      icons: ['Sendes fra Sverige', '99 dages fuld returret', '1 \u00e5rs garanti'],
+      head: 'Har du brug for mere information?',
+      faq: [
+        ['Hvorn\u00e5r f\u00e5r jeg min ordre?', 'Bestiller du inden kl. 16 (svensk tid) p\u00e5 en hverdag, sender vi samme dag med PostNord. Levering tager 2\u20134 hverdage, og fragten er gratis over 600 kr. Ingen told inden for EU.'],
+        ['Hvordan returnerer jeg?', 'Du har 99 dages fuld returret. Skriv til {mail} med dit ordrenummer, s\u00e5 hj\u00e6lper vi dig med returneringen.'],
+        ['Hvilken garanti er inkluderet?', 'Alle produkter har 1 \u00e5rs garanti mod fabrikations- og materialefejl. Det p\u00e5virker ikke din lovpligtige reklamationsret.'],
+        ['Hvordan kan jeg betale?', 'Du betaler trygt med kort, MobilePay eller Klarna. Vi ser aldrig dine kortoplysninger.']
+      ]
+    },
+    nb: {
+      icons: ['Sendes fra Sverige', '99 dagers \u00e5pent kj\u00f8p', 'Ingen toll eller gebyrer'],
+      head: 'Trenger du mer informasjon?',
+      faq: [
+        ['M\u00e5 jeg betale toll?', 'Nei. Vi er registrert i VOEC, s\u00e5 mva. er inkludert i prisen og du betaler ingen toll eller gebyrer ved levering.'],
+        ['N\u00e5r f\u00e5r jeg ordren min?', 'Bestiller du f\u00f8r kl. 16 (svensk tid) p\u00e5 en hverdag, sender vi samme dag med PostNord. Leveringen tar 2\u20134 virkedager, og frakten er gratis over 800 kr.'],
+        ['Hvordan returnerer jeg?', 'Du har 99 dagers \u00e5pent kj\u00f8p. Send en e-post til {mail} med ordrenummeret ditt, s\u00e5 hjelper vi deg med returen.'],
+        ['Hvilken garanti er inkludert?', 'Alle produkter har 1 \u00e5rs garanti mot produksjons- og materialfeil. Det p\u00e5virker ikke reklamasjonsretten din etter loven.'],
+        ['Hvordan kan jeg betale?', 'Du betaler trygt med kort, Vipps eller Klarna. Vi ser aldri kortopplysningene dine.']
+      ]
+    },
+    fi: {
+      icons: ['L\u00e4hetet\u00e4\u00e4n Ruotsista', '99 p\u00e4iv\u00e4n palautusoikeus', '1 vuoden takuu'],
+      head: 'Tarvitsetko lis\u00e4tietoja?',
+      faq: [
+        ['Milloin saan tilaukseni?', 'Kun tilaat arkip\u00e4iv\u00e4n\u00e4 ennen klo 16 (Ruotsin aikaa), l\u00e4het\u00e4mme saman p\u00e4iv\u00e4n aikana PostNordilla. Toimitus kest\u00e4\u00e4 2\u20134 arkip\u00e4iv\u00e4\u00e4, ja yli 80 \u20ac:n tilaukset toimitetaan ilmaiseksi. Ei tulleja EU:n sis\u00e4ll\u00e4.'],
+        ['Miten palautan tuotteen?', 'Sinulla on 99 p\u00e4iv\u00e4n palautusoikeus. L\u00e4het\u00e4 tilausnumerosi osoitteeseen {mail}, niin autamme palautuksessa.'],
+        ['Mik\u00e4 takuu tuotteilla on?', 'Kaikilla tuotteilla on 1 vuoden takuu valmistus- ja materiaalivirheiden varalta. Se ei vaikuta lakis\u00e4\u00e4teisiin oikeuksiisi.'],
+        ['Miten voin maksaa?', 'Maksat turvallisesti kortilla, MobilePaylla, verkkopankissa tai Klarnalla. Emme koskaan n\u00e4e korttitietojasi.']
+      ]
+    },
+    de: {
+      icons: ['Versand aus Schweden', '99 Tage R\u00fcckgaberecht', '1 Jahr Garantie'],
+      head: 'Brauchst du mehr Informationen?',
+      faq: [
+        ['Wann kommt meine Bestellung?', 'Bestellst du werktags vor 16 Uhr, versenden wir noch am selben Tag mit PostNord. Die Lieferung dauert 2\u20134 Werktage, ab 80 \u20ac ist der Versand kostenlos. Kein Zoll innerhalb der EU.'],
+        ['Wie funktioniert die R\u00fccksendung?', 'Du hast 99 Tage R\u00fcckgaberecht. Schreib uns mit deiner Bestellnummer an {mail}, dann helfen wir dir weiter.'],
+        ['Welche Garantie ist enthalten?', 'Alle Produkte haben 1 Jahr Garantie auf Herstellungs- und Materialfehler. Deine gesetzlichen Gew\u00e4hrleistungsrechte bleiben davon unber\u00fchrt.'],
+        ['Wie kann ich bezahlen?', 'Du bezahlst sicher mit Karte, PayPal, auf Rechnung oder mit Klarna. Wir sehen deine Kartendaten nie.']
+      ]
+    },
+    nl: {
+      icons: ['Verzonden vanuit Zweden', '99 dagen bedenktijd', '1 jaar garantie'],
+      head: 'Meer informatie nodig?',
+      faq: [
+        ['Wanneer krijg ik mijn bestelling?', 'Bestel je op een werkdag v\u00f3\u00f3r 16.00 uur, dan versturen we dezelfde dag met PostNord. Levering duurt 2\u20134 werkdagen en vanaf 80 \u20ac is de verzending gratis. Geen douanekosten binnen de EU.'],
+        ['Hoe stuur ik iets terug?', 'Je hebt 99 dagen bedenktijd. Mail je ordernummer naar {mail} en we helpen je met de retour.'],
+        ['Welke garantie krijg ik?', 'Alle producten hebben 1 jaar garantie op fabricage- en materiaalfouten. Dit doet niets af aan je wettelijke rechten.'],
+        ['Hoe kan ik betalen?', 'Je betaalt veilig met iDEAL, kaart of Klarna. Wij zien je kaartgegevens nooit.']
+      ]
+    },
+    en: {
+      icons: ['Shipped from Sweden', '99-day returns', '1-year warranty'],
+      head: 'Need more information?',
+      faq: [
+        ['When will my order arrive?', 'Order before 4 pm (Swedish time) on a weekday and we ship the same day with PostNord. Delivery takes 2\u20134 working days.'],
+        ['How do I return something?', 'You have 99 days to return. Email {mail} with your order number and we will help you.'],
+        ['What warranty is included?', 'All products have a 1-year warranty against manufacturing and material defects. Your statutory rights are not affected.'],
+        ['How can I pay?', 'You pay securely by card or Klarna. We never see your card details.']
+      ]
+    }
+  };
+  T.no = T.nb;
+
+  function lang() {
+    var l = (document.documentElement.getAttribute('lang') || 'sv').toLowerCase().slice(0, 2);
+    return T[l] ? l : 'sv';
+  }
+  var ICON = ['ship', 'ret', 'warr'];
+
+  function build() {
+    var l = lang(), t = T[l];
+    var box = document.createElement('section');
+    box.className = 'p-trust';
+    var row = document.createElement('div');
+    row.className = 'p-trust__icons';
+    for (var i = 0; i < 3; i++) {
+      var it = document.createElement('div');
+      var key = (i === 2 && (l === 'nb' || l === 'no')) ? 'info' : ICON[i];
+      it.className = 'p-trust__icon p-trust__icon--' + key;
+      it.appendChild(document.createElement('span'));
+      it.appendChild(document.createTextNode(t.icons[i]));
+      row.appendChild(it);
+    }
+    box.appendChild(row);
+    var h = document.createElement('h3');
+    h.className = 'p-trust__head';
+    h.textContent = t.head;
+    box.appendChild(h);
+    for (var j = 0; j < t.faq.length; j++) {
+      var d = document.createElement('details');
+      d.className = 'p-trust__faq';
+      var s = document.createElement('summary');
+      s.textContent = t.faq[j][0];
+      var p = document.createElement('p');
+      var parts = t.faq[j][1].split('{mail}');
+      p.appendChild(document.createTextNode(parts[0]));
+      if (parts.length > 1) {
+        var a = document.createElement('a');
+        a.href = 'mailto:' + MAIL; a.textContent = MAIL;
+        p.appendChild(a);
+        p.appendChild(document.createTextNode(parts[1]));
+      }
+      d.appendChild(s); d.appendChild(p);
+      box.appendChild(d);
+    }
+    return box;
+  }
+  function mount() {
+    if (!document.body.classList.contains('checkout')) return;
+    var slot = document.querySelector('.opc-checkout--checkout-method .slot--checkout');
+    if (!slot || !slot.parentElement) return;
+    var next = slot.nextElementSibling;
+    if (next && next.classList.contains('p-trust')) return;
+    var old = document.querySelector('.p-trust');
+    if (old) old.parentElement.removeChild(old);
+    slot.parentElement.insertBefore(build(), slot.nextSibling);
+  }
+  function start() { mount(); setInterval(mount, 1500); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
+})();
