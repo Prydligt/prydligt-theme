@@ -839,7 +839,6 @@
         ['N\u00e4r f\u00e5r jag min order?', 'Best\u00e4ller du f\u00f6re kl. 16 en vardag skickar vi samma dag med PostNord. Leveransen tar 1\u20132 arbetsdagar och frakten \u00e4r fri \u00f6ver 600 kr.'],
         ['Hur returnerar jag?', 'Du har 99 dagars \u00f6ppet k\u00f6p. Registrera returen i {ret}: fyll i dina orderuppgifter s\u00e5 f\u00e5r du en QR-kod som du visar hos ombudet f\u00f6r att f\u00e5 en retursedel. Vi betalar tillbaka pengarna n\u00e4r vi f\u00e5tt varan.'],
         ['Vilken garanti ing\u00e5r?', 'Alla produkter har 1 \u00e5rs garanti mot fabrikations- och materialfel. Dessutom har du alltid tre \u00e5rs reklamationsr\u00e4tt enligt konsumentk\u00f6plagen. Till klockor kan du l\u00e4gga till f\u00f6rl\u00e4ngd garanti.'],
-        ['Hur kan jag betala?', 'Du betalar tryggt med kort, Swish, Apple Pay, Google Pay eller Klarna (faktura och delbetalning). Vi f\u00e5r aldrig se dina kortuppgifter.']
       ]
     },
     da: {
@@ -849,7 +848,6 @@
         ['Hvorn\u00e5r f\u00e5r jeg min ordre?', 'Bestiller du inden kl. 16 (svensk tid) p\u00e5 en hverdag, sender vi samme dag med PostNord. Levering tager 2\u20134 hverdage, og fragten er gratis over 600 kr. Ingen told inden for EU.'],
         ['Hvordan returnerer jeg?', 'Du har 99 dages fuld returret. Skriv til {mail} med dit ordrenummer, s\u00e5 hj\u00e6lper vi dig med returneringen.'],
         ['Hvilken garanti er inkluderet?', 'Alle produkter har 1 \u00e5rs garanti mod fabrikations- og materialefejl. Det p\u00e5virker ikke din lovpligtige reklamationsret.'],
-        ['Hvordan kan jeg betale?', 'Du betaler trygt med kort, MobilePay eller Klarna. Vi ser aldrig dine kortoplysninger.']
       ]
     },
     nb: {
@@ -860,7 +858,6 @@
         ['N\u00e5r f\u00e5r jeg ordren min?', 'Bestiller du f\u00f8r kl. 16 (svensk tid) p\u00e5 en hverdag, sender vi samme dag med PostNord. Leveringen tar 2\u20134 virkedager, og frakten er gratis over 800 kr.'],
         ['Hvordan returnerer jeg?', 'Du har 99 dagers \u00e5pent kj\u00f8p. Send en e-post til {mail} med ordrenummeret ditt, s\u00e5 hjelper vi deg med returen.'],
         ['Hvilken garanti er inkludert?', 'Alle produkter har 1 \u00e5rs garanti mot produksjons- og materialfeil. Det p\u00e5virker ikke reklamasjonsretten din etter loven.'],
-        ['Hvordan kan jeg betale?', 'Du betaler trygt med kort, Vipps eller Klarna. Vi ser aldri kortopplysningene dine.']
       ]
     },
     fi: {
@@ -870,7 +867,6 @@
         ['Milloin saan tilaukseni?', 'Kun tilaat arkip\u00e4iv\u00e4n\u00e4 ennen klo 16 (Ruotsin aikaa), l\u00e4het\u00e4mme saman p\u00e4iv\u00e4n aikana PostNordilla. Toimitus kest\u00e4\u00e4 2\u20134 arkip\u00e4iv\u00e4\u00e4, ja yli 80 \u20ac:n tilaukset toimitetaan ilmaiseksi. Ei tulleja EU:n sis\u00e4ll\u00e4.'],
         ['Miten palautan tuotteen?', 'Sinulla on 99 p\u00e4iv\u00e4n palautusoikeus. L\u00e4het\u00e4 tilausnumerosi osoitteeseen {mail}, niin autamme palautuksessa.'],
         ['Mik\u00e4 takuu tuotteilla on?', 'Kaikilla tuotteilla on 1 vuoden takuu valmistus- ja materiaalivirheiden varalta. Se ei vaikuta lakis\u00e4\u00e4teisiin oikeuksiisi.'],
-        ['Miten voin maksaa?', 'Maksat turvallisesti kortilla, MobilePaylla, verkkopankissa tai Klarnalla. Emme koskaan n\u00e4e korttitietojasi.']
       ]
     },
     de: {
@@ -880,7 +876,6 @@
         ['Wann kommt meine Bestellung?', 'Bestellst du werktags vor 16 Uhr, versenden wir noch am selben Tag mit PostNord. Die Lieferung dauert 2\u20134 Werktage, ab 80 \u20ac ist der Versand kostenlos. Kein Zoll innerhalb der EU.'],
         ['Wie funktioniert die R\u00fccksendung?', 'Du hast 99 Tage R\u00fcckgaberecht. Schreib uns mit deiner Bestellnummer an {mail}, dann helfen wir dir weiter.'],
         ['Welche Garantie ist enthalten?', 'Alle Produkte haben 1 Jahr Garantie auf Herstellungs- und Materialfehler. Deine gesetzlichen Gew\u00e4hrleistungsrechte bleiben davon unber\u00fchrt.'],
-        ['Wie kann ich bezahlen?', 'Du bezahlst sicher mit Karte, PayPal, auf Rechnung oder mit Klarna. Wir sehen deine Kartendaten nie.']
       ]
     },
     nl: {
@@ -890,7 +885,6 @@
         ['Wanneer krijg ik mijn bestelling?', 'Bestel je op een werkdag v\u00f3\u00f3r 16.00 uur, dan versturen we dezelfde dag met PostNord. Levering duurt 2\u20134 werkdagen en vanaf 80 \u20ac is de verzending gratis. Geen douanekosten binnen de EU.'],
         ['Hoe stuur ik iets terug?', 'Je hebt 99 dagen bedenktijd. Mail je ordernummer naar {mail} en we helpen je met de retour.'],
         ['Welke garantie krijg ik?', 'Alle producten hebben 1 jaar garantie op fabricage- en materiaalfouten. Dit doet niets af aan je wettelijke rechten.'],
-        ['Hoe kan ik betalen?', 'Je betaalt veilig met iDEAL, kaart of Klarna. Wij zien je kaartgegevens nooit.']
       ]
     },
     en: {
@@ -900,7 +894,6 @@
         ['When will my order arrive?', 'Order before 4 pm (Swedish time) on a weekday and we ship the same day with PostNord. Delivery takes 2\u20134 working days.'],
         ['How do I return something?', 'You have 99 days to return. Email {mail} with your order number and we will help you.'],
         ['What warranty is included?', 'All products have a 1-year warranty against manufacturing and material defects. Your statutory rights are not affected.'],
-        ['How can I pay?', 'You pay securely by card or Klarna. We never see your card details.']
       ]
     }
   };
