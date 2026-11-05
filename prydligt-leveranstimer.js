@@ -203,6 +203,40 @@
     if (stock) { if (el.previousElementSibling !== stock) stock.insertAdjacentElement('afterend', el); return true; }
     return false;
   }
+  /* ---------- "Finns i lager" på produkter där Abicart inte visar lagerstatus
+     (produkter utan lagerhantering, t.ex. smycken med bokstavsval). Kollas mot butikens API. ---------- */
+  var STOCK_TXT = { sv: 'Finns i lager', nb: 'På lager', da: 'På lager', fi: 'Varastossa', de: 'Auf Lager', nl: 'Op voorraad' };
+  var stockCheck = { path: null, ok: false };
+  function pageArticleNumber() {
+    var el = document.querySelector('.tws-article-description--article-number');
+    var m = el && (el.textContent || '').match(/:\s*(\S+)/);
+    return m ? m[1] : null;
+  }
+  function checkBuyable() {
+    if (stockCheck.path === location.pathname) return;
+    stockCheck = { path: location.pathname, ok: false };
+    var nr = pageArticleNumber(), st = window.twsReduxStore && window.twsReduxStore.getState && window.twsReduxStore.getState();
+    if (!nr || !st || !(window.twsCore && window.twsCore.twapiFromState)) return;
+    var path = location.pathname;
+    Promise.resolve(window.twsCore.twapiFromState(st)('Article.list')({ uid: true, isBuyable: true, presentationOnly: true, stock: true }, { filters: { articleNumber: nr }, limit: 1 }))
+      .then(function (list) {
+        var a = list && list[0];
+        if (path !== location.pathname || !a) return;
+        // Ingen lagerhantering + köpbar = alltid tillgänglig
+        stockCheck.ok = a.isBuyable !== false && !a.presentationOnly && !(a.stock && a.stock.useStock);
+      }).catch(function () {});
+  }
+  var stockEl = null;
+  function showOwnStock(box) {
+    var themeMsg = document.querySelector('.tws-article-stock-shipping--delivery-message');
+    var themeShows = themeMsg && (themeMsg.textContent || '').trim() && themeMsg.offsetParent !== null;
+    checkBuyable();
+    if (themeShows || !stockCheck.ok) { if (stockEl && stockEl.parentNode) stockEl.parentNode.removeChild(stockEl); return; }
+    if (!stockEl) { stockEl = document.createElement('div'); stockEl.className = 'p-stock'; }
+    stockEl.textContent = STOCK_TXT[lang()] || STOCK_TXT.sv;
+    if (box.previousElementSibling !== stockEl) box.insertAdjacentElement('beforebegin', stockEl);
+  }
+
   function mount() {
     if (!document.body || !document.body.classList.contains('article')) return;
     if (!inStock()) { if (timerEl && timerEl.parentNode) timerEl.parentNode.removeChild(timerEl); return; }
@@ -213,6 +247,7 @@
     }
     if (!placeBox(timerEl)) return;
     render(timerEl);
+    showOwnStock(timerEl);
   }
 
   function start() {

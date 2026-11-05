@@ -1402,3 +1402,12 @@ body.article .p-ship__when::before {
 }
 body.article .p-ship__when .p-ship-timer__time { color: var(--p-ok); }
 body.article .p-ship__ret { padding-left: 28px; }
+
+/* Egen "Finns i lager"-rad på produkter där Abicart inte visar lagerstatus (samma utseende som temats) */
+body.article .p-stock {
+  display: flex; align-items: center; gap: 8px;
+  margin: 14px 0 0 0;
+  font-size: 15px; font-weight: 500; color: var(--p-ok);
+}
+body.article .p-stock::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--p-ok); flex-shrink: 0; }
+body.article .p-stock + .p-ship { margin-top: 10px; }
