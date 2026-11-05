@@ -1700,3 +1700,26 @@ body.checkout .slot--checkout-cart-usps li:nth-child(2)::before {
 /* 20e. Kassans USP-ruta (Trustpilot + certifierad e-handel) dold helt – tillförde inget.
    Tryggheten finns i fri frakt-rutan och i raden under "Betala köp". */
 body.checkout .slot--checkout-cart-usps { display: none !important; }
+
+/* 18b. Varukorgsrader i rutnät: namn, lagerstatus, pris och rek. pris i samma vänsterkant
+   på alla rader (även garantin). Antalsväljaren till höger (dator) / under (mobil). */
+body.checkout .tws-opc-cart--item-wrapper {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "info qty" "price qty";
+  column-gap: 16px; row-gap: 6px; align-items: start;
+}
+body.checkout .tws-opc-cart--item-wrapper::before,
+body.checkout .tws-opc-cart--item-wrapper::after { display: none !important; content: none !important; }
+body.checkout .tws-opc-cart--item-wrapper > .tws-opc-cart--item-info,
+body.checkout .tws-opc-cart--item-wrapper > .tws-opc-cart--item-quantity,
+body.checkout .tws-opc-cart--item-wrapper > .tws-opc-cart--item-price {
+  float: none !important; width: auto !important; padding-left: 0 !important; padding-right: 0 !important; margin: 0 !important;
+}
+body.checkout .tws-opc-cart--item-wrapper > .tws-opc-cart--item-info { grid-area: info; }
+body.checkout .tws-opc-cart--item-wrapper > .tws-opc-cart--item-quantity { grid-area: qty; }
+body.checkout .tws-opc-cart--item-wrapper > .tws-opc-cart--item-price { grid-area: price; }
+body.checkout .tws-opc-cart--item-price .tws-opc-cart--unit-costs { margin: 0 !important; padding: 0 !important; }
+@media (max-width: 767px) {
+  body.checkout .tws-opc-cart--item-wrapper { grid-template-columns: minmax(0, 1fr); grid-template-areas: "info" "price" "qty"; }
+}
