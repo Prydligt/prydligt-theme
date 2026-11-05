@@ -821,19 +821,19 @@ body.custompage .tws-custom-page li {
 body.custompage .tws-custom-page > .customPageItem p > span br:first-child { display: none; }
 
 /* Länklistor blir tydliga klickbara rader med pil */
-body.custompage .tws-custom-page ul {
+body.custompage .tws-custom-page ul:not(.p-list) {
   list-style: none !important;
   padding: 0 !important;
   margin: 18px 0 0 0 !important;
   border-top: 1px solid var(--p-line);
 }
-body.custompage .tws-custom-page ul li {
+body.custompage .tws-custom-page ul:not(.p-list) li {
   border-bottom: 1px solid var(--p-line);
   margin: 0 !important;
   padding: 0 !important;
 }
-body.custompage .tws-custom-page ul li span { font-size: inherit !important; }
-body.custompage .tws-custom-page ul li a {
+body.custompage .tws-custom-page ul:not(.p-list) li span { font-size: inherit !important; }
+body.custompage .tws-custom-page ul:not(.p-list) li a {
   display: flex !important;
   align-items: center;
   justify-content: space-between;
@@ -844,15 +844,15 @@ body.custompage .tws-custom-page ul li a {
   color: var(--p-ink) !important;
   text-decoration: none !important;
 }
-body.custompage .tws-custom-page ul li a br { display: none; }
-body.custompage .tws-custom-page ul li a::after {
+body.custompage .tws-custom-page ul:not(.p-list) li a br { display: none; }
+body.custompage .tws-custom-page ul:not(.p-list) li a::after {
   content: "\002192";
   font-size: 20px;
   font-weight: 400;
   transition: transform .15s;
 }
-body.custompage .tws-custom-page ul li a:hover { background: var(--p-sand); }
-body.custompage .tws-custom-page ul li a:hover::after { transform: translateX(4px); }
+body.custompage .tws-custom-page ul:not(.p-list) li a:hover { background: var(--p-sand); }
+body.custompage .tws-custom-page ul:not(.p-list) li a:hover::after { transform: translateX(4px); }
 @media (max-width: 767px) {
   body.custompage .tws-custom-page h1,
   body.custompage .tws-custom-page h1 * { font-size: 28px !important; }
@@ -1023,8 +1023,8 @@ body.checkout .brew--body-wrapper { padding-bottom: 0 !important; }
 body.checkout .brew--footer { margin-top: 24px !important; padding-top: 28px !important; padding-bottom: 8px !important; }
 
 /* Informationssidor: jämna rader (radbrytningar i texten ska inte ge extra höjd) och mindre luft före sidfoten */
-body.custompage .tws-custom-page ul li br { display: none !important; }
-body.custompage .tws-custom-page ul li a { min-height: 56px; padding: 12px 6px !important; }
+body.custompage .tws-custom-page ul:not(.p-list) li br { display: none !important; }
+body.custompage .tws-custom-page ul:not(.p-list) li a { min-height: 56px; padding: 12px 6px !important; }
 body.custompage .tws-custom-page p:empty { display: none !important; }
 body.custompage .brew--body-wrapper { padding-bottom: 0 !important; }
 body.custompage .brew--footer { margin-top: 32px !important; }
@@ -1308,3 +1308,23 @@ body.article .p-warranty__info { margin: 8px 0 0 0 !important; font-size: 12.5px
   body.article .p-warranty__opt:first-child { grid-column: 1 / -1; min-height: 44px; }
 }
 body.article .p-warranty__info a { color: var(--p-ink) !important; text-decoration: underline !important; }
+
+
+/* =====================================================================
+   15. TEXTSIDOR MED VANLIGA LISTOR OCH TABELLER (t.ex. /forlangd-garanti)
+   ===================================================================== */
+body.custompage .tws-custom-page .p-list { margin: 10px 0 18px 0 !important; padding: 0 0 0 22px !important; }
+body.custompage .tws-custom-page .p-list li { margin: 0 0 10px 0 !important; padding: 0 0 0 4px !important; font-size: 16px !important; line-height: 1.6 !important; }
+body.custompage .tws-custom-page ul.p-list--check { list-style: none !important; padding-left: 0 !important; }
+body.custompage .tws-custom-page ul.p-list--check li { position: relative; padding-left: 30px !important; }
+body.custompage .tws-custom-page ul.p-list--check li::before {
+  content: ""; position: absolute; left: 0; top: 4px; width: 18px; height: 18px; border-radius: 50%;
+  background: var(--p-ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 11px 11px no-repeat;
+}
+body.custompage .tws-custom-page ol.p-list--steps { padding-left: 24px !important; }
+body.custompage .tws-custom-page .p-table { width: 100%; max-width: 480px; border-collapse: collapse; margin: 10px 0 18px 0; font-size: 15px; }
+body.custompage .tws-custom-page .p-table th,
+body.custompage .tws-custom-page .p-table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--p-line); }
+body.custompage .tws-custom-page .p-table thead th { background: var(--p-sand); font-weight: 700; }
+body.custompage .tws-custom-page .p-small { font-size: 13px !important; color: var(--p-muted) !important; margin-top: 24px !important; }
+body.custompage .tws-custom-page a[href^="mailto"] { color: var(--p-ink) !important; text-decoration: underline !important; }
