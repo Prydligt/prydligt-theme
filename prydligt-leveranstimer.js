@@ -828,7 +828,7 @@
 (function () {
   var MAIL = 'support@prydligt.se';
   var RETURN_URL = 'https://myreturns.postnord.com/Prydligt001';   // svensk returportal
-  var RETURN_LABEL = 'PostNords returportal';
+  var RETURN_LABEL = 'v\u00e5r returportal';
   var T = {
     sv: {
       icons: ['Skickas fr\u00e5n Sverige', '99 dagars \u00f6ppet k\u00f6p', '1 \u00e5rs garanti'],
