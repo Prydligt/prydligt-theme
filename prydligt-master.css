@@ -1675,3 +1675,9 @@ body.checkout .p-cart-free .p-ship__when::before {
   content: ""; position: absolute; left: 0; top: 1px; width: 20px; height: 20px;
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231e7f4f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 7h11v10H3zM14 10h4l3 3v4h-7'/%3E%3Ccircle cx='7' cy='18' r='2'/%3E%3Ccircle cx='17' cy='18' r='2'/%3E%3C/svg%3E") center / contain no-repeat;
 }
+
+/* 20c. Kassans USP-ruta (Trustpilot + certifierad e-handel): bara på dator.
+   På mobil låg den mellan varukorgen och betalningen och tryckte ner kassan. */
+@media (max-width: 991px) {
+  body.checkout .slot--checkout-cart-usps { display: none !important; }
+}
