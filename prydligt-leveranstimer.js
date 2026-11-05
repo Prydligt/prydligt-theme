@@ -835,7 +835,7 @@
         ['N\u00e4r f\u00e5r jag min order?', 'Best\u00e4ller du f\u00f6re kl. 16 en vardag skickar vi samma dag med PostNord. Leveransen tar 1\u20132 arbetsdagar och frakten \u00e4r fri \u00f6ver 600 kr.'],
         ['Hur returnerar jag?', 'Du har 99 dagars \u00f6ppet k\u00f6p. Mejla {mail} med ditt ordernummer s\u00e5 hj\u00e4lper vi dig med returen och betalar tillbaka pengarna n\u00e4r vi f\u00e5tt varan.'],
         ['Vilken garanti ing\u00e5r?', 'Alla produkter har 1 \u00e5rs garanti mot fabrikations- och materialfel. Dessutom har du alltid tre \u00e5rs reklamationsr\u00e4tt enligt konsumentk\u00f6plagen. Till klockor kan du l\u00e4gga till f\u00f6rl\u00e4ngd garanti.'],
-        ['Hur kan jag betala?', 'Du betalar tryggt via Klarna med kort, faktura eller delbetalning. Vi f\u00e5r aldrig se dina kortuppgifter.']
+        ['Hur kan jag betala?', 'Du betalar tryggt med kort, Swish, Apple Pay, Google Pay eller Klarna (faktura och delbetalning). Vi f\u00e5r aldrig se dina kortuppgifter.']
       ]
     },
     da: {
