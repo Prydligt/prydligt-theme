@@ -711,3 +711,111 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
   else start();
 })();
+
+/* ===================================================================
+   6. USP-PUNKTER P\u00c5 PRODUKTSIDAN: ikon + klickbar f\u00f6rklaring
+   Punkterna skrivs i temaeditorn (Produktsida -> Unique Selling Points).
+   H\u00e4r kopplas varje punkt till en ikon och en kort text som f\u00e4lls ut.
+   =================================================================== */
+(function () {
+  var TP = 'https://www.trustpilot.com/review/prydligt.se';
+  var TXT = {
+    sv: {
+      ship: 'Vi packar och skickar fr\u00e5n v\u00e5rt eget lager i V\u00e4nersborg. Snabbt, utan mellanh\u00e4nder.',
+      cust: '\u00d6ver 450 000 kunder har handlat hos oss. Se vad de tycker p\u00e5 Trustpilot.',
+      custLink: 'L\u00e4s omd\u00f6men', custUrl: 'https://se.trustpilot.com/review/prydligt.se',
+      warr: 'G\u00e5r n\u00e5got s\u00f6nder vid normal anv\u00e4ndning reparerar vi det eller skickar en ny, utan kostnad. Till klockor kan du l\u00e4gga till f\u00f6rl\u00e4ngd garanti med fritt batteribyte.',
+      warrLink: 'L\u00e4s mer', warrUrl: '/forlangd-garanti'
+    },
+    da: {
+      ship: 'Vi pakker og sender fra vores eget lager i V\u00e4nersborg i Sverige. Ingen told inden for EU.',
+      cust: 'Over 450.000 kunder har handlet hos os. Se hvad de siger p\u00e5 Trustpilot.',
+      custLink: 'L\u00e6s anmeldelser', custUrl: 'https://dk.trustpilot.com/review/prydligt.se',
+      warr: 'G\u00e5r noget i stykker ved normal brug, reparerer vi det eller sender et nyt, uden beregning.'
+    },
+    de: {
+      ship: 'Wir packen und versenden aus unserem eigenen Lager in V\u00e4nersborg, Schweden. Kein Zoll innerhalb der EU.',
+      cust: '\u00dcber 450.000 Kunden haben bei uns eingekauft. Lies ihre Bewertungen auf Trustpilot.',
+      custLink: 'Bewertungen lesen', custUrl: 'https://de.trustpilot.com/review/prydligt.se',
+      warr: 'Geht bei normalem Gebrauch etwas kaputt, reparieren wir es oder schicken dir ein neues, kostenlos.'
+    },
+    en: {
+      ship: 'We pack and ship from our own warehouse in V\u00e4nersborg, Sweden.',
+      cust: 'Over 450,000 customers have shopped with us. See what they say on Trustpilot.',
+      custLink: 'Read reviews', custUrl: TP,
+      warr: 'If something breaks with normal use, we repair it or send you a new one, free of charge.'
+    },
+    fi: {
+      ship: 'Pakkaamme ja l\u00e4het\u00e4mme omasta varastostamme V\u00e4nersborgista, Ruotsista. Ei tulleja EU:n sis\u00e4ll\u00e4.',
+      cust: 'Yli 450 000 asiakasta on ostanut meilt\u00e4. Katso mit\u00e4 he sanovat Trustpilotissa.',
+      custLink: 'Lue arvostelut', custUrl: TP,
+      warr: 'Jos jokin hajoaa normaalik\u00e4yt\u00f6ss\u00e4, korjaamme sen tai l\u00e4het\u00e4mme uuden veloituksetta.'
+    },
+    nb: {
+      ship: 'Vi pakker og sender fra v\u00e5rt eget lager i V\u00e4nersborg i Sverige. Vi er registrert i VOEC, s\u00e5 du betaler ingen toll eller gebyrer ved levering.',
+      cust: 'Over 450 000 kunder har handlet hos oss. Se hva de sier p\u00e5 Trustpilot.',
+      custLink: 'Les anmeldelser', custUrl: 'https://no.trustpilot.com/review/prydligt.se',
+      warr: 'G\u00e5r noe i stykker ved normal bruk, reparerer vi det eller sender et nytt, uten kostnad.'
+    },
+    nl: {
+      ship: 'We pakken en verzenden vanuit ons eigen magazijn in V\u00e4nersborg, Zweden. Geen douanekosten binnen de EU.',
+      cust: 'Meer dan 450.000 klanten kochten al bij ons. Lees hun reviews op Trustpilot.',
+      custLink: 'Reviews lezen', custUrl: 'https://nl.trustpilot.com/review/prydligt.se',
+      warr: 'Gaat er bij normaal gebruik iets kapot, dan repareren we het of sturen we een nieuw exemplaar, gratis.'
+    }
+  };
+  TXT.no = TXT.nb;
+
+  function lang() {
+    var l = (document.documentElement.getAttribute('lang') || 'sv').toLowerCase().slice(0, 2);
+    return TXT[l] ? l : 'sv';
+  }
+  function kind(text) {
+    if (/450/.test(text)) return 'cust';
+    if (/Sverige|Sweden|Schweden|Ruotsi|Zweden/i.test(text)) return 'ship';
+    if (/garanti|warranty|takuu/i.test(text)) return 'warr';
+    return null;
+  }
+  function link(href, label) {
+    var a = document.createElement('a');
+    a.href = href; a.textContent = label;
+    if (/^https?:/.test(href)) { a.target = '_blank'; a.rel = 'noopener'; }
+    a.addEventListener('click', function (e) { e.stopPropagation(); });
+    return a;
+  }
+  function enhance() {
+    var items = document.querySelectorAll('.slot--unique-selling-points li');
+    if (!items.length) return;
+    var t = TXT[lang()];
+    for (var i = 0; i < items.length; i++) {
+      var li = items[i];
+      if (li.querySelector('.p-usp__more')) continue;
+      var span = li.querySelector('.tws-unique-selling-points--text');
+      var k = kind((span || li).textContent);
+      if (!k) continue;
+      li.classList.add('p-usp', 'p-usp--' + k);
+      var more = document.createElement('div');
+      more.className = 'p-usp__more';
+      more.id = 'p-usp-' + k;
+      more.appendChild(document.createTextNode(t[k] + ' '));
+      if (k === 'cust' && t.custUrl) more.appendChild(link(t.custUrl, t.custLink));
+      if (k === 'warr' && t.warrUrl) more.appendChild(link(t.warrUrl, t.warrLink));
+      li.appendChild(more);
+      li.setAttribute('role', 'button');
+      li.setAttribute('tabindex', '0');
+      li.setAttribute('aria-expanded', 'false');
+      li.setAttribute('aria-controls', more.id);
+      li.addEventListener('click', toggle);
+      li.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle.call(this); }
+      });
+    }
+  }
+  function toggle() {
+    var open = this.classList.toggle('p-usp--open');
+    this.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  function start() { enhance(); setInterval(enhance, 1500); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
+})();
