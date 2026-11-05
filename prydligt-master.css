@@ -1817,3 +1817,43 @@ html.p-wdlg-open, html.p-wdlg-open body { overflow: hidden !important; }
   .p-wdlg__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .p-wdlg__table { font-size: 13px; }
 }
+
+/* =====================================================================
+   22. HOVER PÅ KÖPKNAPPAR I HELA BUTIKEN (Kustoms betalruta påverkas inte – den ligger i en iframe)
+   Svarta knappar blir ljusare och lyfter 1 px; tryck = tillbaka.
+   ===================================================================== */
+body.brew .btn-primary,
+body.brew .tws-article-buy-button-with-modal--buy-button,
+body.brew .tws-article-buy-button-with-modal--proceed-to-checkout,
+body.brew .tws-article-list--list .tws-article-list--buy-button .btn,
+body.brew .tws-newsletter-subscribe--subscribe-button,
+body.brew .brew--sidebar .tws-article-list--buy-button .btn,
+.p-wdlg__choose {
+  transition: background-color .18s ease, transform .18s ease, opacity .18s ease !important;
+}
+body.brew .btn-primary:hover,
+body.brew .btn-primary:focus-visible,
+body.brew .tws-article-buy-button-with-modal--buy-button:hover,
+body.brew .tws-article-buy-button-with-modal--buy-button:focus-visible,
+body.brew .tws-article-buy-button-with-modal--proceed-to-checkout:hover,
+body.brew .tws-article-list--list .tws-list--grid-item .tws-article-list--buy-button .btn:hover,
+body.brew .tws-newsletter-subscribe--subscribe-button:hover,
+.p-wdlg__card:hover .p-wdlg__choose {
+  background: #383838 !important; opacity: 1 !important; transform: translateY(-1px);
+}
+body.brew .btn-primary:active,
+body.brew .tws-article-buy-button-with-modal--buy-button:active,
+body.brew .tws-article-buy-button-with-modal--proceed-to-checkout:active,
+body.brew .tws-article-list--list .tws-list--grid-item .tws-article-list--buy-button .btn:active,
+body.brew .tws-newsletter-subscribe--subscribe-button:active {
+  background: #000 !important; transform: translateY(0);
+}
+/* Vita köpknappar i sidomenyn: blir beige */
+body.brew .brew--sidebar .tws-article-list--buy-button .btn:hover { background: var(--p-sand) !important; transform: translateY(-1px); }
+@media (prefers-reduced-motion: reduce) {
+  body.brew .btn-primary:hover, body.brew .tws-article-buy-button-with-modal--buy-button:hover,
+  body.brew .tws-article-buy-button-with-modal--proceed-to-checkout:hover,
+  body.brew .tws-article-list--list .tws-list--grid-item .tws-article-list--buy-button .btn:hover,
+  body.brew .tws-newsletter-subscribe--subscribe-button:hover,
+  body.brew .brew--sidebar .tws-article-list--buy-button .btn:hover { transform: none; }
+}
