@@ -454,10 +454,35 @@
       })();
     });
   }
+  /* --- Uppdatera Abicarts varukorg (antal i menyn, fri frakt-notis, summor) efter att garantin lagts till.
+         Samma anrop och samma urval som temat själv använder (Order.getCritical + SET_ORDER). --- */
+  function orderSelection(st) {
+    var lang = st.language, def = st.webshop && st.webshop.defaultLanguage, names = [lang];
+    if (def && def !== lang) names.push(def);
+    var sel = { costs: true, currency: true, customer: true, delivery: true, hasVat: true, payments: {}, changed: true,
+      items: { uid: true, article: { uid: true, name: names, articleNumber: true, url: lang,
+        choices: { name: lang, options: {}, description: lang, type: true, uid: true, quantityChoicesAffectsOptionPrices: true, quantity: true },
+        deliveryInfo: names, content: true, isBuyable: true, images: true, imagesAltText: true, freeFreight: true, presentationOnly: true,
+        sku: true, stock: true, type: true, articlegroup: { name: names }, unit: true, variants: true, price: true, quantityInfo: true },
+        choices: true, costs: ['unit', 'total'], articleName: true, articleNumber: true, discountInfo: true, deliveryInfo: names },
+      language: true, discountInfo: true };
+    if (!(st.order && st.order.uid)) sel.uid = true;
+    if (!(st.order && st.order.ordered)) sel.ordered = true;
+    return sel;
+  }
+  function refreshOrder(orderId) {
+    var st = store();
+    if (!st || !window.twsReduxStore.dispatch) return Promise.resolve();
+    return rpc('Order.getCritical', [orderId, orderSelection(st)]).then(function (order) {
+      if (order && order.changed !== null) window.twsReduxStore.dispatch({ type: 'SET_ORDER', payload: order });
+    }).catch(function (err) { if (window.console) console.warn('[Prydligt garanti] kunde inte uppdatera varukorgen', err); });
+  }
+
   function addToCart(articleNumber, orderId) {
     if (window.prydligtAddArticle) return Promise.resolve(window.prydligtAddArticle(articleNumber, 1));
     return lookupUid(articleNumber)
       .then(function (uid) { return rpc('Order.addArticle', [orderId, uid, { quantity: 1 }, { uid: true }, { fastVerify: true }]); })
+      .then(function (r) { return refreshOrder(orderId).then(function () { return r; }); })
       .catch(function (err) { if (window.console) console.warn('[Prydligt garanti] kunde inte l\u00e4gga till', articleNumber, err); });
   }
 
