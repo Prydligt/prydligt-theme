@@ -105,19 +105,80 @@
     return { mode: n === 1 ? 'tomorrow' : 'day', day: d.getUTCDay() };
   }
 
+  /* ---------- Leveransruta: fri frakt-mätare + nedräkning + beräknad leverans + öppet köp ---------- */
+  // Per marknad (styrs av sidans språk): leveranstid i vardagar och gräns för fri frakt
+  var MARKET = {
+    sv: { days: [1, 2], free: 600, cur: 'kr',  fmt: function (n) { return n + ' kr'; } },
+    nb: { days: [2, 4], free: 800, cur: 'kr',  fmt: function (n) { return n + ' kr'; } },
+    da: { days: [2, 4], free: 600, cur: 'kr',  fmt: function (n) { return n + ' kr'; } },
+    fi: { days: [2, 4], free: 80,  cur: 'EUR', fmt: function (n) { return n + ' €'; } },
+    de: { days: [2, 4], free: 80,  cur: 'EUR', fmt: function (n) { return n + ' €'; } },
+    nl: { days: [2, 4], free: 80,  cur: 'EUR', fmt: function (n) { return '€ ' + n; } }
+  };
+  var BOX = {
+    sv: { free: 'Fri frakt', left: 'kvar', reached: 'Du har fri frakt', pre: 'Beställ inom', today: 'så skickas din order idag.', next: 'Beställ nu så skickas din order', est: 'Beräknad leverans mellan', and: 'och', ret: '99 dagars öppet köp', tomorrow: 'imorgon' ,
+          months: ['jan','feb','mars','apr','maj','juni','juli','aug','sep','okt','nov','dec'] },
+    nb: { free: 'Gratis frakt', left: 'igjen', reached: 'Du har gratis frakt', pre: 'Bestill innen', today: 'så sendes ordren din i dag.', next: 'Bestill nå så sendes ordren din', est: 'Beregnet levering mellom', and: 'og', ret: '99 dagers åpent kjøp', tomorrow: 'i morgen',
+          months: ['jan','feb','mars','apr','mai','juni','juli','aug','sep','okt','nov','des'] },
+    da: { free: 'Gratis fragt', left: 'tilbage', reached: 'Du har gratis fragt', pre: 'Bestil inden', today: 'så sendes din ordre i dag.', next: 'Bestil nu så sendes din ordre', est: 'Forventet levering mellem', and: 'og', ret: '99 dages fuld returret', tomorrow: 'i morgen',
+          months: ['jan','feb','marts','apr','maj','juni','juli','aug','sep','okt','nov','dec'] },
+    fi: { free: 'Ilmainen toimitus', left: 'jäljellä', reached: 'Saat ilmaisen toimituksen', pre: 'Tilaa', today: 'sisällä, niin tilauksesi lähetetään tänään.', next: 'Tilaa nyt, niin tilauksesi lähetetään', est: 'Arvioitu toimitus', and: '–', ret: '99 päivän palautusoikeus', tomorrow: 'huomenna',
+          months: ['tammik.','helmik.','maalisk.','huhtik.','toukok.','kesäk.','heinäk.','elok.','syysk.','lokak.','marrask.','jouluk.'] },
+    de: { free: 'Kostenloser Versand', left: 'übrig', reached: 'Kostenloser Versand erreicht', pre: 'Bestellen Sie innerhalb von', today: 'und Ihre Bestellung wird heute versandt.', next: 'Jetzt bestellen – Versand', est: 'Voraussichtliche Lieferung zwischen', and: 'und', ret: '99 Tage Rückgaberecht', tomorrow: 'morgen',
+          months: ['Jan.','Feb.','März','Apr.','Mai','Juni','Juli','Aug.','Sep.','Okt.','Nov.','Dez.'] },
+    nl: { free: 'Gratis verzending', left: 'te gaan', reached: 'Je hebt gratis verzending', pre: 'Bestel binnen', today: 'en je bestelling wordt vandaag verzonden.', next: 'Bestel nu, dan wordt je bestelling verzonden', est: 'Verwachte levering tussen', and: 'en', ret: '99 dagen bedenktijd', tomorrow: 'morgen',
+          months: ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'] }
+  };
+
+  function addShipDays(d, n) { var x = d; while (n > 0) { x = addDays(x, 1); if (isShipDay(x)) n--; } return x; }
+  function fmtDate(d) {
+    var l = lang(), t = TEXT[l], b = BOX[l];
+    var wd = t.days[d.getUTCDay()], day = d.getUTCDate(), mon = b.months[d.getUTCMonth()];
+    if (l === 'de') return wd + ', ' + day + '. ' + mon;
+    if (l === 'fi') return day + '. ' + mon;
+    return wd + ' ' + day + ' ' + mon;
+  }
+  function shipDate() {
+    var wall = stockholmWall(now());
+    var today = new Date(Date.UTC(wall.getUTCFullYear(), wall.getUTCMonth(), wall.getUTCDate()));
+    var st = state();
+    if (st.mode === 'today') return today;
+    var d = addDays(today, 1); while (!isShipDay(d)) d = addDays(d, 1);
+    return d;
+  }
+  // Kvar till fri frakt: läses från Abicarts egen notis i sidhuvudet ("330 SEK kvar till fri frakt" / "Du har fri frakt")
+  function freeShippingLeft(m) {
+    var n = document.querySelector('.tws-free-shipping-notice');
+    if (!n) return m.free;
+    if (n.querySelector('.tws-free-shipping-notice--cost-reached')) return 0;
+    var txt = (n.textContent || '').replace(/\s/g, '');
+    var num = txt.match(/(\d+(?:[.,]\d+)?)/);
+    return num ? Math.max(0, Math.round(parseFloat(num[1].replace(',', '.')))) : m.free;
+  }
+
   function render(el) {
-    var t = TEXT[lang()], s = state(), html;
+    var l = lang(), t = TEXT[l], b = BOX[l], m = MARKET[l], s = state();
+    var left = freeShippingLeft(m), pct = Math.max(0, Math.min(100, Math.round((m.free - left) / m.free * 100)));
+    var freeRow = left > 0
+      ? '<div class="p-ship__free"><span>' + b.free + '</span><span><strong>' + m.fmt(left) + '</strong> ' + b.left + '</span></div>'
+      : '<div class="p-ship__free p-ship__free--ok"><span>' + b.reached + '</span></div>';
+    var bar = '<div class="p-ship__bar" aria-hidden="true"><span style="width:' + (left > 0 ? pct : 100) + '%"></span></div>';
+
+    var when;
     if (s.mode === 'today') {
-      var h = Math.floor(s.left / 3600), m = Math.floor((s.left % 3600) / 60), sec = s.left % 60;
-      var parts = (h > 0 ? h + '\u00a0' + t.h + ' ' : '') + m + '\u00a0' + t.m + ' ' + (sec < 10 ? '0' : '') + sec + '\u00a0' + t.s;
-      html = t.pre + ' <strong class="p-ship-timer__time">' + parts + '</strong> \u2013 ' + t.today;
-      if (lang() === 'fi') html = t.pre + ' <strong class="p-ship-timer__time">' + parts + '</strong> ' + t.today;
-    } else if (s.mode === 'tomorrow') {
-      html = t.next + ' <strong>' + t.tomorrow + '</strong>';
+      var h = Math.floor(s.left / 3600), mi = Math.floor((s.left % 3600) / 60), sec = s.left % 60;
+      var parts = (h > 0 ? h + ' ' + t.h + ' ' : '') + mi + ' ' + t.m + ' ' + (sec < 10 ? '0' : '') + sec + ' ' + t.s;
+      when = b.pre + ' <strong class="p-ship-timer__time">' + parts + '</strong> ' + b.today;
     } else {
-      html = t.next + ' <strong>' + t.on + ' ' + t.days[s.day] + '</strong>';
+      when = b.next + ' <strong>' + (s.mode === 'tomorrow' ? b.tomorrow : t.days[s.day]) + '</strong>.';
     }
-    html = '<span>' + html + '</span>';
+    var sd = shipDate(), d1 = addShipDays(sd, m.days[0]), d2 = addShipDays(sd, m.days[1]);
+    var end = fmtDate(d2), dot = /\.$/.test(end) ? '' : '.';
+    var est = ' ' + b.est + ' <strong>' + fmtDate(d1) + '</strong> ' + b.and + ' <strong>' + end + '</strong>' + dot;
+
+    var html = freeRow + bar +
+      '<p class="p-ship__when">' + when + est + '</p>' +
+      '<p class="p-ship__ret">' + b.ret + '</p>';
     if (el.__last !== html) { el.innerHTML = html; el.__last = html; }
   }
 
@@ -135,7 +196,7 @@
     if (!ok) { if (timerEl && timerEl.parentNode) timerEl.parentNode.removeChild(timerEl); return; }
     if (!timerEl) {
       timerEl = document.createElement('div');
-      timerEl.className = 'p-ship-timer';
+      timerEl.className = 'p-ship-timer p-ship';
       timerEl.setAttribute('aria-live', 'off');
     }
     if (timerEl.previousElementSibling !== anchor) anchor.insertAdjacentElement('afterend', timerEl);

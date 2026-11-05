@@ -1363,3 +1363,28 @@ body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-butto
   mix-blend-mode: multiply !important;
   opacity: 1 !important;
 }
+
+
+/* =====================================================================
+   12b. LEVERANSRUTA (ersätter den gröna nedräkningsraden)
+   Fri frakt-mätare · nedräkning + beräknad leverans · öppet köp
+   ===================================================================== */
+body.article .p-ship-timer.p-ship {
+  display: block;
+  margin: 14px 0 0 0;
+  padding: 16px 18px;
+  background: var(--p-sand);
+  color: var(--p-ink);
+  font-size: 15px;
+  line-height: 1.45;
+}
+body.article .p-ship-timer.p-ship::before { display: none; }
+body.article .p-ship__free { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: 15px; }
+body.article .p-ship__free strong { font-weight: 700; }
+body.article .p-ship__free--ok span { font-weight: 700; color: var(--p-ok); }
+body.article .p-ship__bar { height: 6px; margin: 8px 0 12px 0; background: #fff; border: 1px solid var(--p-ink); overflow: hidden; }
+body.article .p-ship__bar span { display: block; height: 100%; background: var(--p-ink); transition: width .4s ease; }
+body.article .p-ship__when { margin: 0 !important; font-size: 15px !important; line-height: 1.5 !important; }
+body.article .p-ship__when strong { font-weight: 700; }
+body.article .p-ship__when .p-ship-timer__time { color: var(--p-ink); font-variant-numeric: tabular-nums; }
+body.article .p-ship__ret { margin: 8px 0 0 0 !important; font-size: 14px !important; font-style: italic; color: var(--p-muted) !important; }
