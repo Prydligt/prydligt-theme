@@ -1693,6 +1693,23 @@ body.checkout .slot--checkout-cart-usps li:nth-child(2)::before {
   background: #111 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 3.2l3.8 1.4v2.9c0 2.3-1.6 4.2-3.8 4.9-2.2-.7-3.8-2.6-3.8-4.9V4.6z' fill='%23fff'/%3E%3Cpath d='M6.3 8l1.2 1.2 2.3-2.4' stroke='%23111' stroke-width='1.3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 16px 16px no-repeat;
 }
 
+/* 20c. Kassans USP-ruta (Trustpilot + certifierad e-handel): bara på dator.
+   På mobil låg den mellan varukorgen och betalningen och tryckte ner kassan. */
+@media (max-width: 991px) {
+  body.checkout .slot--checkout-cart-usps { display: none !important; }
+}
+
+/* 20d. Kassans USP-ruta: samma runda ikoner som produktsidan.
+   Rad 1 = Trustpilot (guldstjärna), rad 2 = certifierad e-handel (sköld med bock). */
+body.checkout .slot--checkout-cart-usps li:nth-child(1)::after,
+body.checkout .slot--checkout-cart-usps li:nth-child(2)::after { display: none; }
+body.checkout .slot--checkout-cart-usps li:nth-child(1)::before {
+  background: #111 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 3.1l1.45 2.95 3.25.47-2.35 2.29.56 3.24L8 10.52l-2.91 1.53.56-3.24L3.3 6.52l3.25-.47z' fill='%23F5B301'/%3E%3C/svg%3E") center / 16px 16px no-repeat;
+}
+body.checkout .slot--checkout-cart-usps li:nth-child(2)::before {
+  background: #111 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 3.2l3.8 1.4v2.9c0 2.3-1.6 4.2-3.8 4.9-2.2-.7-3.8-2.6-3.8-4.9V4.6z' fill='%23fff'/%3E%3Cpath d='M6.3 8l1.2 1.2 2.3-2.4' stroke='%23111' stroke-width='1.3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 16px 16px no-repeat;
+}
+
 /* 12d. Trustpilot-rad i kassans fri frakt-ruta – bara på mobil (dator: högerspalten) */
 body.checkout .p-cart-free .p-cart-tp { display: none; }
 @media (max-width: 991px) {
@@ -1703,3 +1720,7 @@ body.checkout .p-cart-free .p-cart-tp { display: none; }
     background: #111 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 3.1l1.45 2.95 3.25.47-2.35 2.29.56 3.24L8 10.52l-2.91 1.53.56-3.24L3.3 6.52l3.25-.47z' fill='%23F5B301'/%3E%3C/svg%3E") center / 16px 16px no-repeat;
   }
 }
+
+/* 20e. Kassans USP-ruta (Trustpilot + certifierad e-handel) dold helt – tillförde inget.
+   Tryggheten finns i fri frakt-rutan och i raden under "Betala köp". */
+body.checkout .slot--checkout-cart-usps { display: none !important; }
