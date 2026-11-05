@@ -1660,3 +1660,7 @@ body.checkout .p-trust__faq a { color: var(--p-ink) !important; text-decoration:
   body.checkout .p-trust__icon { font-size: 13.5px; }
   body.checkout .p-trust__faq summary { font-size: 15px; }
 }
+
+/* 20b. Trygghetsraden: tätare mot betalrutan och samma bredd som den (600 px) */
+body.checkout .p-trust { margin: 0 auto 8px auto !important; max-width: 600px; }
+body.checkout .p-trust__icons { margin-bottom: 24px !important; }
