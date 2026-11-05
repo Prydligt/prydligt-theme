@@ -287,7 +287,7 @@
  * Priset styrs av produktens pris via prisnivåer (BANDS). Varje nivå + längd är en egen
  * artikel i Abicart (artikelnummer i ART), som läggs i varukorgen tillsammans med produkten.
  *
- * STATUS: klar. Fyll i ART_UID (artikel-ID för de 32 garantiartiklarna) och sätt LIVE = true.
+ * STATUS: klar. Artikel-ID slås upp automatiskt via artikelnumret. Sätt LIVE = true efter test.
  * Tills dess visas modulen bara med ?garanti=1 i adressen.
  */
 (function () {
@@ -349,26 +349,37 @@
     return ONLY_IN.test(((crumbs && crumbs.textContent) || '') + ' ' + ((name && name.textContent) || ''));
   }
 
-  /* --- Artikel-ID (uid) i Abicart för varje garantiartikel. Fylls i efter importen. --- */
-  var ART_UID = {
-    // 'GARANTI-1AR-A': 123456789,
-  };
-
-  /* --- Lägger en artikel i varukorgen via Abicarts eget API (Order.addArticle) --- */
+  /* --- Abicarts eget API, via temats egen koppling (twsCore.twapiFromState) --- */
   function store() { return window.twsReduxStore && window.twsReduxStore.getState ? window.twsReduxStore.getState() : null; }
   function rpc(method, params) {
     var st = store();
-    if (!st || !st.host) return Promise.reject(new Error('Abicart-store saknas'));
+    if (!st) return Promise.reject(new Error('Abicart-store saknas'));
+    if (window.twsCore && typeof window.twsCore.twapiFromState === 'function') {
+      var call = window.twsCore.twapiFromState(st)(method);
+      return Promise.resolve(call.apply(null, params));
+    }
+    // Reserv: samma anrop som temat gör
     var q = { webshop: st.webshop && st.webshop.uid, auth: st.auth, session: st.session, language: st.language };
     var qs = Object.keys(q).map(function (k) { return k + '=' + (q[k] === null || q[k] === undefined ? '' : q[k]); }).join('&');
     return fetch('https://' + st.host + '?' + qs, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ jsonrpc: '2.0', id: Date.now(), method: method, params: params })
-    }).then(function (r) { return r.json(); }).then(function (j) {
-      if (j.error) throw j.error;
-      return j.result;
-    });
+    }).then(function (r) { return r.json(); }).then(function (j) { if (j.error) throw j.error; return j.result; });
+  }
+
+  /* --- Artikelnummer -> Abicarts interna artikel-ID (uid), slås upp en gång och sparas --- */
+  var uidCache = {};
+  try { uidCache = JSON.parse(sessionStorage.getItem('pGarantiUids') || '{}') || {}; } catch (e) { uidCache = {}; }
+  function lookupUid(articleNumber) {
+    if (uidCache[articleNumber]) return Promise.resolve(uidCache[articleNumber]);
+    return rpc('Article.list', [['uid', 'articleNumber'], { filters: { articleNumber: articleNumber }, limit: 1 }])
+      .then(function (list) {
+        var hit = list && list[0];
+        if (!hit || !hit.uid) throw new Error('Hittar ingen artikel ' + articleNumber);
+        uidCache[articleNumber] = hit.uid;
+        try { sessionStorage.setItem('pGarantiUids', JSON.stringify(uidCache)); } catch (e) {}
+        return hit.uid;
+      });
   }
   function orderUid() { var st = store(); return st && st.order && st.order.uid; }
   function waitForOrder(ms) {
@@ -384,9 +395,8 @@
   }
   function addToCart(articleNumber, orderId) {
     if (window.prydligtAddArticle) return Promise.resolve(window.prydligtAddArticle(articleNumber, 1));
-    var uid = ART_UID[articleNumber];
-    if (!uid) { if (window.console) console.warn('[Prydligt garanti] uid saknas f\u00f6r', articleNumber); return Promise.resolve(); }
-    return rpc('Order.addArticle', [orderId, uid, { quantity: 1 }, { uid: true }, { fastVerify: true }])
+    return lookupUid(articleNumber)
+      .then(function (uid) { return rpc('Order.addArticle', [orderId, uid, { quantity: 1 }, { uid: true }, { fastVerify: true }]); })
       .catch(function (err) { if (window.console) console.warn('[Prydligt garanti] kunde inte l\u00e4gga till', articleNumber, err); });
   }
 
@@ -409,6 +419,7 @@
       var b = e.target.closest('.p-warranty__opt');
       if (!b) return;
       selected = parseInt(b.getAttribute('data-years'), 10) || 0;
+      if (selected) lookupUid(artNo(band, selected)).catch(function (err) { if (window.console) console.warn('[Prydligt garanti]', err); });
       el.querySelectorAll('.p-warranty__opt').forEach(function (o) {
         var on = o === b; o.classList.toggle('is-selected', on); o.setAttribute('aria-pressed', on ? 'true' : 'false');
       });
