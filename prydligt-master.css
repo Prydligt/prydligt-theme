@@ -1450,3 +1450,11 @@ body.brew .brew--footer .brew--footer-mid-right img { filter: none !important; }
 body.brew .brew--footer .tws-brand-logos--logo-amex .tws-brand-logos--logo-image { filter: none !important; opacity: 1; }
 /* Bara en skiljelinje ovanför betallogorna */
 body.brew .brew--footer .slot--brand-logos { border-top: 0 !important; }
+
+
+/* =====================================================================
+   17. GÖM GARANTIARTIKLARNA I ALLA PRODUKTLISTOR (de ska bara köpas via tillvalet)
+   ===================================================================== */
+body.brew .tws-list--grid-item:has(a[href*="forlangd-garanti-"]),
+body.brew .tws-list--list-item:has(a[href*="forlangd-garanti-"]),
+body.brew .slick-slide:has(a[href*="forlangd-garanti-"]) { display: none !important; }
