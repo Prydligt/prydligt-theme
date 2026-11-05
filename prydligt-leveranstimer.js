@@ -164,14 +164,8 @@
     return num ? Math.max(0, Math.round(parseFloat(num[1].replace(',', '.')))) : m.free;
   }
 
-  function render(el) {
-    var l = lang(), t = TEXT[l], b = BOX[l], m = MARKET[l], s = state();
-    var left = freeShippingLeft(m), pct = Math.max(0, Math.min(100, Math.round((m.free - left) / m.free * 100)));
-    var freeRow = left > 0
-      ? '<div class="p-ship__free"><span>' + b.free + '</span><span><strong>' + m.fmt(left) + '</strong> ' + b.left + '</span></div>'
-      : '<div class="p-ship__free p-ship__free--ok"><span>' + b.reached + '</span></div>';
-    var bar = '<div class="p-ship__bar" aria-hidden="true"><span style="width:' + (left > 0 ? pct : 100) + '%"></span></div>';
-
+  // Nedräkning + beräknad leveransdag (används på produktsidan och i kassan)
+  function deliveryText(l, t, b, m, s) {
     var when;
     if (s.mode === 'today') {
       var h = Math.floor(s.left / 3600), mi = Math.floor((s.left % 3600) / 60), sec = s.left % 60;
@@ -184,8 +178,21 @@
     var end = fmtDate(d2), dot = /\.$/.test(end) ? '' : '.';
     var est = ' ' + b.est + ' <strong>' + fmtDate(d1) + '</strong> ' + b.and + ' <strong>' + end + '</strong>' + dot;
 
+    return when + est;
+  }
+
+  function render(el) {
+    var l = lang(), t = TEXT[l], b = BOX[l], m = MARKET[l], s = state();
+    var left = freeShippingLeft(m), pct = Math.max(0, Math.min(100, Math.round((m.free - left) / m.free * 100)));
+    var freeRow = left > 0
+      ? '<div class="p-ship__free"><span>' + b.free + '</span><span><strong>' + m.fmt(left) + '</strong> ' + b.left + '</span></div>'
+      : '<div class="p-ship__free p-ship__free--ok"><span>' + b.reached + '</span></div>';
+    var bar = '<div class="p-ship__bar" aria-hidden="true"><span style="width:' + (left > 0 ? pct : 100) + '%"></span></div>';
+
+    var whenEst = deliveryText(l, t, b, m, s);
+
     var html = freeRow + bar +
-      '<p class="p-ship__when">' + when + est + '</p>' +
+      '<p class="p-ship__when">' + whenEst + '</p>' +
       '<p class="p-ship__ret">' + b.ret + '</p>';
     if (el.__last !== html) { el.innerHTML = html; el.__last = html; }
   }
@@ -271,7 +278,8 @@
     var html = (left > 0
       ? '<div class="p-ship__free"><span>' + b.free + '</span><span><strong>' + m.fmt(left) + '</strong> ' + b.left + '</span></div>'
       : '<div class="p-ship__free p-ship__free--ok"><span>' + b.reached + '</span></div>') +
-      '<div class="p-ship__bar" aria-hidden="true"><span style="width:' + pct + '%"></span></div>';
+      '<div class="p-ship__bar" aria-hidden="true"><span style="width:' + pct + '%"></span></div>' +
+      '<p class="p-ship__when">' + deliveryText(l, TEXT[l], b, m, state()) + '</p>';
     if (cartEl.__last !== html) { cartEl.innerHTML = html; cartEl.__last = html; }
   }
 
