@@ -1609,7 +1609,7 @@ html[lang="en"] body.brew .tws-newsletter-subscribe--subscribe-button .ladda-lab
   body.brew .tws-newsletter-subscribe--html-before h3 { font-size: 22px !important; }
 }
 
-/* 19b. Popupen visas först när JS:en satt html.p-nl-ok (efter 20 s, ej i kassan) */
+/* 19b. Popupen visas först när JS:en satt html.p-nl-ok (efter 8 s, ej i kassan) */
 html:not(.p-nl-ok) .tws-newsletter-subscribe--dialog { display: none !important; }
 
 /* 19c. Centrera fält + knapp och ta bort glipan mellan dem */

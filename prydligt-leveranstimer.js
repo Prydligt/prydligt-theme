@@ -766,7 +766,7 @@
    aldrig setts, och Abicart visar den igen vid nästa besök.
    =================================================================== */
 (function () {
-  var NL_DELAY = 20000;
+  var NL_DELAY = 8000;
   var KEY = 'pNlStart';
   var t0 = Date.now();
   try {
