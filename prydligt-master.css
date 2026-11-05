@@ -1862,3 +1862,4 @@ body.brew .brew--sidebar .tws-article-list--buy-button .btn:hover { background: 
 :root { --p-sale: #c8102e; }
 html body.brew .tws-api-price:has(.tws-api--price-regular) .tws-api--price-current.twsPriceCurrent,
 html body.brew .tws-api-price:has(.twsPriceRegular) .twsPriceCurrent:not(.twsPriceRegular) { color: var(--p-sale) !important; }
+body.brew .tws-article-list--list .tws-list--grid-item .tws-article-list--price .tws-api-price:has(.twsPriceRegular) .tws-api--price-current.twsPriceCurrent { color: var(--p-sale) !important; }
