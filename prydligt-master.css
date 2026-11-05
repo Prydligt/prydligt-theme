@@ -1411,3 +1411,42 @@ body.article .p-stock {
 }
 body.article .p-stock::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--p-ok); flex-shrink: 0; }
 body.article .p-stock + .p-ship { margin-top: 10px; }
+
+
+/* =====================================================================
+   16. SVART SIDFOT MED LOGGA
+   ===================================================================== */
+body.brew .brew--footer {
+  background: var(--p-ink) !important;
+  color: #fff !important;
+  padding-top: 40px !important;
+}
+body.brew .brew--footer,
+body.brew .brew--footer a,
+body.brew .brew--footer p,
+body.brew .brew--footer span,
+body.brew .brew--footer address,
+body.brew .brew--footer strong,
+body.brew .brew--footer h4 { color: #fff !important; }
+body.brew .brew--footer a { opacity: .85; }
+body.brew .brew--footer a:hover { opacity: 1; text-decoration: underline !important; }
+body.brew .brew--footer .tws-custom-html--content p:first-child { color: rgba(255,255,255,.6) !important; }
+
+/* Loggan (läggs in av prydligt-leveranstimer.js) */
+body.brew .brew--footer .p-footer-logo { display: block; margin: 0 0 28px 0; opacity: 1 !important; }
+body.brew .brew--footer .p-footer-logo img { height: 44px; width: auto; display: block; }
+@media (max-width: 767px) {
+  body.brew .brew--footer .p-footer-logo { margin: 0 auto 24px auto; width: max-content; }
+  body.brew .brew--footer .p-footer-logo img { height: 36px; }
+}
+
+/* Betallogor och sociala ikoner i vitt */
+body.brew .brew--footer .brew--footer--brand-logos { border-top: 1px solid rgba(255,255,255,.15) !important; }
+body.brew .brew--footer .tws-brand-logos--logo-image { mix-blend-mode: normal !important; filter: brightness(0) invert(1); opacity: .9; }
+body.brew .brew--footer .tws-social-icons-logo-image { filter: invert(1) !important; }
+/* Köpskydd-märket behåller sina färger */
+body.brew .brew--footer .brew--footer-mid-right img { filter: none !important; }
+/* American Express är en fylld logga – visas i färg i stället för vit */
+body.brew .brew--footer .tws-brand-logos--logo-amex .tws-brand-logos--logo-image { filter: none !important; opacity: 1; }
+/* Bara en skiljelinje ovanför betallogorna */
+body.brew .brew--footer .slot--brand-logos { border-top: 0 !important; }

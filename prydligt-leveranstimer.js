@@ -612,3 +612,28 @@
 
   window.prydligtWarranty = { bands: BANDS, artNo: artNo, selected: function () { return selected; } };
 })();
+
+/*!
+ * Prydligt – butikens logga i sidfoten (kopieras från sidhuvudet, så att rätt logga visas på varje marknad)
+ */
+(function () {
+  'use strict';
+  function addFooterLogo() {
+    var footer = document.querySelector('.brew--footer > .container, .brew--footer .container');
+    if (!footer || footer.querySelector('.p-footer-logo')) return;
+    var img = document.querySelector('.slot--sidebar-logo .tws-logo img, .slot--header-logo .tws-logo img, a.tws-logo img');
+    if (!img || !img.currentSrc && !img.src) return;
+    var a = document.createElement('a');
+    a.className = 'p-footer-logo';
+    a.href = '/';
+    var logo = document.createElement('img');
+    logo.src = img.currentSrc || img.src;
+    logo.alt = img.alt || 'Prydligt';
+    logo.loading = 'lazy';
+    a.appendChild(logo);
+    footer.insertBefore(a, footer.firstChild);
+  }
+  function start() { addFooterLogo(); setInterval(addFooterLogo, 2000); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
+})();
