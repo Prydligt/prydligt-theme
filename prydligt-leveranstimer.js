@@ -1049,33 +1049,32 @@
 
 /* ===================================================================
    8. ÅNGERFORMULÄR: flyttas från sidfoten till listan på "Villkor & info"
-   Länk och text tas från sidfotens egen ångerformulär-länk, så det blir
-   rätt språk och adress i alla länder. Själva sidfotslänken döljs med CSS
-   först när punkten finns på sidan (html.p-angra-moved).
+   Villkorssidan = första länken i sidfotens INFORMATION-kolumn (rätt sida
+   och språk i alla länder). Länk och text tas från sidfotens ångerformulär-
+   länk. Sidfotslänken döljs (html.p-angra-moved) bara när det finns en
+   villkorssida att lägga punkten på.
    =================================================================== */
 (function () {
+  function path(h) { try { return new URL(h, location.href).pathname.replace(/\/+$/, ''); } catch (e) { return ''; } }
   function run() {
     var src = document.querySelector('.tws-contact-info--withdrawal-form a');
-    if (!src) return;
-    var lists = document.querySelectorAll('.tws-custom-page ul, .slot--custom-page ul, .brew--content ul');
-    for (var i = 0; i < lists.length; i++) {
-      var ul = lists[i];
-      if (ul.closest('.brew--sidebar, .brew--footer')) continue;
-      if (ul.querySelector('.p-angra')) { document.documentElement.classList.add('p-angra-moved'); return; }
-      var links = ul.querySelectorAll(':scope > li a');
-      var isTermsList = links.length >= 4 && [].some.call(links, function (a) { return /kontakt|contact|kontakt/i.test(a.getAttribute('href') || ''); }) &&
-        [].some.call(links, function (a) { return /vilkar|villkor|vilkår|ehdot|bedingungen|voorwaarden|terms|kopvillkor|kjopsvilkar/i.test(a.getAttribute('href') || ''); });
-      if (!isTermsList) continue;
-      var last = ul.querySelector(':scope > li:last-child');
-      var li = last.cloneNode(true);
-      li.classList.add('p-angra');
-      var a = li.querySelector('a');
-      a.setAttribute('href', src.getAttribute('href'));
-      a.textContent = src.textContent.trim();
-      ul.appendChild(li);
-      document.documentElement.classList.add('p-angra-moved');
-      return;
-    }
+    var terms = document.querySelector('.brew--footer-mid-left a[href]');
+    if (!src || !terms) return;
+    document.documentElement.classList.add('p-angra-moved');
+    if (path(terms.getAttribute('href')) !== location.pathname.replace(/\/+$/, '')) return;
+    var best = null, n = 0;
+    document.querySelectorAll('.brew--content ul').forEach(function (ul) {
+      if (ul.closest('.brew--sidebar, .brew--footer')) return;
+      var c = ul.querySelectorAll(':scope > li a').length;
+      if (c > n) { n = c; best = ul; }
+    });
+    if (!best || n < 3 || best.querySelector('.p-angra')) return;
+    var li = best.querySelector(':scope > li:last-child').cloneNode(true);
+    li.classList.add('p-angra');
+    var a = li.querySelector('a');
+    a.setAttribute('href', src.getAttribute('href'));
+    a.textContent = src.textContent.trim();
+    best.appendChild(li);
   }
   function start() { run(); setInterval(run, 1500); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);

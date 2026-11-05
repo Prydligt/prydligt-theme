@@ -1903,5 +1903,5 @@ body.brew .tws-opc-cart--modal .modal-footer .btn-primary { background: var(--p-
 }
 
 /* 26. Ångerformulär: visas som punkt på Villkor & info (JS), inte i sidfoten */
-/* Dölj i sidfoten bara när punkten verkligen lagts in på sidan, annars finns länken kvar (krav att den är lätt att hitta) */
+/* Döljs i sidfoten när JS:en hittat villkorssidan (där punkten läggs in) */
 html.p-angra-moved body.brew .brew--footer .tws-contact-info--withdrawal-form { display: none !important; }
