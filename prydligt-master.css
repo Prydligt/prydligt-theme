@@ -1705,7 +1705,7 @@ body.checkout .slot--checkout-cart-usps { display: none !important; }
    på alla rader (även garantin). Antalsväljaren till höger (dator) / under (mobil). */
 body.checkout .tws-opc-cart--item-wrapper {
   display: grid !important;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) 132px;   /* fast bredd = soptunnan hamnar på samma plats på alla rader */
   grid-template-areas: "info qty" "price qty";
   column-gap: 16px; row-gap: 6px; align-items: start;
 }
