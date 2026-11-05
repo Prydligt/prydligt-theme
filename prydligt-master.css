@@ -1587,3 +1587,8 @@ body.startpage .tws-content-box--with-image .tws-content-box { overflow: hidden 
    egen behållare gör att multiply fungerar även under zoomen. */
 body.brew .tws-article-list--product-image .tws-img--container { background: var(--p-sand) !important; }
 body.brew .tws-article-list--product-image .tws-img--wrapper { border-radius: 0 !important; }
+
+/* 4b. Dölj "Lägsta pris de senaste 30 dagarna" på produktsidan (på begäran).
+   OBS: visas en prissänkning (t.ex. -81 %) kräver prisinformationslagen att
+   lägsta pris 30 dagar anges. Ta bort denna regel om rabattetiketten visas. */
+body.brew .tws-article-price--compare-at-price { display: none !important; }
