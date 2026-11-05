@@ -1388,3 +1388,17 @@ body.article .p-ship__when { margin: 0 !important; font-size: 15px !important; l
 body.article .p-ship__when strong { font-weight: 700; }
 body.article .p-ship__when .p-ship-timer__time { color: var(--p-ink); font-variant-numeric: tabular-nums; }
 body.article .p-ship__ret { margin: 8px 0 0 0 !important; font-size: 14px !important; font-style: italic; color: var(--p-muted) !important; }
+
+/* Leveransrutan i grönt med lastbilen (som den första nedräkningen) */
+body.article .p-ship-timer.p-ship { background: #eef6f1; }
+body.article .p-ship__bar { border-color: var(--p-ok); }
+body.article .p-ship__bar span { background: var(--p-ok); }
+body.article .p-ship__when { position: relative; padding-left: 28px !important; }
+body.article .p-ship__when::before {
+  content: "";
+  position: absolute; left: 0; top: 2px;
+  width: 20px; height: 20px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231e7f4f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 7h11v10H3zM14 10h4l3 3v4h-7'/%3E%3Ccircle cx='7' cy='18' r='2'/%3E%3Ccircle cx='17' cy='18' r='2'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+body.article .p-ship__when .p-ship-timer__time { color: var(--p-ok); }
+body.article .p-ship__ret { padding-left: 28px; }
