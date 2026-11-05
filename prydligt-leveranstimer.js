@@ -614,7 +614,6 @@
       var p = band.price[y], py = Math.round(p / y), sv = Math.round((1 - p / (base * y)) * 100);
       return '<button type="button" class="p-wdlg__card" data-years="' + y + '">' +
         '<span class="p-wdlg__len">+' + y + ' ' + TXT.year + '</span>' +
-        '<span class="p-wdlg__py">totalt ' + (y + 1) + ' \u00e5r</span>' +
         '<span class="p-wdlg__py">' + py + ' kr ' + INFO.perYear + '</span>' +
         (sv > 0 ? '<span class="p-wdlg__save">' + INFO.save + ' ' + sv + ' %</span>' : '<span class="p-wdlg__save p-wdlg__save--none">&nbsp;</span>') +
         '<span class="p-wdlg__total">' + p + ' kr</span>' +
@@ -658,7 +657,6 @@
     YEARS.forEach(function (y) {
       opts += '<button type="button" class="p-warranty__opt" data-years="' + y + '" aria-pressed="false">' +
         '<span class="p-warranty__len">+' + y + ' ' + (y === 1 ? TXT.year : TXT.yearPl) + '</span>' +
-        '<span class="p-warranty__total">totalt ' + (y + 1) + ' \u00e5r</span>' +
         '<span class="p-warranty__price">' + band.price[y] + ' ' + TXT.kr + '</span>' +
         (function () { var sv = Math.round((1 - band.price[y] / (band.price[1] * y)) * 100);
           return y > 1 && sv > 0 ? '<span class="p-warranty__save">Spara ' + sv + ' %</span>' : ''; })() +
