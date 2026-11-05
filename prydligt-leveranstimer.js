@@ -184,22 +184,34 @@
 
   /* ---------- Placering på sidan ---------- */
   var timerEl = null;
+  // Visa rutan om produkten finns i lager, eller om lagerstatus inte visas än (t.ex. variant ej vald).
+  // Göm den bara om lagerstatusen uttryckligen säger slut/beställningsvara.
   function inStock() {
     var msg = document.querySelector('.tws-article-stock-shipping--delivery-message');
-    if (!msg) return false;
+    if (!msg || !(msg.textContent || '').trim()) return true;
     return !HIDE_IF_STOCK_TEXT.test(msg.textContent || '');
+  }
+  function placeBox(el) {
+    var stock = document.querySelector(ANCHOR);
+    if (stock && stock.offsetParent !== null) {           // lagerstatusen syns: direkt under den
+      if (el.previousElementSibling !== stock) stock.insertAdjacentElement('afterend', el);
+      return true;
+    }
+    // annars före garantimodulen / förtroenderutan
+    var before = document.querySelector('.p-warranty') || document.querySelector('.slot--unique-selling-points');
+    if (before) { if (el.nextElementSibling !== before) before.insertAdjacentElement('beforebegin', el); return true; }
+    if (stock) { if (el.previousElementSibling !== stock) stock.insertAdjacentElement('afterend', el); return true; }
+    return false;
   }
   function mount() {
     if (!document.body || !document.body.classList.contains('article')) return;
-    var anchor = document.querySelector(ANCHOR);
-    var ok = anchor && inStock();
-    if (!ok) { if (timerEl && timerEl.parentNode) timerEl.parentNode.removeChild(timerEl); return; }
+    if (!inStock()) { if (timerEl && timerEl.parentNode) timerEl.parentNode.removeChild(timerEl); return; }
     if (!timerEl) {
       timerEl = document.createElement('div');
       timerEl.className = 'p-ship-timer p-ship';
       timerEl.setAttribute('aria-live', 'off');
     }
-    if (timerEl.previousElementSibling !== anchor) anchor.insertAdjacentElement('afterend', timerEl);
+    if (!placeBox(timerEl)) return;
     render(timerEl);
   }
 
