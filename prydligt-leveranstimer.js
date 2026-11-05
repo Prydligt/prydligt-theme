@@ -662,3 +662,52 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
   else start();
 })();
+
+/* ===================================================================
+   5. NYHETSBREVS-POPUP: visa först efter en stund
+   Abicart visar popupen direkt. CSS:en döljer den tills <html> får
+   klassen p-nl-ok, vilket sker när besökaren varit på sajten i
+   NL_DELAY ms (räknas över sidbyten), inte står i kassan och
+   cookie-rutan är borta. Lämnar besökaren innan dess har popupen
+   aldrig setts, och Abicart visar den igen vid nästa besök.
+   =================================================================== */
+(function () {
+  var NL_DELAY = 20000;
+  var KEY = 'pNlStart';
+  var t0 = Date.now();
+  try {
+    var s = +sessionStorage.getItem(KEY);
+    if (s) t0 = s; else sessionStorage.setItem(KEY, String(t0));
+  } catch (e) {}
+  var root = document.documentElement;
+
+  function cookieBarVisible() {
+    var els = document.querySelectorAll('[class*="cookie" i]');
+    for (var i = 0; i < els.length; i++) {
+      var cs = getComputedStyle(els[i]);
+      if ((cs.position === 'fixed' || cs.position === 'sticky') &&
+          els[i].offsetHeight > 40 && cs.display !== 'none' && cs.visibility !== 'hidden') return true;
+    }
+    return false;
+  }
+  function fixPlaceholder() {
+    var f = document.querySelectorAll('.tws-newsletter-subscribe--form-wrapper input[type="email"]');
+    for (var i = 0; i < f.length; i++) {
+      if (f[i].placeholder === 'Din epostadress') f[i].placeholder = 'Din e-postadress';
+    }
+  }
+  function tick() {
+    fixPlaceholder();
+    if (root.classList.contains('p-nl-ok')) {
+      if (document.body.classList.contains('checkout')) root.classList.remove('p-nl-ok');
+      return;
+    }
+    if (Date.now() - t0 < NL_DELAY) return;
+    if (document.body.classList.contains('checkout')) return;
+    if (cookieBarVisible()) return;
+    root.classList.add('p-nl-ok');
+  }
+  function start() { tick(); setInterval(tick, 1000); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
+})();
