@@ -294,7 +294,7 @@
   'use strict';
 
   /* ======================== INSTÄLLNINGAR ======================== */
-  var LIVE = false;                     // sätt till true när addToCart är inkopplad
+  var LIVE = true;                      // sätt till true när addToCart är inkopplad
   var CURRENCY = 'SEK';                 // visas bara i butiker med denna valuta (fler läggs till senare)
   var YEARS = [1, 2, 3, 5];
   // Prisnivåer efter produktens pris (kr). Priser = Diturs procentsatser på nivåns mittpunkt:
@@ -427,6 +427,20 @@
     return el;
   }
 
+  // Göm längder vars garantiartikel butiken inte hittar, och hela modulen om ingen hittas
+  function verify(el, band) {
+    el.style.display = 'none';
+    var left = YEARS.length, found = 0;
+    YEARS.forEach(function (y) {
+      lookupUid(artNo(band, y)).then(function () { found++; }, function () {
+        var o = el.querySelector('.p-warranty__opt[data-years="' + y + '"]');
+        if (o) o.parentNode.removeChild(o);
+      }).then(function () {
+        if (--left === 0 && found > 0) el.style.display = '';
+      });
+    });
+  }
+
   function mount() {
     if (!document.body || !document.body.classList.contains('article') || !enabled()) return;
     var price = productPrice(), band = price && bandFor(price);
@@ -435,6 +449,7 @@
     if (!box || currentBand !== band) {
       if (box && box.parentNode) box.parentNode.removeChild(box);
       box = build(band); currentBand = band; selected = 0;
+      verify(box, band);
     }
     if (box.nextElementSibling !== anchor) anchor.insertAdjacentElement('beforebegin', box);
   }
@@ -450,7 +465,9 @@
     var pass = function () { btn.__pBypass = true; btn.click(); setTimeout(function () { btn.__pBypass = false; }, 0); };
     if (existing) {
       e.preventDefault(); e.stopImmediatePropagation();
-      addToCart(a, existing).then(pass, pass);
+      var done = false, go = function () { if (!done) { done = true; pass(); } };
+      setTimeout(go, 3000);                       // köpet av klockan får aldrig vänta längre än 3 s
+      addToCart(a, existing).then(go, go);
     } else {
       waitForOrder(8000).then(function (u) { if (u) addToCart(a, u); });
     }
