@@ -269,7 +269,10 @@
   var cartEl = null;
   function mountCart() {
     if (!document.body || !document.body.classList.contains('checkout')) return;
-    var anchor = document.querySelector('.slot--checkout-cart-summary');
+    // Abicart har två sammanfattningar (mobil och dator) – använd den som syns
+    var slots = document.querySelectorAll('.slot--checkout-cart-summary'), anchor = null;
+    for (var i = 0; i < slots.length; i++) { if (slots[i].offsetParent !== null) { anchor = slots[i]; break; } }
+    if (!anchor) anchor = slots[0];
     if (!anchor) return;
     if (!cartEl) { cartEl = document.createElement('div'); cartEl.className = 'p-cart-free'; }
     if (anchor.firstElementChild !== cartEl) anchor.insertBefore(cartEl, anchor.firstChild);
