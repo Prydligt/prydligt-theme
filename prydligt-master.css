@@ -1901,3 +1901,6 @@ body.brew .tws-opc-cart--modal .modal-footer .btn-primary { background: var(--p-
 @media (max-width: 767px) {
   body.brew .tws-opc-cart--modal .modal-dialog { margin: 22vh 16px 0 16px; }
 }
+
+/* 26. Ångerformulär: visas som punkt på Villkor & info (JS), inte i sidfoten */
+body.brew .brew--footer .tws-contact-info--withdrawal-form { display: none !important; }
