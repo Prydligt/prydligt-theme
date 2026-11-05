@@ -1591,4 +1591,5 @@ body.brew .tws-article-list--product-image .tws-img--wrapper { border-radius: 0 
 /* 4b. Dölj "Lägsta pris de senaste 30 dagarna" på produktsidan (på begäran).
    OBS: visas en prissänkning (t.ex. -81 %) kräver prisinformationslagen att
    lägsta pris 30 dagar anges. Ta bort denna regel om rabattetiketten visas. */
+body.brew .slot--article-price .tws-article-price .tws-article-price--compare-at-price,
 body.brew .tws-article-price--compare-at-price { display: none !important; }
