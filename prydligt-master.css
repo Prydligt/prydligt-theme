@@ -1352,3 +1352,14 @@ body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-butto
   margin-top: 10px !important;
 }
 body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .tws-article-list--list .tws-list--grid-item .tws-article-list--buy-button .btn { width: 100% !important; }
+
+/* "Lagd i varukorgen"-rutan: produkten som just lades till får också beige platta */
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .modal-body .tws-img--wrapper:not(.tws-article-list--list *) {
+  background: var(--p-sand) !important;
+  isolation: isolate;
+  padding: 6px !important;
+}
+body.brew :is(.tws-article-buy-button-with-modal--dialog, .tws-article-buy-button-with-modal--dialog-wrapper) .modal-body .tws-img--wrapper:not(.tws-article-list--list *) img {
+  mix-blend-mode: multiply !important;
+  opacity: 1 !important;
+}
