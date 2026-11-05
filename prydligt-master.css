@@ -1593,3 +1593,13 @@ body.brew .tws-article-list--product-image .tws-img--wrapper { border-radius: 0 
    lägsta pris 30 dagar anges. Ta bort denna regel om rabattetiketten visas. */
 body.brew .slot--article-price .tws-article-price .tws-article-price--compare-at-price,
 body.brew .tws-article-price--compare-at-price { display: none !important; }
+
+/* 4c. Produktsidans USP:er – första punkten ("Skickas från Sverige") får en rund
+   svensk flagga i stället för bock. Håll den punkten först i temaeditorn. */
+body.brew .slot--unique-selling-points li:first-child::before {
+  background:
+    linear-gradient(to right, transparent 31%, #FECC02 31%, #FECC02 46%, transparent 46%),
+    linear-gradient(to bottom, transparent 41%, #FECC02 41%, #FECC02 59%, transparent 59%),
+    #006AA7;
+}
+body.brew .slot--unique-selling-points li:first-child::after { display: none; }
