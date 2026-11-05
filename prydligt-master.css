@@ -1459,8 +1459,26 @@ body.brew .brew--footer .slot--brand-logos { border-top: 0 !important; }
    17. GÖM GARANTIARTIKLARNA I ALLA PRODUKTLISTOR (de ska bara köpas via tillvalet)
    ===================================================================== */
 body.brew .tws-list--grid-item:has(a[href*="forlangd-garanti-"]),
+body.brew .tws-list--grid-item:has(a[href*="utvidet-garanti-"]),
+body.brew .tws-list--grid-item:has(a[href*="udvidet-garanti-"]),
+body.brew .tws-list--grid-item:has(a[href*="jatkettu-takuu-"]),
+body.brew .tws-list--grid-item:has(a[href*="garantieverlangerung-"]),
+body.brew .tws-list--grid-item:has(a[href*="garantieverlenging-"]),
+body.brew .tws-list--grid-item:has(a[href*="extended-warranty-"]),
 body.brew .tws-list--list-item:has(a[href*="forlangd-garanti-"]),
-body.brew .slick-slide:has(a[href*="forlangd-garanti-"]) { display: none !important; }
+body.brew .tws-list--list-item:has(a[href*="utvidet-garanti-"]),
+body.brew .tws-list--list-item:has(a[href*="udvidet-garanti-"]),
+body.brew .tws-list--list-item:has(a[href*="jatkettu-takuu-"]),
+body.brew .tws-list--list-item:has(a[href*="garantieverlangerung-"]),
+body.brew .tws-list--list-item:has(a[href*="garantieverlenging-"]),
+body.brew .tws-list--list-item:has(a[href*="extended-warranty-"]),
+body.brew .slick-slide:has(a[href*="forlangd-garanti-"]),
+body.brew .slick-slide:has(a[href*="utvidet-garanti-"]),
+body.brew .slick-slide:has(a[href*="udvidet-garanti-"]),
+body.brew .slick-slide:has(a[href*="jatkettu-takuu-"]),
+body.brew .slick-slide:has(a[href*="garantieverlangerung-"]),
+body.brew .slick-slide:has(a[href*="garantieverlenging-"]),
+body.brew .slick-slide:has(a[href*="extended-warranty-"]) { display: none !important; }
 
 
 /* =====================================================================
@@ -1471,9 +1489,33 @@ body.brew .slick-slide:has(a[href*="forlangd-garanti-"]) { display: none !import
    Garantiraden: artikelns egen bild, bara soptunnan (inget antal att ändra). */
 body.checkout .tws-opc-cart--item:has(.p-qty) .tws-opc-cart--item-remove { display: none !important; }
 body.checkout .tws-opc-cart--item:has(a[href*="forlangd-garanti-"]) .p-qty input,
-body.checkout .tws-opc-cart--item:has(a[href*="forlangd-garanti-"]) .p-qty__plus { display: none !important; }
-body.checkout .tws-opc-cart--item:has(a[href*="forlangd-garanti-"]) .p-qty { border-color: transparent !important; }
-body.checkout .tws-opc-cart--item:has(a[href*="forlangd-garanti-"]) .tws-opc-cart--item-info-name a { pointer-events: none; }
+body.checkout .tws-opc-cart--item:has(a[href*="utvidet-garanti-"]) .p-qty input,
+body.checkout .tws-opc-cart--item:has(a[href*="udvidet-garanti-"]) .p-qty input,
+body.checkout .tws-opc-cart--item:has(a[href*="jatkettu-takuu-"]) .p-qty input,
+body.checkout .tws-opc-cart--item:has(a[href*="garantieverlangerung-"]) .p-qty input,
+body.checkout .tws-opc-cart--item:has(a[href*="garantieverlenging-"]) .p-qty input,
+body.checkout .tws-opc-cart--item:has(a[href*="extended-warranty-"]) .p-qty input,
+body.checkout .tws-opc-cart--item:has(a[href*="forlangd-garanti-"]) .p-qty__plus,
+body.checkout .tws-opc-cart--item:has(a[href*="utvidet-garanti-"]) .p-qty__plus,
+body.checkout .tws-opc-cart--item:has(a[href*="udvidet-garanti-"]) .p-qty__plus,
+body.checkout .tws-opc-cart--item:has(a[href*="jatkettu-takuu-"]) .p-qty__plus,
+body.checkout .tws-opc-cart--item:has(a[href*="garantieverlangerung-"]) .p-qty__plus,
+body.checkout .tws-opc-cart--item:has(a[href*="garantieverlenging-"]) .p-qty__plus,
+body.checkout .tws-opc-cart--item:has(a[href*="extended-warranty-"]) .p-qty__plus { display: none !important; }
+body.checkout .tws-opc-cart--item:has(a[href*="forlangd-garanti-"]) .p-qty,
+body.checkout .tws-opc-cart--item:has(a[href*="utvidet-garanti-"]) .p-qty,
+body.checkout .tws-opc-cart--item:has(a[href*="udvidet-garanti-"]) .p-qty,
+body.checkout .tws-opc-cart--item:has(a[href*="jatkettu-takuu-"]) .p-qty,
+body.checkout .tws-opc-cart--item:has(a[href*="garantieverlangerung-"]) .p-qty,
+body.checkout .tws-opc-cart--item:has(a[href*="garantieverlenging-"]) .p-qty,
+body.checkout .tws-opc-cart--item:has(a[href*="extended-warranty-"]) .p-qty { border-color: transparent !important; }
+body.checkout .tws-opc-cart--item:has(a[href*="forlangd-garanti-"]) .tws-opc-cart--item-info-name a,
+body.checkout .tws-opc-cart--item:has(a[href*="utvidet-garanti-"]) .tws-opc-cart--item-info-name a,
+body.checkout .tws-opc-cart--item:has(a[href*="udvidet-garanti-"]) .tws-opc-cart--item-info-name a,
+body.checkout .tws-opc-cart--item:has(a[href*="jatkettu-takuu-"]) .tws-opc-cart--item-info-name a,
+body.checkout .tws-opc-cart--item:has(a[href*="garantieverlangerung-"]) .tws-opc-cart--item-info-name a,
+body.checkout .tws-opc-cart--item:has(a[href*="garantieverlenging-"]) .tws-opc-cart--item-info-name a,
+body.checkout .tws-opc-cart--item:has(a[href*="extended-warranty-"]) .tws-opc-cart--item-info-name a { pointer-events: none; }
 
 /* Mobil produktsida: "Till toppen"-knappen göms (den låg över produktnamnet), och den fasta köpraden
    får hela bredden till köpknappen */
