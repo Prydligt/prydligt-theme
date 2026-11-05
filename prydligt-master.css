@@ -1535,17 +1535,17 @@ body.brew .modal:has(.tws-newsletter-subscribe--modal-form) .modal-header .close
 body.brew .modal:has(.tws-newsletter-subscribe--modal-form) .modal-body { padding: 4px 32px 32px 32px !important; }
 body.brew .modal:has(.tws-newsletter-subscribe--modal-form) .modal-footer { display: none !important; }  /* "Stäng" – krysset räcker */
 
-/* Fält + knapp: samma som startsidans block */
-body.brew .tws-newsletter-subscribe--modal-form form,
-body.brew .tws-newsletter-subscribe--modal-form .form-group,
-body.brew .tws-newsletter-subscribe--modal-form .input-group { display: flex !important; width: 100% !important; margin: 12px 0 0 0 !important; }
-body.brew .tws-newsletter-subscribe--modal-form .form-group,
-body.brew .tws-newsletter-subscribe--modal-form .input-group { margin: 0 !important; }
-body.brew .tws-newsletter-subscribe--modal-form input[type="email"] {
+/* Fält + knapp: popup och startsidans block */
+body.brew .tws-newsletter-subscribe--form-wrapper form,
+body.brew .tws-newsletter-subscribe--form-wrapper .form-group,
+body.brew .tws-newsletter-subscribe--form-wrapper .input-group { display: flex !important; width: 100% !important; margin: 12px 0 0 0 !important; }
+body.brew .tws-newsletter-subscribe--form-wrapper .form-group,
+body.brew .tws-newsletter-subscribe--form-wrapper .input-group { margin: 0 !important; }
+body.brew .tws-newsletter-subscribe--form-wrapper input[type="email"] {
   flex: 1; width: 100% !important; height: 52px !important; border: 1px solid var(--p-field) !important; border-right: 0 !important;
   border-radius: 0 !important; box-shadow: none !important; font-size: 16px !important; background: #fff !important;
 }
-body.brew .tws-newsletter-subscribe--modal-form .input-group-btn { width: auto; display: block; }
+body.brew .tws-newsletter-subscribe--form-wrapper .input-group-btn { width: auto !important; display: block !important; }
 body.brew .tws-newsletter-subscribe--subscribe-button {
   height: 52px !important; padding: 0 20px !important; background: var(--p-ink) !important; color: #fff !important;
   border: 0 !important; border-radius: 0 !important; font-weight: 700 !important; letter-spacing: .04em; text-transform: uppercase;
