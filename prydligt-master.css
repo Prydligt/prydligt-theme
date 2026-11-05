@@ -1903,3 +1903,5 @@ body.brew .tws-opc-cart--modal .modal-footer .btn-primary { background: var(--p-
 }
 
 /* 26. Ångerformulär: ska synas i sidfoten på alla sidor (EU-krav på lättåtkomlig ångerfunktion) – döljs inte */
+/* Garantiväljaren: visa total skyddstid så ingen tror att grundgarantin kostar */
+body.article .p-warranty__total { font-size: 11.5px; color: var(--p-muted); line-height: 1.2; }
