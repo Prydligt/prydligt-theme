@@ -250,9 +250,26 @@
     showOwnStock(timerEl);
   }
 
+  // Fri frakt-mätare i varukorgen, ovanför sammanfattningen
+  var cartEl = null;
+  function mountCart() {
+    if (!document.body || !document.body.classList.contains('checkout')) return;
+    var anchor = document.querySelector('.slot--checkout-cart-summary');
+    if (!anchor) return;
+    if (!cartEl) { cartEl = document.createElement('div'); cartEl.className = 'p-cart-free'; }
+    if (anchor.firstElementChild !== cartEl) anchor.insertBefore(cartEl, anchor.firstChild);
+    var l = lang(), b = BOX[l], m = MARKET[l], left = freeShippingLeft(m);
+    var pct = left > 0 ? Math.max(0, Math.min(100, Math.round((m.free - left) / m.free * 100))) : 100;
+    var html = (left > 0
+      ? '<div class="p-ship__free"><span>' + b.free + '</span><span><strong>' + m.fmt(left) + '</strong> ' + b.left + '</span></div>'
+      : '<div class="p-ship__free p-ship__free--ok"><span>' + b.reached + '</span></div>') +
+      '<div class="p-ship__bar" aria-hidden="true"><span style="width:' + pct + '%"></span></div>';
+    if (cartEl.__last !== html) { cartEl.innerHTML = html; cartEl.__last = html; }
+  }
+
   function start() {
-    mount();
-    setInterval(function () { mount(); }, 1000);   // uppdaterar sekunderna och klarar att Abicart byter sidinnehåll
+    mount(); mountCart();
+    setInterval(function () { mount(); mountCart(); }, 1000);   // uppdaterar sekunderna och klarar att Abicart byter sidinnehåll
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
   else start();

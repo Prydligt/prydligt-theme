@@ -1458,3 +1458,32 @@ body.brew .brew--footer .slot--brand-logos { border-top: 0 !important; }
 body.brew .tws-list--grid-item:has(a[href*="forlangd-garanti-"]),
 body.brew .tws-list--list-item:has(a[href*="forlangd-garanti-"]),
 body.brew .slick-slide:has(a[href*="forlangd-garanti-"]) { display: none !important; }
+
+
+/* =====================================================================
+   18. FYND FRÅN GENOMGÅNGEN I BUTIKEN
+   ===================================================================== */
+/* Garantiraden i varukorgen: sköld-ikon i stället för tom bild, inget antal att ändra */
+body.checkout .tws-opc-cart--item:has(a[href*="forlangd-garanti-"]) .tws-opc-cart--item-image .tws-img { visibility: hidden; }
+body.checkout .tws-opc-cart--item:has(a[href*="forlangd-garanti-"]) .tws-opc-cart--item-image .tws-img--wrapper {
+  background: var(--p-sand) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23111111' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6z'/%3E%3Cpath d='M8.5 12l2.5 2.5 4.5-5'/%3E%3C/svg%3E") center / 40% no-repeat !important;
+}
+body.checkout .tws-opc-cart--item:has(a[href*="forlangd-garanti-"]) .p-qty input,
+body.checkout .tws-opc-cart--item:has(a[href*="forlangd-garanti-"]) .p-qty__plus { display: none !important; }
+body.checkout .tws-opc-cart--item:has(a[href*="forlangd-garanti-"]) .p-qty { border: 0 !important; }
+body.checkout .tws-opc-cart--item:has(a[href*="forlangd-garanti-"]) .tws-opc-cart--item-info-name a { pointer-events: none; }
+
+/* Mobil produktsida: "Till toppen"-knappen göms (den låg över produktnamnet), och den fasta köpraden
+   får hela bredden till köpknappen */
+@media (max-width: 767px) {
+  body.article .brew--back-to-top { display: none !important; }
+  body.article .brew--buy-button-group .slot--article-quantity { display: none !important; }
+  body.article .brew--buy-button-group .slot--article-buy-button { flex: 1 1 100% !important; width: 100% !important; max-width: 100% !important; }
+}
+
+/* Fri frakt-mätare i varukorgen (läggs in av prydligt-leveranstimer.js) */
+body.checkout .p-cart-free { margin: 0 0 14px 0; padding: 14px 16px; background: #eef6f1; font-size: 15px; }
+body.checkout .p-cart-free .p-ship__free { display: flex; justify-content: space-between; gap: 10px; }
+body.checkout .p-cart-free .p-ship__free--ok span { font-weight: 700; color: var(--p-ok); }
+body.checkout .p-cart-free .p-ship__bar { height: 6px; margin: 8px 0 0 0; background: #fff; border: 1px solid var(--p-ok); overflow: hidden; }
+body.checkout .p-cart-free .p-ship__bar span { display: block; height: 100%; background: var(--p-ok); transition: width .4s ease; }
