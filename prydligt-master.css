@@ -482,8 +482,8 @@ body.checkout { background: #fff; color: var(--p-ink); }
 body.checkout .brew--sidebar .slot--sidebar,
 body.checkout .brew--header .brew--mobile-menu-button,
 body.checkout .brew--sidebar-header .brew--mobile-menu-button,
-body.checkout .brew--footer-mid-right,
 body.checkout .brew--footer-right { display: none !important; }
+/* Sidfotens mittkolumn med e-handelscertifieringens märke visas även i kassan (förtroende) */
 
 /* Rubriker */
 body.checkout .tws-opc-cart--cart-heading,
