@@ -441,17 +441,17 @@
   var LIVE = true;                      // sätt till true när addToCart är inkopplad
   var CURRENCY = 'SEK';                 // visas bara i butiker med denna valuta (fler läggs till senare)
   var YEARS = [1, 2, 3, 5];
-  // Prisnivåer efter produktens pris (kr). Priser = Diturs procentsatser på nivåns mittpunkt:
-  // 1 år 9 %, 2 år 16 %, 3 år 21 %, 5 år 30 %.
+  // Prisnivåer efter produktens pris (kr). Priser = andel av nivåns mittpunkt:
+  // 1 år 15 %, 2 år 27 %, 3 år 35 %, 5 år 50 % (ca 10/22/33 % billigare per år än 1 år).
   var BANDS = [
-    { from: 200,  to: 299,  id: 'A', price: { 1: 22,  2: 40,  3: 52,  5: 74 } },
-    { from: 300,  to: 449,  id: 'B', price: { 1: 34,  2: 60,  3: 78,  5: 111 } },
-    { from: 450,  to: 599,  id: 'C', price: { 1: 47,  2: 84,  3: 110, 5: 156 } },
-    { from: 600,  to: 799,  id: 'D', price: { 1: 63,  2: 112, 3: 146, 5: 208 } },
-    { from: 800,  to: 999,  id: 'E', price: { 1: 81,  2: 144, 3: 188, 5: 267 } },
-    { from: 1000, to: 1499, id: 'F', price: { 1: 112, 2: 199, 3: 261, 5: 371 } },
-    { from: 1500, to: 2499, id: 'G', price: { 1: 180, 2: 319, 3: 418, 5: 594 } },
-    { from: 2500, to: 3999, id: 'H', price: { 1: 292, 2: 519, 3: 679, 5: 966 } }
+    { from: 200 , to: 299 , id: 'A', price: { 1: 38, 2: 68, 3: 88, 5: 125 } },
+    { from: 300 , to: 449 , id: 'B', price: { 1: 56, 2: 101, 3: 131, 5: 188 } },
+    { from: 450 , to: 599 , id: 'C', price: { 1: 79, 2: 142, 3: 184, 5: 262 } },
+    { from: 600 , to: 799 , id: 'D', price: { 1: 105, 2: 189, 3: 245, 5: 350 } },
+    { from: 800 , to: 999 , id: 'E', price: { 1: 135, 2: 243, 3: 315, 5: 450 } },
+    { from: 1000, to: 1499, id: 'F', price: { 1: 188, 2: 338, 3: 438, 5: 625 } },
+    { from: 1500, to: 2499, id: 'G', price: { 1: 300, 2: 540, 3: 700, 5: 1000 } },
+    { from: 2500, to: 3999, id: 'H', price: { 1: 488, 2: 878, 3: 1138, 5: 1625 } }
   ];
   function artNo(band, years) { return 'GARANTI-' + years + 'AR-' + band.id; }   // t.ex. GARANTI-2AR-C
   var ONLY_IN = /klock|watch|ur\b/i;   // visa bara på klockor (matchas mot brödsmulor/kategori); tomt = alla
