@@ -1491,3 +1491,80 @@ body.checkout .p-cart-free .p-ship__free { display: flex; justify-content: space
 body.checkout .p-cart-free .p-ship__free--ok span { font-weight: 700; color: var(--p-ok); }
 body.checkout .p-cart-free .p-ship__bar { height: 6px; margin: 8px 0 0 0; background: #fff; border: 1px solid var(--p-ok); overflow: hidden; }
 body.checkout .p-cart-free .p-ship__bar span { display: block; height: 100%; background: var(--p-ok); transition: width .4s ease; }
+
+/* =====================================================================
+   19. NYHETSBREV – popup-rutan och texten (gäller även startsidans block)
+   Texten skrivs i temat: Tillägg → Popup-dialog. Struktur:
+   <p>Nyhetsbrev</p> <h3>Rubrik</h3> <p>Brödtext</p>
+   ===================================================================== */
+body.brew .tws-newsletter-subscribe--html-before,
+body.brew .tws-newsletter-subscribe--after-sending { text-align: center; color: var(--p-ink); }
+body.brew .tws-newsletter-subscribe--html-before p:empty,
+body.brew .tws-newsletter-subscribe--after-sending p:empty { display: none; }
+body.brew .tws-newsletter-subscribe--html-before > p:first-child,
+body.brew .tws-newsletter-subscribe--after-sending > p:first-child {
+  margin: 0 0 6px 0 !important; font-size: 12px !important; font-weight: 700 !important;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--p-muted) !important;
+}
+body.brew .tws-newsletter-subscribe--html-before h3,
+body.brew .tws-newsletter-subscribe--after-sending h3 {
+  margin: 0 0 10px 0 !important; font-size: 26px !important; font-weight: 700 !important;
+  line-height: 1.2 !important; letter-spacing: -.01em; color: var(--p-ink) !important;
+}
+body.brew .tws-newsletter-subscribe--html-before p,
+body.brew .tws-newsletter-subscribe--after-sending p {
+  margin: 0 0 8px 0; font-size: 15px !important; font-weight: 400 !important; line-height: 1.5; color: #2a2d31;
+}
+body.brew .tws-newsletter-subscribe--after-sending strong {
+  display: inline-block; padding: 6px 12px; background: var(--p-sand); border: 1px dashed var(--p-ink);
+  font-size: 18px; letter-spacing: .06em; user-select: all;
+}
+
+/* Popup-rutan */
+body.brew .modal:has(.tws-newsletter-subscribe--modal-form) .modal-dialog { max-width: 460px; margin-top: 12vh; }
+body.brew .modal:has(.tws-newsletter-subscribe--modal-form) .modal-content {
+  border: 0 !important; border-radius: 0 !important; box-shadow: 0 20px 60px rgba(0,0,0,.25) !important;
+  background: #fff;
+}
+body.brew .modal:has(.tws-newsletter-subscribe--modal-form) .modal-header {
+  border: 0 !important; padding: 10px 12px 0 12px !important; min-height: 0;
+}
+body.brew .modal:has(.tws-newsletter-subscribe--modal-form) .modal-header .close {
+  font-size: 30px; font-weight: 300; opacity: .8; color: var(--p-ink); text-shadow: none;
+}
+body.brew .modal:has(.tws-newsletter-subscribe--modal-form) .modal-body { padding: 4px 32px 32px 32px !important; }
+body.brew .modal:has(.tws-newsletter-subscribe--modal-form) .modal-footer { display: none !important; }  /* "Stäng" – krysset räcker */
+
+/* Fält + knapp: samma som startsidans block */
+body.brew .tws-newsletter-subscribe--modal-form form,
+body.brew .tws-newsletter-subscribe--modal-form .form-group,
+body.brew .tws-newsletter-subscribe--modal-form .input-group { display: flex !important; width: 100% !important; margin: 12px 0 0 0 !important; }
+body.brew .tws-newsletter-subscribe--modal-form .form-group,
+body.brew .tws-newsletter-subscribe--modal-form .input-group { margin: 0 !important; }
+body.brew .tws-newsletter-subscribe--modal-form input[type="email"] {
+  flex: 1; width: 100% !important; height: 52px !important; border: 1px solid var(--p-field) !important; border-right: 0 !important;
+  border-radius: 0 !important; box-shadow: none !important; font-size: 16px !important; background: #fff !important;
+}
+body.brew .tws-newsletter-subscribe--modal-form .input-group-btn { width: auto; display: block; }
+body.brew .tws-newsletter-subscribe--subscribe-button {
+  height: 52px !important; padding: 0 20px !important; background: var(--p-ink) !important; color: #fff !important;
+  border: 0 !important; border-radius: 0 !important; font-weight: 700 !important; letter-spacing: .04em; text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Knapptexten "Anmälan" går inte att ändra i admin – byts här */
+body.brew .tws-newsletter-subscribe--subscribe-button .ladda-label { font-size: 0 !important; }
+body.brew .tws-newsletter-subscribe--subscribe-button .ladda-label::after { font-size: 14px; content: "F\00E5  koden"; }
+html[lang="nb"] body.brew .tws-newsletter-subscribe--subscribe-button .ladda-label::after,
+html[lang="no"] body.brew .tws-newsletter-subscribe--subscribe-button .ladda-label::after { content: "F\00E5  koden"; }
+html[lang="da"] body.brew .tws-newsletter-subscribe--subscribe-button .ladda-label::after { content: "F\00E5  koden"; }
+html[lang="fi"] body.brew .tws-newsletter-subscribe--subscribe-button .ladda-label::after { content: "Tilaa"; }
+html[lang="de"] body.brew .tws-newsletter-subscribe--subscribe-button .ladda-label::after { content: "Code holen"; }
+html[lang="nl"] body.brew .tws-newsletter-subscribe--subscribe-button .ladda-label::after { content: "Code ontvangen"; }
+html[lang="en"] body.brew .tws-newsletter-subscribe--subscribe-button .ladda-label::after { content: "Get the code"; }
+
+@media (max-width: 767px) {
+  body.brew .modal:has(.tws-newsletter-subscribe--modal-form) .modal-dialog { margin: 18vh 16px 0 16px; }
+  body.brew .modal:has(.tws-newsletter-subscribe--modal-form) .modal-body { padding: 0 20px 24px 20px !important; }
+  body.brew .tws-newsletter-subscribe--html-before h3 { font-size: 22px !important; }
+}
