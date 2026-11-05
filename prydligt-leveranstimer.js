@@ -15,7 +15,7 @@
   var SHIP_WEEKDAYS = [1, 2, 3, 4, 5];   // 1 = måndag … 5 = fredag
   var SKIP_EVES = true;        // julafton, nyårsafton och midsommarafton räknas inte som skickdagar
   var EXTRA_CLOSED = [];       // egna stängda dagar, t.ex. ['2026-12-28', '2026-12-29']
-  var HIDE_IF_STOCK_TEXT = /slut|ej i lager|tillfälligt|beställningsvara|utsolgt|udsolgt|loppu|ausverkauft|uitverkocht/i;
+  var HIDE_IF_STOCK_TEXT = /slut|ej i lager|tillf\u00e4lligt|best\u00e4llningsvara|utsolgt|udsolgt|loppu|ausverkauft|uitverkocht/i;
   var ANCHOR = '.slot--article-stock-shipping';   // timern läggs direkt under lagerstatusen
   /* ============================================================== */
 
@@ -164,11 +164,11 @@
   var DELAY = 450;   // ms att vänta efter sista klicket innan varukorgen uppdateras
 
   var L = {
-    sv: { minus: 'Minska antal', plus: 'Öka antal', remove: 'Ta bort' },
-    nb: { minus: 'Reduser antall', plus: 'Øk antall', remove: 'Fjern' },
-    da: { minus: 'Formindsk antal', plus: 'Forøg antal', remove: 'Fjern' },
-    fi: { minus: 'Vähennä', plus: 'Lisää', remove: 'Poista' },
-    de: { minus: 'Menge verringern', plus: 'Menge erhöhen', remove: 'Entfernen' },
+    sv: { minus: 'Minska antal', plus: '\u00d6ka antal', remove: 'Ta bort' },
+    nb: { minus: 'Reduser antall', plus: '\u00d8k antall', remove: 'Fjern' },
+    da: { minus: 'Formindsk antal', plus: 'For\u00f8g antal', remove: 'Fjern' },
+    fi: { minus: 'V\u00e4henn\u00e4', plus: 'Lis\u00e4\u00e4', remove: 'Poista' },
+    de: { minus: 'Menge verringern', plus: 'Menge erh\u00f6hen', remove: 'Entfernen' },
     nl: { minus: 'Aantal verlagen', plus: 'Aantal verhogen', remove: 'Verwijderen' }
   };
   function t() {
@@ -278,4 +278,131 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
   else start();
+})();
+
+/*!
+ * Prydligt – förlängd garanti som tillval på produktsidan
+ * [ Nej tack ] [ 1 år 47 kr ] [ 2 år 84 kr ] [ 3 år 110 kr ] [ 5 år 156 kr ]
+ *
+ * Priset styrs av produktens pris via prisnivåer (BANDS). Varje nivå + längd är en egen
+ * artikel i Abicart (artikelnummer i ART), som läggs i varukorgen tillsammans med produkten.
+ *
+ * STATUS: visningen är klar. Själva "lägg i varukorgen" (addToCart nedan) kopplas in när
+ * vi sett hur Abicart lägger till artiklar. Tills dess visas modulen bara med ?garanti=1 i adressen.
+ */
+(function () {
+  'use strict';
+
+  /* ======================== INSTÄLLNINGAR ======================== */
+  var LIVE = false;                     // sätt till true när addToCart är inkopplad
+  var CURRENCY = 'SEK';                 // visas bara i butiker med denna valuta (fler läggs till senare)
+  var YEARS = [1, 2, 3, 5];
+  // Prisnivåer efter produktens pris (kr). Priser = Diturs procentsatser på nivåns mittpunkt:
+  // 1 år 9 %, 2 år 16 %, 3 år 21 %, 5 år 30 %.
+  var BANDS = [
+    { from: 200,  to: 299,  id: 'A', price: { 1: 22,  2: 40,  3: 52,  5: 74 } },
+    { from: 300,  to: 449,  id: 'B', price: { 1: 34,  2: 60,  3: 78,  5: 111 } },
+    { from: 450,  to: 599,  id: 'C', price: { 1: 47,  2: 84,  3: 110, 5: 156 } },
+    { from: 600,  to: 799,  id: 'D', price: { 1: 63,  2: 112, 3: 146, 5: 208 } },
+    { from: 800,  to: 999,  id: 'E', price: { 1: 81,  2: 144, 3: 188, 5: 267 } },
+    { from: 1000, to: 1499, id: 'F', price: { 1: 112, 2: 199, 3: 261, 5: 371 } },
+    { from: 1500, to: 2499, id: 'G', price: { 1: 180, 2: 319, 3: 418, 5: 594 } },
+    { from: 2500, to: 3999, id: 'H', price: { 1: 292, 2: 519, 3: 679, 5: 966 } }
+  ];
+  function artNo(band, years) { return 'GARANTI-' + years + 'AR-' + band.id; }   // t.ex. GARANTI-2AR-C
+  var ONLY_IN = /klock|watch|ur\b/i;   // visa bara på klockor (matchas mot brödsmulor/kategori); tomt = alla
+  /* ============================================================== */
+
+  var TXT = {
+    title: 'F\u00f6rl\u00e4ngd garanti',
+    none: 'Nej tack',
+    year: '\u00e5r',
+    yearPl: '\u00e5r',
+    kr: 'kr',
+    info: 'G\u00e4ller fabrikations- och materialfel efter den vanliga garantin. Reparation eller ny klocka \u2013 utan kostnad.',
+    more: 'L\u00e4s mer'
+  };
+
+  function enabled() {
+    if (LIVE) return true;
+    try { return /[?&]garanti=1\b/.test(location.search) || sessionStorage.getItem('pGarantiPreview') === '1'; } catch (e) { return false; }
+  }
+  try { if (/[?&]garanti=1\b/.test(location.search)) sessionStorage.setItem('pGarantiPreview', '1'); } catch (e) {}
+
+  function productPrice() {
+    var el = document.querySelector('.slot--article-price .tws-article-price--price .twsPriceCurrent');
+    if (!el) return null;
+    var txt = el.textContent || '';
+    if (CURRENCY === 'SEK' && !/sek|kr/i.test(txt)) return null;
+    var n = parseFloat(txt.replace(/[^\d,.]/g, '').replace(/\s/g, '').replace(',', '.'));
+    return isNaN(n) ? null : n;
+  }
+  function bandFor(price) {
+    for (var i = 0; i < BANDS.length; i++) if (price >= BANDS[i].from && price <= BANDS[i].to) return BANDS[i];
+    return null;
+  }
+  function isWatch() {
+    if (!ONLY_IN) return true;
+    var crumbs = document.querySelector('.tws-breadcrumbs');
+    var name = document.querySelector('.slot--article-name h1');
+    return ONLY_IN.test(((crumbs && crumbs.textContent) || '') + ' ' + ((name && name.textContent) || ''));
+  }
+
+  /* --- Kopplas in senare: lägger garanti-artikeln i varukorgen --- */
+  function addToCart(articleNumber) {
+    if (window.prydligtAddArticle) return window.prydligtAddArticle(articleNumber, 1);
+    if (window.console) console.warn('[Prydligt garanti] addToCart ej inkopplad \u2013 skulle lagt till', articleNumber);
+  }
+
+  var box = null, selected = 0, currentBand = null;
+
+  function build(band) {
+    var el = document.createElement('div');
+    el.className = 'p-warranty';
+    var opts = '<button type="button" class="p-warranty__opt is-selected" data-years="0" aria-pressed="true"><span class="p-warranty__len">' + TXT.none + '</span></button>';
+    YEARS.forEach(function (y) {
+      opts += '<button type="button" class="p-warranty__opt" data-years="' + y + '" aria-pressed="false">' +
+        '<span class="p-warranty__len">' + y + ' ' + (y === 1 ? TXT.year : TXT.yearPl) + '</span>' +
+        '<span class="p-warranty__price">' + band.price[y] + ' ' + TXT.kr + '</span></button>';
+    });
+    el.innerHTML =
+      '<div class="p-warranty__head"><span class="p-warranty__title">' + TXT.title + '</span></div>' +
+      '<div class="p-warranty__opts" role="group" aria-label="' + TXT.title + '">' + opts + '</div>' +
+      '<p class="p-warranty__info">' + TXT.info + '</p>';
+    el.addEventListener('click', function (e) {
+      var b = e.target.closest('.p-warranty__opt');
+      if (!b) return;
+      selected = parseInt(b.getAttribute('data-years'), 10) || 0;
+      el.querySelectorAll('.p-warranty__opt').forEach(function (o) {
+        var on = o === b; o.classList.toggle('is-selected', on); o.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+    });
+    return el;
+  }
+
+  function mount() {
+    if (!document.body || !document.body.classList.contains('article') || !enabled()) return;
+    var price = productPrice(), band = price && bandFor(price);
+    var anchor = document.querySelector('.slot--unique-selling-points');
+    if (!band || !anchor || !isWatch()) { if (box && box.parentNode) box.parentNode.removeChild(box); return; }
+    if (!box || currentBand !== band) {
+      if (box && box.parentNode) box.parentNode.removeChild(box);
+      box = build(band); currentBand = band; selected = 0;
+    }
+    if (box.nextElementSibling !== anchor) anchor.insertAdjacentElement('beforebegin', box);
+  }
+
+  // Lägg till garantin när kunden trycker Köp
+  document.addEventListener('click', function (e) {
+    if (!selected || !currentBand || !enabled()) return;
+    if (!e.target.closest('.slot--article-buy-button .tws-article-buy-button-with-modal--buy-button')) return;
+    var a = artNo(currentBand, selected);
+    setTimeout(function () { addToCart(a); }, 600);   // efter att huvudprodukten lagts till
+  }, true);
+
+  function start() { mount(); setInterval(mount, 1000); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
+
+  window.prydligtWarranty = { bands: BANDS, artNo: artNo, selected: function () { return selected; } };
 })();

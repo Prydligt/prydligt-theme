@@ -1269,3 +1269,41 @@ body.brew .p-qty__minus--remove { color: var(--p-muted) !important; }
 @media (max-width: 767px) {
   body.checkout .tws-opc-cart--item .tws-opc-cart--item-remove { display: none !important; }
 }
+
+
+/* =====================================================================
+   14. FÖRLÄNGD GARANTI SOM TILLVAL (prydligt-leveranstimer.js)
+   ===================================================================== */
+body.article .p-warranty { margin: 16px 0 0 0; }
+body.article .p-warranty__head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+body.article .p-warranty__title { font-size: 15px; font-weight: 700; color: var(--p-ink); }
+body.article .p-warranty__opts {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+}
+body.article .p-warranty__opt {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 56px;
+  padding: 6px 4px !important;
+  background: #fff !important;
+  border: 1px solid var(--p-field) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: var(--p-ink) !important;
+  cursor: pointer;
+  font: inherit;
+}
+body.article .p-warranty__opt:hover { border-color: var(--p-ink) !important; }
+body.article .p-warranty__opt.is-selected { border: 2px solid var(--p-ink) !important; padding: 5px 3px !important; }
+body.article .p-warranty__len { font-size: 14px; font-weight: 700; line-height: 1.2; }
+body.article .p-warranty__price { font-size: 13px; color: var(--p-muted); line-height: 1.2; }
+body.article .p-warranty__info { margin: 8px 0 0 0 !important; font-size: 12.5px !important; line-height: 1.45 !important; color: var(--p-muted) !important; }
+@media (max-width: 400px) {
+  body.article .p-warranty__opts { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  body.article .p-warranty__opt:first-child { grid-column: 1 / -1; min-height: 44px; }
+}
