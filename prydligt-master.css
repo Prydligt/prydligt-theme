@@ -1902,6 +1902,5 @@ body.brew .tws-opc-cart--modal .modal-footer .btn-primary { background: var(--p-
   body.brew .tws-opc-cart--modal .modal-dialog { margin: 22vh 16px 0 16px; }
 }
 
-/* 26. Ångerformulär: visas som punkt på Villkor & info (JS), inte i sidfoten */
-/* Döljs i sidfoten när JS:en hittat villkorssidan (där punkten läggs in) */
-html.p-angra-moved body.brew .brew--footer .tws-contact-info--withdrawal-form { display: none !important; }
+/* 26. Ångerformulär: ligger som punkt i sidan Villkor & info (sidans innehåll i Abicart), inte i sidfoten */
+body.brew .brew--footer .tws-contact-info--withdrawal-form { display: none !important; }
