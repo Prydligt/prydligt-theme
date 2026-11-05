@@ -149,7 +149,15 @@
   // Kvar till fri frakt: läses från Abicarts egen notis i sidhuvudet ("330 SEK kvar till fri frakt" / "Du har fri frakt")
   function freeShippingLeft(m) {
     var n = document.querySelector('.tws-free-shipping-notice');
-    if (!n) return m.free;
+    if (!n) {
+      // Ingen notis på sidan (t.ex. i kassan): räkna från varukorgens värde i butikens data
+      try {
+        var o = window.twsReduxStore && window.twsReduxStore.getState().order;
+        var cart = o && o.costs && o.costs.cart && o.costs.cart.incVat;
+        if (typeof cart === 'number') return Math.max(0, Math.round(m.free - cart));
+      } catch (e) {}
+      return m.free;
+    }
     if (n.querySelector('.tws-free-shipping-notice--cost-reached')) return 0;
     var txt = (n.textContent || '').replace(/\s/g, '');
     var num = txt.match(/(\d+(?:[.,]\d+)?)/);
