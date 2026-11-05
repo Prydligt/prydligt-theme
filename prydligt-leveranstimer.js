@@ -287,8 +287,8 @@
  * Priset styrs av produktens pris via prisnivåer (BANDS). Varje nivå + längd är en egen
  * artikel i Abicart (artikelnummer i ART), som läggs i varukorgen tillsammans med produkten.
  *
- * STATUS: visningen är klar. Själva "lägg i varukorgen" (addToCart nedan) kopplas in när
- * vi sett hur Abicart lägger till artiklar. Tills dess visas modulen bara med ?garanti=1 i adressen.
+ * STATUS: klar. Fyll i ART_UID (artikel-ID för de 32 garantiartiklarna) och sätt LIVE = true.
+ * Tills dess visas modulen bara med ?garanti=1 i adressen.
  */
 (function () {
   'use strict';
@@ -319,8 +319,9 @@
     year: '\u00e5r',
     yearPl: '\u00e5r',
     kr: 'kr',
-    info: 'G\u00e4ller fabrikations- och materialfel efter den vanliga garantin. Reparation eller ny klocka \u2013 utan kostnad.',
-    more: 'L\u00e4s mer'
+    info: 'Kostnadsfri reparation eller ny klocka vid fel, fritt batteribyte och fri frakt \u2013 under hela garantitiden.',
+    more: 'L\u00e4s mer',
+    moreUrl: '/forlangd-garanti'
   };
 
   function enabled() {
@@ -348,10 +349,45 @@
     return ONLY_IN.test(((crumbs && crumbs.textContent) || '') + ' ' + ((name && name.textContent) || ''));
   }
 
-  /* --- Kopplas in senare: lägger garanti-artikeln i varukorgen --- */
-  function addToCart(articleNumber) {
-    if (window.prydligtAddArticle) return window.prydligtAddArticle(articleNumber, 1);
-    if (window.console) console.warn('[Prydligt garanti] addToCart ej inkopplad \u2013 skulle lagt till', articleNumber);
+  /* --- Artikel-ID (uid) i Abicart för varje garantiartikel. Fylls i efter importen. --- */
+  var ART_UID = {
+    // 'GARANTI-1AR-A': 123456789,
+  };
+
+  /* --- Lägger en artikel i varukorgen via Abicarts eget API (Order.addArticle) --- */
+  function store() { return window.twsReduxStore && window.twsReduxStore.getState ? window.twsReduxStore.getState() : null; }
+  function rpc(method, params) {
+    var st = store();
+    if (!st || !st.host) return Promise.reject(new Error('Abicart-store saknas'));
+    var q = { webshop: st.webshop && st.webshop.uid, auth: st.auth, session: st.session, language: st.language };
+    var qs = Object.keys(q).map(function (k) { return k + '=' + (q[k] === null || q[k] === undefined ? '' : q[k]); }).join('&');
+    return fetch('https://' + st.host + '?' + qs, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ jsonrpc: '2.0', id: Date.now(), method: method, params: params })
+    }).then(function (r) { return r.json(); }).then(function (j) {
+      if (j.error) throw j.error;
+      return j.result;
+    });
+  }
+  function orderUid() { var st = store(); return st && st.order && st.order.uid; }
+  function waitForOrder(ms) {
+    return new Promise(function (resolve) {
+      var t0 = Date.now();
+      (function poll() {
+        var u = orderUid();
+        if (u) return resolve(u);
+        if (Date.now() - t0 > ms) return resolve(null);
+        setTimeout(poll, 250);
+      })();
+    });
+  }
+  function addToCart(articleNumber, orderId) {
+    if (window.prydligtAddArticle) return Promise.resolve(window.prydligtAddArticle(articleNumber, 1));
+    var uid = ART_UID[articleNumber];
+    if (!uid) { if (window.console) console.warn('[Prydligt garanti] uid saknas f\u00f6r', articleNumber); return Promise.resolve(); }
+    return rpc('Order.addArticle', [orderId, uid, { quantity: 1 }, { uid: true }, { fastVerify: true }])
+      .catch(function (err) { if (window.console) console.warn('[Prydligt garanti] kunde inte l\u00e4gga till', articleNumber, err); });
   }
 
   var box = null, selected = 0, currentBand = null;
@@ -368,7 +404,7 @@
     el.innerHTML =
       '<div class="p-warranty__head"><span class="p-warranty__title">' + TXT.title + '</span></div>' +
       '<div class="p-warranty__opts" role="group" aria-label="' + TXT.title + '">' + opts + '</div>' +
-      '<p class="p-warranty__info">' + TXT.info + '</p>';
+      '<p class="p-warranty__info">' + TXT.info + ' <a href="' + TXT.moreUrl + '" target="_blank" rel="noopener">' + TXT.more + '</a></p>';
     el.addEventListener('click', function (e) {
       var b = e.target.closest('.p-warranty__opt');
       if (!b) return;
@@ -392,12 +428,21 @@
     if (box.nextElementSibling !== anchor) anchor.insertAdjacentElement('beforebegin', box);
   }
 
-  // Lägg till garantin när kunden trycker Köp
+  // När kunden trycker Köp med en garanti vald:
+  // finns redan en varukorg läggs garantin till först (så att Abicarts egen uppdatering visar båda),
+  // annars läggs klockan till först och garantin direkt efter att varukorgen skapats.
   document.addEventListener('click', function (e) {
-    if (!selected || !currentBand || !enabled()) return;
-    if (!e.target.closest('.slot--article-buy-button .tws-article-buy-button-with-modal--buy-button')) return;
+    var btn = e.target.closest && e.target.closest('.slot--article-buy-button .tws-article-buy-button-with-modal--buy-button');
+    if (!btn || btn.__pBypass || !selected || !currentBand || !enabled()) return;
     var a = artNo(currentBand, selected);
-    setTimeout(function () { addToCart(a); }, 600);   // efter att huvudprodukten lagts till
+    var existing = orderUid();
+    var pass = function () { btn.__pBypass = true; btn.click(); setTimeout(function () { btn.__pBypass = false; }, 0); };
+    if (existing) {
+      e.preventDefault(); e.stopImmediatePropagation();
+      addToCart(a, existing).then(pass, pass);
+    } else {
+      waitForOrder(8000).then(function (u) { if (u) addToCart(a, u); });
+    }
   }, true);
 
   function start() { mount(); setInterval(mount, 1000); }

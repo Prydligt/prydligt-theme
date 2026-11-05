@@ -1307,3 +1307,4 @@ body.article .p-warranty__info { margin: 8px 0 0 0 !important; font-size: 12.5px
   body.article .p-warranty__opts { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   body.article .p-warranty__opt:first-child { grid-column: 1 / -1; min-height: 44px; }
 }
+body.article .p-warranty__info a { color: var(--p-ink) !important; text-decoration: underline !important; }
