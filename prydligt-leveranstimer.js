@@ -463,7 +463,8 @@
     year: '\u00e5r',
     yearPl: '\u00e5r',
     kr: 'kr',
-    info: 'Kostnadsfri reparation eller ny klocka vid fel, fritt batteribyte och fri frakt \u2013 under hela garantitiden.',
+    info: 'Kostnadsfri reparation eller ny klocka vid fabrikations- eller materialfel, och fri frakt \u2013 under hela garantitiden.',
+    infoBtn: 'Vad ing\u00e5r?',
     more: 'L\u00e4s mer',
     moreUrl: '/forlangd-garanti'
   };
@@ -569,6 +570,84 @@
       .catch(function (err) { if (window.console) console.warn('[Prydligt garanti] kunde inte l\u00e4gga till', articleNumber, err); });
   }
 
+
+  /* --- Popup "Vad ing\u00e5r?" \u2013 j\u00e4mf\u00f6relse, pris per \u00e5r, s\u00e5 g\u00f6r du, undantag --- */
+  var INFO = {
+    title: 'F\u00f6rl\u00e4ngd garanti',
+    lead: 'Samma skydd som v\u00e5r vanliga garanti \u2013 men l\u00e4ngre. G\u00e5r klockan s\u00f6nder av ett fabrikations- eller materialfel reparerar vi den eller skickar en ny, utan kostnad.',
+    colStd: 'Standard (1 \u00e5r)', colExt: 'F\u00f6rl\u00e4ngd garanti',
+    rows: [
+      ['Fabrikations- och materialfel', 1, 1],
+      ['Urverk som stannar eller g\u00e5r fel', 1, 1],
+      ['Krona, knappar eller delar som lossnar utan yttre p\u00e5verkan', 1, 1],
+      ['Reparation eller ny klocka utan kostnad', 1, 1],
+      ['Fri frakt till och fr\u00e5n oss vid reparation', 1, 1],
+      ['Skyddstid fr\u00e5n leverans', '1 \u00e5r', '2\u20136 \u00e5r']
+    ],
+    perYear: '/ \u00e5r', save: 'Spara', choose: 'V\u00e4lj',
+    howTitle: 'Om n\u00e5got h\u00e4nder',
+    how: ['Mejla support@prydligt.se med ordernummer och en bild eller film p\u00e5 felet.',
+          'Vi skickar en fraktsedel \u2013 frakten st\u00e5r vi f\u00f6r.',
+          'Vi reparerar klockan eller skickar en ny likv\u00e4rdig.'],
+    notTitle: 'Det h\u00e4r ing\u00e5r inte',
+    not: ['Olyckor, t.ex. tapp, slag, st\u00f6tar eller krossat glas',
+          'Vattenskador n\u00e4r klockan anv\u00e4nts djupare \u00e4n vattent\u00e4theten anger',
+          'Normalt slitage: repor, pl\u00e4tering, armband och batteri',
+          'F\u00f6rlust och st\u00f6ld',
+          'Klockor som \u00f6ppnats eller reparerats av n\u00e5gon annan \u00e4n oss'],
+    terms: 'Fullst\u00e4ndiga villkor', close: 'St\u00e4ng'
+  };
+  var dlg = null, lastFocus = null;
+  function closeInfo() {
+    if (!dlg) return;
+    dlg.parentNode && dlg.parentNode.removeChild(dlg); dlg = null;
+    document.documentElement.classList.remove('p-wdlg-open');
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  function openInfo(band, moduleEl) {
+    closeInfo();
+    lastFocus = document.activeElement;
+    var mark = function (v) { return v === 1 ? '<span class="p-wdlg__yes" aria-label="Ja">\u2713</span>' : (v ? v : '<span class="p-wdlg__no" aria-label="Nej">\u2013</span>'); };
+    var rows = INFO.rows.map(function (r) { return '<tr><th scope="row">' + r[0] + '</th><td>' + mark(r[1]) + '</td><td>' + mark(r[2]) + '</td></tr>'; }).join('');
+    var base = band.price[1];
+    var cards = YEARS.map(function (y) {
+      var p = band.price[y], py = Math.round(p / y), sv = Math.round((1 - p / (base * y)) * 100);
+      return '<button type="button" class="p-wdlg__card" data-years="' + y + '">' +
+        '<span class="p-wdlg__len">' + y + ' ' + TXT.year + '</span>' +
+        '<span class="p-wdlg__py">' + py + ' kr ' + INFO.perYear + '</span>' +
+        (sv > 0 ? '<span class="p-wdlg__save">' + INFO.save + ' ' + sv + ' %</span>' : '<span class="p-wdlg__save p-wdlg__save--none">&nbsp;</span>') +
+        '<span class="p-wdlg__total">' + p + ' kr</span>' +
+        '<span class="p-wdlg__choose">' + INFO.choose + '</span></button>';
+    }).join('');
+    dlg = document.createElement('div');
+    dlg.className = 'p-wdlg';
+    dlg.innerHTML =
+      '<div class="p-wdlg__backdrop"></div>' +
+      '<div class="p-wdlg__box" role="dialog" aria-modal="true" aria-labelledby="p-wdlg-title" tabindex="-1">' +
+        '<button type="button" class="p-wdlg__x" aria-label="' + INFO.close + '">\u00d7</button>' +
+        '<h2 id="p-wdlg-title" class="p-wdlg__title">' + INFO.title + '</h2>' +
+        '<p class="p-wdlg__lead">' + INFO.lead + '</p>' +
+        '<table class="p-wdlg__table"><thead><tr><th></th><th scope="col">' + INFO.colStd + '</th><th scope="col">' + INFO.colExt + '</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+        '<div class="p-wdlg__cards">' + cards + '</div>' +
+        '<h3 class="p-wdlg__h3">' + INFO.howTitle + '</h3><ol class="p-wdlg__steps">' + INFO.how.map(function (t) { return '<li>' + t + '</li>'; }).join('') + '</ol>' +
+        '<h3 class="p-wdlg__h3">' + INFO.notTitle + '</h3><ul class="p-wdlg__not">' + INFO.not.map(function (t) { return '<li>' + t + '</li>'; }).join('') + '</ul>' +
+        '<p class="p-wdlg__terms"><a href="' + TXT.moreUrl + '" target="_blank" rel="noopener">' + INFO.terms + '</a></p>' +
+      '</div>';
+    dlg.addEventListener('click', function (e) {
+      if (e.target.closest('.p-wdlg__x') || e.target.classList.contains('p-wdlg__backdrop')) { closeInfo(); return; }
+      var c = e.target.closest('.p-wdlg__card');
+      if (c) {
+        var opt = moduleEl.querySelector('.p-warranty__opt[data-years="' + c.getAttribute('data-years') + '"]');
+        if (opt) opt.click();
+        closeInfo();
+      }
+    });
+    document.body.appendChild(dlg);
+    document.documentElement.classList.add('p-wdlg-open');
+    dlg.querySelector('.p-wdlg__box').focus();
+  }
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeInfo(); });
+
   var box = null, selected = 0, currentBand = null;
 
   function build(band) {
@@ -581,10 +660,14 @@
         '<span class="p-warranty__price">' + band.price[y] + ' ' + TXT.kr + '</span></button>';
     });
     el.innerHTML =
-      '<div class="p-warranty__head"><span class="p-warranty__title">' + TXT.title + '</span></div>' +
+      '<div class="p-warranty__head"><span class="p-warranty__title">' + TXT.title + '</span>' +
+        '<button type="button" class="p-warranty__infobtn" aria-haspopup="dialog">' + TXT.infoBtn + '</button></div>' +
       '<div class="p-warranty__opts" role="group" aria-label="' + TXT.title + '">' + opts + '</div>' +
       '<p class="p-warranty__info">' + TXT.info + ' <a href="' + TXT.moreUrl + '" target="_blank" rel="noopener">' + TXT.more + '</a></p>';
     el.addEventListener('click', function (e) {
+      if (e.target.closest('.p-warranty__infobtn') || e.target.closest('.p-warranty__info a')) {
+        e.preventDefault(); openInfo(band, el); return;
+      }
       var b = e.target.closest('.p-warranty__opt');
       if (!b) return;
       selected = parseInt(b.getAttribute('data-years'), 10) || 0;
@@ -733,7 +816,7 @@
     sv: {
       ship: 'Vi packar och skickar fr\u00e5n v\u00e5rt eget lager i V\u00e4nersborg. Snabbt, utan mellanh\u00e4nder.',
       cust: '\u00d6ver 450 000 kunder har handlat hos oss sedan starten.',
-      warr: 'G\u00e5r n\u00e5got s\u00f6nder vid normal anv\u00e4ndning reparerar vi det eller skickar en ny, utan kostnad. Till klockor kan du l\u00e4gga till f\u00f6rl\u00e4ngd garanti med fritt batteribyte.',
+      warr: 'G\u00e5r n\u00e5got s\u00f6nder vid normal anv\u00e4ndning reparerar vi det eller skickar en ny, utan kostnad. Till klockor kan du l\u00e4gga till f\u00f6rl\u00e4ngd garanti.',
       warrLink: 'L\u00e4s mer', warrUrl: '/forlangd-garanti'
     },
     da: {
