@@ -1488,13 +1488,6 @@ body.brew .slick-slide:has(a[href*="extended-warranty-"]) { display: none !impor
    (JS:en klickar fortfarande på den i bakgrunden när man tar bort).
    Garantiraden: artikelns egen bild, bara soptunnan (inget antal att ändra). */
 body.checkout .tws-opc-cart--item:has(.p-qty) .tws-opc-cart--item-remove { display: none !important; }
-body.checkout .tws-opc-cart--item:has(a[href*="forlangd-garanti-"]) .p-qty input,
-body.checkout .tws-opc-cart--item:has(a[href*="utvidet-garanti-"]) .p-qty input,
-body.checkout .tws-opc-cart--item:has(a[href*="udvidet-garanti-"]) .p-qty input,
-body.checkout .tws-opc-cart--item:has(a[href*="jatkettu-takuu-"]) .p-qty input,
-body.checkout .tws-opc-cart--item:has(a[href*="garantieverlangerung-"]) .p-qty input,
-body.checkout .tws-opc-cart--item:has(a[href*="garantieverlenging-"]) .p-qty input,
-body.checkout .tws-opc-cart--item:has(a[href*="extended-warranty-"]) .p-qty input,
 body.checkout .tws-opc-cart--item:has(a[href*="forlangd-garanti-"]) .p-qty__plus,
 body.checkout .tws-opc-cart--item:has(a[href*="utvidet-garanti-"]) .p-qty__plus,
 body.checkout .tws-opc-cart--item:has(a[href*="udvidet-garanti-"]) .p-qty__plus,
@@ -1916,3 +1909,10 @@ body.article .p-warranty__total { font-size: 11.5px; color: var(--p-muted); line
   body.article .p-warranty__save { font-size: 10.5px !important; letter-spacing: -0.01em; }
 }
 body.article .p-warranty__save { white-space: nowrap; }
+
+/* =====================================================================
+   28. KÖPKNAPP MEDAN GARANTI LÄGGS TILL
+   Antalet visas nu även på garantiraden i varukorgen (minus/soptunna finns kvar,
+   plus är dolt) så att kunden ser om garantin råkat hamna flera gånger.
+   ===================================================================== */
+body.article .tws-article-buy-button-with-modal--buy-button.p-busy { opacity: .6 !important; cursor: progress !important; }

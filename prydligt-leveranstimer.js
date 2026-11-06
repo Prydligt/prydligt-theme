@@ -712,19 +712,29 @@
   // När kunden trycker Köp med en garanti vald:
   // finns redan en varukorg läggs garantin till först (så att Abicarts egen uppdatering visar båda),
   // annars läggs klockan till först och garantin direkt efter att varukorgen skapats.
+  // Spärr: medan en garanti läggs till ignoreras fler klick på Köp. Annars lade varje extra klick
+  // (kunden tryckte igen när inget verkade hända) till en garanti till, medan Abicart bara lade
+  // till klockan en gång – t.ex. 1 klocka + 3 garantier.
+  var adding = false;
   document.addEventListener('click', function (e) {
     var btn = e.target.closest && e.target.closest('.slot--article-buy-button .tws-article-buy-button-with-modal--buy-button');
     if (!btn || btn.__pBypass || !selected || !currentBand || !enabled()) return;
+    if (adding) { e.preventDefault(); e.stopImmediatePropagation(); return; }
+    adding = true;
+    btn.classList.add('p-busy'); btn.setAttribute('aria-busy', 'true');
+    var release = function () { adding = false; btn.classList.remove('p-busy'); btn.removeAttribute('aria-busy'); };
     var a = artNo(currentBand, selected);
     var existing = orderUid();
     var pass = function () { btn.__pBypass = true; btn.click(); setTimeout(function () { btn.__pBypass = false; }, 0); };
     if (existing) {
       e.preventDefault(); e.stopImmediatePropagation();
-      var done = false, go = function () { if (!done) { done = true; pass(); } };
+      var done = false, go = function () { if (!done) { done = true; pass(); setTimeout(release, 2000); } };
       setTimeout(go, 3000);                       // köpet av klockan får aldrig vänta längre än 3 s
       addToCart(a, existing).then(go, go);
     } else {
-      waitForOrder(8000).then(function (u) { if (u) addToCart(a, u); });
+      var rel = setTimeout(release, 10000);
+      waitForOrder(8000).then(function (u) { return u ? addToCart(a, u) : null; })
+        .then(function () { clearTimeout(rel); setTimeout(release, 1500); }, function () { clearTimeout(rel); release(); });
     }
   }, true);
 
