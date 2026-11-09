@@ -1919,21 +1919,18 @@ body.article .tws-article-buy-button-with-modal--buy-button.p-busy { opacity: .6
 
 /* =====================================================================
    29. SAMMANFATTNING: TOTALEN FÅR INTE BLI BREDARE ÄN RUTAN
-   Stora belopp ("7 268,40 SEK") sköt ut totalen utanför den smala rutan på dator.
-   Texten skalar ner lite och beloppet hoppar ner på egen rad om det ändå inte får plats.
+   Abicart lägger "Totalt" (60 %) och beloppet (40 %) som floats med fasta bredder,
+   så stora belopp sköt ut utanför rutan. Raden görs flexibel: namn till vänster,
+   belopp till höger, och beloppet hoppar ner på egen rad (högerställt) om det inte får plats.
    ===================================================================== */
-body.checkout .tws-cart-summary,
-body.checkout .tws-cart-summary--wrapper { box-sizing: border-box !important; max-width: 100% !important; min-width: 0 !important; }
 body.checkout .tws-cart-summary .tws-cart-summary--sum-row {
   display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important;
-  align-items: baseline !important; column-gap: 12px !important; row-gap: 2px !important;
+  align-items: baseline !important; column-gap: 10px !important; row-gap: 0 !important;
 }
-body.checkout .tws-cart-summary .tws-cart-summary--sum-row > * { min-width: 0 !important; max-width: 100% !important; flex: 0 1 auto !important; }
-body.checkout .tws-cart-summary .tws-cart-summary--sum-row > *:last-child { margin-left: auto !important; text-align: right !important; }
-body.checkout .tws-cart-summary .tws-cart-summary--sum-row:not(.tws-cart-summary--sum-row-vat) *:not(.tws-cart-summary--sum-row-vat):not(.tws-cart-summary--sum-row-vat *) {
-  font-size: clamp(18px, 1.5vw, 22px) !important; line-height: 1.2 !important; letter-spacing: -0.01em;
-}
-body.checkout .tws-cart-summary .tws-cart-summary--sum-row .twsPriceCurrent,
-body.checkout .tws-cart-summary .tws-cart-summary--sum-row [class*="price"] { white-space: nowrap !important; }
-body.checkout .tws-cart-summary .tws-cart-summary--sum-row-vat,
-body.checkout .tws-cart-summary .tws-cart-summary--sum-row-vat * { font-size: 12px !important; }
+body.checkout .tws-cart-summary .tws-cart-summary--sum-row::before,
+body.checkout .tws-cart-summary .tws-cart-summary--sum-row::after { display: none !important; content: none !important; }
+body.checkout .tws-cart-summary .tws-cart-summary--sum-row > .tws-cart-summary--name,
+body.checkout .tws-cart-summary .tws-cart-summary--sum-row > .tws-cart-summary--value { float: none !important; width: auto !important; max-width: 100% !important; min-width: 0 !important; }
+body.checkout .tws-cart-summary .tws-cart-summary--sum-row > .tws-cart-summary--value { margin-left: auto !important; text-align: right !important; }
+body.checkout .tws-cart-summary .tws-cart-summary--sum-row .tws-cart-summary--name,
+body.checkout .tws-cart-summary .tws-cart-summary--sum-row .twsPriceCurrent { font-size: clamp(18px, 1.45vw, 22px) !important; white-space: nowrap !important; }
