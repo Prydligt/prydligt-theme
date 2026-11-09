@@ -1916,3 +1916,24 @@ body.article .p-warranty__save { white-space: nowrap; }
    plus är dolt) så att kunden ser om garantin råkat hamna flera gånger.
    ===================================================================== */
 body.article .tws-article-buy-button-with-modal--buy-button.p-busy { opacity: .6 !important; cursor: progress !important; }
+
+/* =====================================================================
+   29. SAMMANFATTNING: TOTALEN FÅR INTE BLI BREDARE ÄN RUTAN
+   Stora belopp ("7 268,40 SEK") sköt ut totalen utanför den smala rutan på dator.
+   Texten skalar ner lite och beloppet hoppar ner på egen rad om det ändå inte får plats.
+   ===================================================================== */
+body.checkout .tws-cart-summary,
+body.checkout .tws-cart-summary--wrapper { box-sizing: border-box !important; max-width: 100% !important; min-width: 0 !important; }
+body.checkout .tws-cart-summary .tws-cart-summary--sum-row {
+  display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important;
+  align-items: baseline !important; column-gap: 12px !important; row-gap: 2px !important;
+}
+body.checkout .tws-cart-summary .tws-cart-summary--sum-row > * { min-width: 0 !important; max-width: 100% !important; flex: 0 1 auto !important; }
+body.checkout .tws-cart-summary .tws-cart-summary--sum-row > *:last-child { margin-left: auto !important; text-align: right !important; }
+body.checkout .tws-cart-summary .tws-cart-summary--sum-row:not(.tws-cart-summary--sum-row-vat) *:not(.tws-cart-summary--sum-row-vat):not(.tws-cart-summary--sum-row-vat *) {
+  font-size: clamp(18px, 1.5vw, 22px) !important; line-height: 1.2 !important; letter-spacing: -0.01em;
+}
+body.checkout .tws-cart-summary .tws-cart-summary--sum-row .twsPriceCurrent,
+body.checkout .tws-cart-summary .tws-cart-summary--sum-row [class*="price"] { white-space: nowrap !important; }
+body.checkout .tws-cart-summary .tws-cart-summary--sum-row-vat,
+body.checkout .tws-cart-summary .tws-cart-summary--sum-row-vat * { font-size: 12px !important; }
