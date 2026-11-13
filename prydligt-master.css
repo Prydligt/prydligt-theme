@@ -1937,15 +1937,12 @@ body.checkout .tws-cart-summary .tws-cart-summary--sum-row .twsPriceCurrent { fo
 
 /* =====================================================================
    30. KASSAN – ENKLARE VÄG TILL BETALNINGEN
-   - Leveransland och leveransmetod döljs när det bara finns ett val.
+   - Leveransland och leveransmetod visas som vanligt (döljs först när Kustoms fraktassistent är aktiv).
    - Rubriken "Slutför din beställning" döljs (Kustom-rutan har egna rubriker).
    - Fri frakt: en bock-rad i stället för grön ruta och mätare (JS skriver inte ut mätaren i kassan).
    - Mobil/surfplatta (body.p-co-mobile, sätts av JS): rubrik "Kassa" + hopfälld varukorg
      och sammanfattning bakom raden "Visa varukorg (3)  1 564 SEK".
    ===================================================================== */
-body.checkout .opc-checkout--shortcuts:has(.tws-checkout-shortcuts--just-one) { display: none !important; }
-body.checkout .tws-checkout--select-delivery:has(.tws-checkout--select-delivery-lonely) { display: none !important; }
-body.checkout .tws-checkout--delivery-payment:has(.tws-checkout--select-delivery-lonely) { margin: 0 !important; padding: 0 !important; }
 body.checkout .tws-checkout--complete-heading { display: none !important; }
 
 body.checkout .p-cart-free { background: transparent !important; padding: 12px 0 !important; margin: 0 0 4px 0 !important; border-bottom: 1px solid var(--p-line); }
