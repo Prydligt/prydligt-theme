@@ -1995,22 +1995,29 @@ body.checkout.p-co-mobile .tws-discount-field { margin-bottom: 0 !important; }
 
 /* =====================================================================
    32. VARUKORGSRADER MED RABATT ELLER FLERA AV SAMMA
-   Tidigare syntes bara styckpriset och ett ensamt minusbelopp (radens rabatt)
-   utan förklaring. Nu: rabattens namn + belopp, och radens totalsumma
-   när raden har rabatt eller antal > 1.
+   Raden visar styckpris + rek. pris som förut. Har raden rabatt eller antal > 1
+   visas radens summa på en egen rad: "Totalt: 9 294,30 SEK  ~~10 327 SEK~~"
+   (överstruket = före rabatt). Rabattens namn och belopp per rad visas inte –
+   den samlade rabatten står i sammanfattningen.
    ===================================================================== */
-body.checkout .tws-opc-cart--unit-costs-discount {
-  display: flex !important; flex-wrap: wrap; align-items: baseline; gap: 2px 8px;
-  margin-top: 4px !important; font-size: 14px !important; color: var(--p-muted) !important;
+body.checkout .tws-opc-cart--unit-costs-discount { display: none !important; }
+body.checkout .tws-opc-cart--unit-costs:has(.tws-opc-cart--unit-costs-discount),
+body.checkout .tws-opc-cart--item:has(.p-qty input:not([value="1"])) .tws-opc-cart--unit-costs {
+  display: flex !important; flex-wrap: wrap !important; align-items: baseline; column-gap: 8px;
 }
-body.checkout .tws-opc-cart--unit-costs-discount .tws-opc-cart--uc-title { display: inline !important; color: var(--p-muted) !important; }
-body.checkout .tws-opc-cart--unit-costs .tws-opc-cart--unit-costs-discount .twsPriceCurrent {
-  font-size: 14px !important; font-weight: 600 !important; color: var(--p-ink) !important;
-}
+body.checkout .tws-opc-cart--unit-costs > li { list-style: none; }
+body.checkout .tws-opc-cart--unit-costs .tws-opc-cart--unit-costs-unit { flex: 0 0 100%; }
 body.checkout .tws-opc-cart--unit-costs:has(.tws-opc-cart--unit-costs-discount) .tws-opc-cart--unit-costs-total,
 body.checkout .tws-opc-cart--item:has(.p-qty input:not([value="1"])) .tws-opc-cart--unit-costs-total {
-  display: flex !important; align-items: baseline; gap: 8px; margin-top: 6px !important;
-  padding-top: 6px; border-top: 1px dashed var(--p-line);
+  display: flex !important; align-items: baseline; gap: 6px; margin-top: 6px !important; order: 2;
 }
-body.checkout .tws-opc-cart--unit-costs-total .tws-opc-cart--uc-title { display: inline !important; font-size: 14px; color: var(--p-muted); }
-body.checkout .tws-opc-cart--unit-costs .tws-opc-cart--unit-costs-total .twsPriceCurrent { font-size: 16px !important; font-weight: 700 !important; color: var(--p-ink) !important; }
+body.checkout .tws-opc-cart--unit-costs-total .tws-opc-cart--uc-title { display: inline !important; font-size: 15px; color: var(--p-ink); }
+body.checkout .tws-opc-cart--unit-costs .tws-opc-cart--unit-costs-total .twsPriceCurrent { font-size: 15px !important; font-weight: 700 !important; color: var(--p-ink) !important; }
+/* Summan före rabatt, överstruken, efter den nya summan */
+body.checkout .tws-opc-cart--unit-costs:has(.tws-opc-cart--unit-costs-discount) .tws-opc-cart--unit-costs-vat {
+  display: inline-flex !important; order: 3; margin-top: 6px !important;
+}
+body.checkout .tws-opc-cart--unit-costs-vat .tws-opc-cart--uc-title { display: none !important; }
+body.checkout .tws-opc-cart--unit-costs .tws-opc-cart--unit-costs-vat .twsPriceCurrent {
+  font-size: 14px !important; font-weight: 400 !important; color: var(--p-muted) !important; text-decoration: line-through;
+}
