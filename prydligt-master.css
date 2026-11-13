@@ -1604,6 +1604,10 @@ html[lang="en"] body.brew .tws-newsletter-subscribe--subscribe-button .ladda-lab
 
 /* 19b. Popupen visas först när JS:en satt html.p-nl-ok (efter 8 s, ej i kassan) */
 html:not(.p-nl-ok) .tws-newsletter-subscribe--dialog { display: none !important; }
+/* 19d. Låt sidan gå att scrolla och klicka medan popupen väntar (och i kassan).
+   Abicart låser body (modal_active + overflow:hidden) direkt när popupen läggs in,
+   fast vi döljer den – utan detta var sidan låst i 8 s och kassan låst helt. */
+html:not(.p-nl-ok) body.modal_active:has(.tws-newsletter-subscribe--dialog .modal-backdrop) { overflow: auto !important; padding-right: 0 !important; }
 
 /* 19c. Centrera fält + knapp och ta bort glipan mellan dem */
 body.brew .tws-newsletter-subscribe--form-wrapper form { max-width: 520px !important; margin: 16px auto 0 auto !important; }
