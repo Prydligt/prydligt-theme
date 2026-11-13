@@ -277,11 +277,10 @@
     if (!cartEl) { cartEl = document.createElement('div'); cartEl.className = 'p-cart-free'; }
     if (anchor.firstElementChild !== cartEl) anchor.insertBefore(cartEl, anchor.firstChild);
     var l = lang(), b = BOX[l], m = MARKET[l], left = freeShippingLeft(m);
-    var pct = left > 0 ? Math.max(0, Math.min(100, Math.round((m.free - left) / m.free * 100))) : 100;
-    var html = (left > 0
-      ? '<div class="p-ship__free"><span>' + b.free + '</span><span><strong>' + m.fmt(left) + '</strong> ' + b.left + '</span></div>'
-      : '<div class="p-ship__free p-ship__free--ok"><span>' + b.reached + '</span></div>') +
-      '<div class="p-ship__bar" aria-hidden="true"><span style="width:' + pct + '%"></span></div>' +
+    // I kassan: ingen mätare och inget "X kr kvar" (lockar bort kunden från kassan).
+    // Fri frakt visas som en bock-rad när gränsen är nådd; leveransdatumet visas alltid.
+    cartEl.classList.toggle('p-cart-free--ok', left <= 0);
+    var html = (left > 0 ? '' : '<div class="p-ship__free p-ship__free--ok"><span>' + b.reached + '</span></div>') +
       '<p class="p-ship__when">' + deliveryText(l, TEXT[l], b, m, state()) + '</p>';
     if (cartEl.__last !== html) { cartEl.innerHTML = html; cartEl.__last = html; }
   }
@@ -1053,6 +1052,71 @@
     slot.parentElement.insertBefore(build(), slot.nextSibling);
   }
   function start() { mount(); setInterval(mount, 1500); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
+})();
+
+/*!
+ * Prydligt – hopfälld varukorg i kassan (mobil/surfplatta)
+ * När kassan är enkolumns (sammanfattningen i sidokolumnen syns inte) visas rubriken
+ * "Kassa" och en rad "Visa varukorg (3)  1 564 SEK". Varorna och sammanfattningen är
+ * dolda tills kunden klickar. På dator (två kolumner) ändras ingenting här.
+ */
+(function () {
+  'use strict';
+  var T = {
+    sv: ['Kassa', 'Visa varukorg', 'Dölj varukorg'],
+    nb: ['Kasse', 'Vis handlekurv', 'Skjul handlekurv'],
+    da: ['Kasse', 'Vis kurv', 'Skjul kurv'],
+    fi: ['Kassa', 'Näytä ostoskori', 'Piilota ostoskori'],
+    de: ['Kasse', 'Warenkorb anzeigen', 'Warenkorb ausblenden'],
+    nl: ['Afrekenen', 'Winkelwagen tonen', 'Winkelwagen verbergen'],
+    en: ['Checkout', 'Show cart', 'Hide cart'],
+    fr: ['Paiement', 'Afficher le panier', 'Masquer le panier']
+  };
+  T.no = T.nb;
+  function lang() {
+    var l = (document.documentElement.getAttribute('lang') || 'sv').toLowerCase().slice(0, 2);
+    return T[l] ? l : 'sv';
+  }
+  var open = false, title = null, btn = null;
+
+  function txt(sel) {
+    var e = document.querySelector(sel);
+    return e ? (e.textContent || '').replace(/\s+/g, ' ').trim() : '';
+  }
+
+  function tick() {
+    var body = document.body;
+    if (!body || !body.classList.contains('checkout')) return;
+    var cart = document.querySelector('.opc-checkout--main .tws-opc-cart');
+    var side = document.querySelector('.opc-checkout--summary');
+    var mobile = !side || side.offsetParent === null;
+    body.classList.toggle('p-co-mobile', mobile);
+    if (!cart || !cart.parentElement) return;
+
+    var t = T[lang()];
+    if (!title) { title = document.createElement('h1'); title.className = 'p-co-title'; }
+    if (!btn) {
+      btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'p-co-toggle';
+      btn.addEventListener('click', function () { open = !open; tick(); });
+    }
+    if (cart.previousElementSibling !== btn) cart.parentElement.insertBefore(btn, cart);
+    if (btn.previousElementSibling !== title) btn.parentElement.insertBefore(title, btn);
+    if (title.textContent !== t[0]) title.textContent = t[0];
+
+    var n = (txt('.tws-cart-summary--items-count').match(/\d+/) || [''])[0];
+    var total = txt('.tws-cart-summary--sum-row .tws-cart-summary--value');
+    var html = '<span class="p-co-toggle__lbl">' + (open ? t[2] : t[1]) + (n ? ' (' + n + ')' : '') +
+      ' <span class="p-co-toggle__chev" aria-hidden="true"></span></span><span class="p-co-toggle__tot">' + total + '</span>';
+    if (btn.__last !== html) { btn.innerHTML = html; btn.__last = html; }
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    body.classList.toggle('p-co-closed', !open);
+  }
+
+  function start() { tick(); setInterval(tick, 700); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
   else start();
 })();

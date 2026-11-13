@@ -1934,3 +1934,48 @@ body.checkout .tws-cart-summary .tws-cart-summary--sum-row > .tws-cart-summary--
 body.checkout .tws-cart-summary .tws-cart-summary--sum-row > .tws-cart-summary--value { margin-left: auto !important; text-align: right !important; }
 body.checkout .tws-cart-summary .tws-cart-summary--sum-row .tws-cart-summary--name,
 body.checkout .tws-cart-summary .tws-cart-summary--sum-row .twsPriceCurrent { font-size: clamp(18px, 1.45vw, 22px) !important; white-space: nowrap !important; }
+
+/* =====================================================================
+   30. KASSAN – ENKLARE VÄG TILL BETALNINGEN
+   - Leveransland och leveransmetod döljs när det bara finns ett val.
+   - Rubriken "Slutför din beställning" döljs (Kustom-rutan har egna rubriker).
+   - Fri frakt: en bock-rad i stället för grön ruta och mätare (JS skriver inte ut mätaren i kassan).
+   - Mobil/surfplatta (body.p-co-mobile, sätts av JS): rubrik "Kassa" + hopfälld varukorg
+     och sammanfattning bakom raden "Visa varukorg (3)  1 564 SEK".
+   ===================================================================== */
+body.checkout .opc-checkout--shortcuts:has(.tws-checkout-shortcuts--just-one) { display: none !important; }
+body.checkout .tws-checkout--select-delivery:has(.tws-checkout--select-delivery-lonely) { display: none !important; }
+body.checkout .tws-checkout--delivery-payment:has(.tws-checkout--select-delivery-lonely) { margin: 0 !important; padding: 0 !important; }
+body.checkout .tws-checkout--complete-heading { display: none !important; }
+
+body.checkout .p-cart-free { background: transparent !important; padding: 12px 0 !important; margin: 0 0 4px 0 !important; border-bottom: 1px solid var(--p-line); }
+body.checkout .p-cart-free .p-ship__bar { display: none !important; }
+body.checkout .p-cart-free .p-ship__free--ok { margin-bottom: 4px; font-weight: 700; color: var(--p-ok); }
+body.checkout .p-cart-free .p-ship__free--ok span::before { content: '\2713\00a0'; }
+body.checkout .p-cart-free .p-ship__when { font-size: 14px !important; }
+
+/* Rubrik och växlingsrad – bara i enkolumnsläge */
+body.checkout .p-co-title,
+body.checkout .p-co-toggle { display: none; }
+body.checkout.p-co-mobile .p-co-title {
+  display: block; font-size: 32px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15;
+  margin: 4px 0 0 0; padding: 0 0 14px 0; border-bottom: 1px solid var(--p-line);
+}
+body.checkout.p-co-mobile .p-co-toggle {
+  display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 12px;
+  background: none; border: 0; border-bottom: 1px solid var(--p-line); border-radius: 0;
+  padding: 14px 0; margin: 0; font: inherit; color: inherit; cursor: pointer; text-align: left;
+}
+body.checkout .p-co-toggle__lbl { font-weight: 600; font-size: 17px; display: inline-flex; align-items: center; gap: 8px; }
+body.checkout .p-co-toggle__tot { font-weight: 700; font-size: 18px; white-space: nowrap; }
+body.checkout .p-co-toggle__chev {
+  width: 8px; height: 8px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translateY(-3px); transition: transform .2s;
+}
+body.checkout .p-co-toggle[aria-expanded="true"] .p-co-toggle__chev { transform: rotate(-135deg) translateX(-2px); }
+
+body.checkout.p-co-mobile .tws-opc-cart--header { display: none !important; }
+body.checkout.p-co-mobile.p-co-closed .tws-opc-cart--wrapper,
+body.checkout.p-co-mobile.p-co-closed .opc-checkout--cart .tws-cart-summary { display: none !important; }
+body.checkout.p-co-mobile .opc-checkout--cart { margin-bottom: 0 !important; }
+body.checkout.p-co-mobile .tws-discount-field { margin-bottom: 0 !important; }
