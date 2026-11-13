@@ -1980,3 +1980,15 @@ body.checkout.p-co-mobile.p-co-closed .tws-opc-cart--wrapper,
 body.checkout.p-co-mobile.p-co-closed .opc-checkout--cart .tws-cart-summary { display: none !important; }
 body.checkout.p-co-mobile .opc-checkout--cart { margin-bottom: 0 !important; }
 body.checkout.p-co-mobile .tws-discount-field { margin-bottom: 0 !important; }
+
+/* =====================================================================
+   31. MOBIL: ETT TRYCK RÄCKER PÅ PRODUKTKORTEN
+   Abicart byter till produktens andra bild vid :hover (opacity-växling).
+   På pekskärmar (iOS) gör det att första trycket bara "hovrar" och
+   andra trycket öppnar produkten. På enheter utan hover stängs bytet av.
+   ===================================================================== */
+@media (hover: none) {
+  .tws-list--grid-item--change-on-hover .tws-article-list--product-image { transition: none !important; }
+  .tws-list--grid-item--change-on-hover:hover .tws-article-list--product-image:not(.tws-article-list--product-image-second) { opacity: 1 !important; }
+  .tws-list--grid-item--change-on-hover .tws-article-list--product-image-second { display: none !important; }
+}
