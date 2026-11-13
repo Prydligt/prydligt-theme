@@ -2023,3 +2023,16 @@ body.checkout .tws-opc-cart--unit-costs-vat::after { content: none !important; }
 body.checkout .tws-opc-cart--unit-costs .tws-opc-cart--unit-costs-vat .twsPriceCurrent {
   font-size: 14px !important; font-weight: 400 !important; color: var(--p-muted) !important; text-decoration: line-through;
 }
+
+/* 33. Radsumman högerställd längst ner på raden (under antalet): överstruken
+   summa före rabatt ovanför, ny summa i fetstil under. Ingen "Totalt"-etikett. */
+body.checkout .tws-opc-cart--rows .tws-opc-cart--item { position: relative !important; }
+body.checkout .tws-opc-cart--unit-costs:has(.tws-opc-cart--unit-costs-discount) .tws-opc-cart--unit-costs-total,
+body.checkout .tws-opc-cart--item:has(.p-qty input:not([value="1"])) .tws-opc-cart--unit-costs-total {
+  position: absolute !important; right: 0; bottom: 14px; margin: 0 !important;
+}
+body.checkout .tws-opc-cart--unit-costs-total .tws-opc-cart--uc-title { display: none !important; }
+body.checkout .tws-opc-cart--unit-costs .tws-opc-cart--unit-costs-total .twsPriceCurrent { font-size: 17px !important; }
+body.checkout .tws-opc-cart--unit-costs:has(.tws-opc-cart--unit-costs-discount) .tws-opc-cart--unit-costs-vat {
+  position: absolute !important; right: 0; bottom: 38px; margin: 0 !important;
+}
