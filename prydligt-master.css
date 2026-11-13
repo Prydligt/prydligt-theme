@@ -2018,6 +2018,8 @@ body.checkout .tws-opc-cart--unit-costs:has(.tws-opc-cart--unit-costs-discount) 
   display: inline-flex !important; order: 3; margin-top: 6px !important;
 }
 body.checkout .tws-opc-cart--unit-costs-vat .tws-opc-cart--uc-title { display: none !important; }
+body.checkout .tws-opc-cart--unit-costs-vat::before,
+body.checkout .tws-opc-cart--unit-costs-vat::after { content: none !important; }
 body.checkout .tws-opc-cart--unit-costs .tws-opc-cart--unit-costs-vat .twsPriceCurrent {
   font-size: 14px !important; font-weight: 400 !important; color: var(--p-muted) !important; text-decoration: line-through;
 }
