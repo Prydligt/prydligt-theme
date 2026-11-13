@@ -1996,16 +1996,16 @@ body.checkout.p-co-mobile .tws-discount-field { margin-bottom: 0 !important; }
 /* =====================================================================
    32. VARUKORGSRADER MED RABATT ELLER FLERA AV SAMMA
    Tidigare syntes bara styckpriset och ett ensamt minusbelopp (radens rabatt)
-   utan förklaring. Nu: rabattens namn + belopp i grönt, och radens totalsumma
+   utan förklaring. Nu: rabattens namn + belopp, och radens totalsumma
    när raden har rabatt eller antal > 1.
    ===================================================================== */
 body.checkout .tws-opc-cart--unit-costs-discount {
   display: flex !important; flex-wrap: wrap; align-items: baseline; gap: 2px 8px;
-  margin-top: 4px !important; font-size: 14px !important; color: var(--p-ok) !important;
+  margin-top: 4px !important; font-size: 14px !important; color: var(--p-muted) !important;
 }
-body.checkout .tws-opc-cart--unit-costs-discount .tws-opc-cart--uc-title { display: inline !important; font-weight: 600; color: var(--p-ok) !important; }
+body.checkout .tws-opc-cart--unit-costs-discount .tws-opc-cart--uc-title { display: inline !important; color: var(--p-muted) !important; }
 body.checkout .tws-opc-cart--unit-costs .tws-opc-cart--unit-costs-discount .twsPriceCurrent {
-  font-size: 14px !important; font-weight: 600 !important; color: var(--p-ok) !important;
+  font-size: 14px !important; font-weight: 600 !important; color: var(--p-ink) !important;
 }
 body.checkout .tws-opc-cart--unit-costs:has(.tws-opc-cart--unit-costs-discount) .tws-opc-cart--unit-costs-total,
 body.checkout .tws-opc-cart--item:has(.p-qty input:not([value="1"])) .tws-opc-cart--unit-costs-total {
