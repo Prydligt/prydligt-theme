@@ -2036,3 +2036,14 @@ body.checkout .tws-opc-cart--unit-costs .tws-opc-cart--unit-costs-total .twsPric
 body.checkout .tws-opc-cart--unit-costs:has(.tws-opc-cart--unit-costs-discount) .tws-opc-cart--unit-costs-vat {
   position: absolute !important; right: 0; bottom: 38px; margin: 0 !important;
 }
+
+/* =====================================================================
+   34. TEST: ÖVERSTRUKET ORDINARIE PRIS UTAN "REK. PRIS"-ETIKETT
+   Gäller alla språk och alla ställen (listor, produktsida, köp-popup, kassa).
+   :not(#p) ger id-specificitet så att regeln vinner över äldre regler.
+   Ta bort hela sektionen för att gå tillbaka till "Rek. pris 1 995 SEK".
+   ===================================================================== */
+body.brew .twsPriceRegular:not(#p),
+body.brew .tws-api--price-regular:not(#p) { text-decoration: line-through !important; }
+body.brew .twsPriceRegular:not(#p)::before,
+body.brew .tws-api--price-regular:not(#p)::before { content: none !important; }
