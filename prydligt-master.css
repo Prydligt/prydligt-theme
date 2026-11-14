@@ -104,9 +104,9 @@ body.brew input:focus-visible {
   body.brew select { font-size: 16px !important; }
 }
 
-/* Rabattetiketter (-81 %) överallt: svarta och fyrkantiga */
+/* Rabattetiketter (-81 %) överallt: röda (samma röd som rabatterat pris) och fyrkantiga */
 body.brew .tws-article-labels--special-offer .tws-article-labels--label-text {
-  background: var(--p-ink) !important;
+  background: var(--p-sale, #c8102e) !important;
   color: #fff !important;
   border-radius: 0 !important;
   font-size: 13px !important;
@@ -168,8 +168,8 @@ body.brew .brew--sidebar .tws-util-heading--heading { color: #fff !important; }
 body.brew .brew--sidebar .tws-article-list--list .twsPriceRegular { color: #a9a9a9 !important; }
 body.brew .brew--sidebar .tws-article-list--list .tws-img--wrapper { background: #fff !important; }
 body.brew .brew--sidebar .tws-article-labels--special-offer .tws-article-labels--label-text {
-  background: #fff !important;
-  color: var(--p-ink) !important;
+  background: var(--p-sale, #c8102e) !important;
+  color: #fff !important;
 }
 
 
