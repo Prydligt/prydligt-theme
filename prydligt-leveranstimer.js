@@ -2222,13 +2222,15 @@ window.prydligtImg = function (u, w, q) {
     var gap = whole ? Math.ceil(free - cart) : Math.ceil((free - cart) * 100) / 100;
     if (gap <= 0) { remove(); return; }
     // Relevans utifrån korgen
-    var inCart = {}, hasMen = false, hasWatch = false, hasJewel = false, silver = false;
+    var cartSeries = {}, inCart = {}, hasMen = false, hasWatch = false, hasJewel = false, silver = false;
     items.forEach(function (it) {
       var a = it.article || {}, nr = String(a.articleNumber || it.articleNumber || '').toUpperCase();
       inCart[nr] = 1;
       var url = (a.url && (a.url[l] || a.url.sv || a.url.en)) || '';
       if (WATCH_NR.test(nr)) { hasWatch = true; if (MEN_URL.test(url)) hasMen = true; }
       if (/^K-/.test(nr)) hasJewel = true;
+      var nm0 = a.name && (a.name.en || a.name.sv || a.name[l]);
+      if (nm0) cartSeries[String(nm0).toLowerCase().split(/\s+/).slice(0, 2).join(' ')] = 1;
       if (/silver|argent|silber|zilver|hopea|s[oø]lv/i.test(JSON.stringify(a.name || ''))) silver = true;
     });
     var pool = hasWatch ? (hasMen ? L.MENW : L.WOMENW).concat(L.JEWEL)
@@ -2249,6 +2251,7 @@ window.prydligtImg = function (u, w, q) {
       var by = {};
       res.forEach(function (a) { by[String(a.articleNumber).toUpperCase()] = a; });
       var need = Math.max(gap, floor), seen = {}, pick = [];
+      for (var cs in cartSeries) seen[cs] = 1;   // inte samma modell i annan färg
       pool.forEach(function (nr) {
         var a = by[nr.toUpperCase()];
         if (!a || pick.length >= 3 || inCart[nr.toUpperCase()] || a.isBuyable === false || !a.images || !a.images[0]) return;
