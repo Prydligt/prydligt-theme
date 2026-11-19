@@ -5,7 +5,7 @@ import { writeFileSync, readFileSync, existsSync } from 'node:fs';
 const API = 'https://www.prydligt.se/backend/jsonrpc/v1?webshop=89339';
 const SKIP_GROUPS = new Set([9477981]); // armband/straps till smartklockor
 const SKIP_NAME = /\b(strap|warranty|garanti|tool|toolkit|charger|cable|gift ?card)\b/i;
-const COL = /\b(18k|14k|silver|silvery|gold|golden|rose|rosé|black|blue|green|white|brown|grey|gray|red|steel|stainless|pink|purple|teal|yellow|orange|navy|champagne|pine|lavender|forest|cream|beige|bronze|copper|titanium|gunmetal|case|dial|oro|argento|arento|nero|blu|rosa|verde|bianco|marrone|grigio|giallo|azzurro|madreperlaceo|marmo|light|dark|matte|mesh|leather|rubber|tone|two|and)\b/gi;
+const COL = /\b(18k|14k|silver|silvery|gold|golden|rose|rosé|black|blue|green|white|brown|grey|gray|red|steel|stainless|pink|purple|teal|yellow|orange|navy|champagne|pine|lavender|forest|cream|beige|bronze|copper|titanium|gunmetal|case|dial|oro|argento|arento|nero|blu|rosa|verde|bianco|marrone|grigio|giallo|azzurro|madreperlaceo|marmo|light|dark|matte|mesh|leather|rubber|tone|two|and|due|rosso|cuio|cuoio|pelle)\b/gi;
 const norm = n => String(n || '').toLowerCase().replace(/[\/&,()+\-]/g, ' ').replace(COL, ' ').replace(/\s+/g, ' ').trim();
 
 const rows = [];
