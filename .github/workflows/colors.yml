@@ -1,0 +1,26 @@
+name: Färgserier (colors.json)
+on:
+  schedule:
+    - cron: '17 2 * * *'   # varje natt ~03:17 svensk tid
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node tools/build-colors.mjs
+      - name: Spara om ändrad
+        run: |
+          if [ -n "$(git status --porcelain colors.json)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898799+github-actions[bot]@users.noreply.github.com"
+            git add colors.json
+            git commit -m "Uppdatera färgserier"
+            git push
+            curl -s "https://purge.jsdelivr.net/gh/Prydligt/prydligt-theme@main/colors.json" > /dev/null || true
+          fi
