@@ -29,7 +29,7 @@ for (const r of rows) {
   if (k.split(' ').length < 2) continue;
   (g[k] = g[k] || []).push(nr);
 }
-const groups = Object.keys(g).sort().map(k => g[k].sort((a, b) => a.localeCompare(b, 'en', { numeric: true }))).filter(l => l.length >= 2 && l.length <= 24);
+const groups = Object.keys(g).sort().map(k => g[k].sort((a, b) => a.localeCompare(b, 'en', { numeric: true }))).filter(l => l.length >= 2 && l.length <= 30);
 
 const out = JSON.stringify({ articles: rows.length, groups });
 const prev = existsSync('colors.json') ? readFileSync('colors.json', 'utf8') : '';
