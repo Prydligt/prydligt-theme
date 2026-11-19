@@ -2285,6 +2285,9 @@ window.prydligtImg = function (u, w, q) {
           window.prydligtAddToOrder(x.nr).then(function () {
             b.textContent = t[3];
             track('addon_added', { addon_type: WATCH_NR.test(x.nr) ? 'klocka' : 'smycke', addon_sku: x.nr, addon_value: x.price, addon_currency: cur, addon_position: pos + 1, addon_page: 'kassa', main_sku: null });
+            // Abicart räknar inte om fraktvalet (och betalningen, t.ex. Klarna) när ordern ändras utanför
+            // kassans egna knappar. Ladda om kassan så att frakt, summa och betalning stämmer med ordern.
+            setTimeout(function () { window.location.reload(); }, 400);
           }, function () { b.disabled = false; b.textContent = '+ ' + t[1]; });
         });
         row.appendChild(im); row.appendChild(tx); row.appendChild(b);
