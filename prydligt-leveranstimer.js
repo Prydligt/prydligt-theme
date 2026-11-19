@@ -1692,7 +1692,9 @@ window.prydligtImg = function (u, w, q) {
   T.no = T.nb;
   var LOC = { sv: 'sv-SE', nb: 'nb-NO', no: 'nb-NO', da: 'da-DK', fi: 'fi-FI', de: 'de-DE', nl: 'nl-NL', en: 'en-GB', fr: 'fr-FR', pl: 'pl-PL', es: 'es-ES', it: 'it-IT', pt: 'pt-PT' };
   var MAX = 8;   // antal förslag i den svepbara raden
-  window.prydligtLists = { JEWEL: JEWEL, MENW: MENW, GOLD_J: GOLD_J, SILVER_J: SILVER_J };
+  // Damklockor att föreslå (används av fri frakt-fyllaren i kassan)
+  var WOMENW = 'LOR-63,LOR-117,LOR-66,LOR-71,LOR-79,LOR-74,LOR-87,LOR-64,LOR-83,LOR-120,LOR-75,LOR-72,LOR-129,LOR-121,LOR-67,LOR-185,LOR-137,NIB-179,LOR-139,LOR-160,LOR-118,LOR-84,LOR-225,LOR-224,LOR-85,LOR-161,LOR-193,LOR-80,LOR-186,NIB-176'.split(',');
+  window.prydligtLists = { JEWEL: JEWEL, MENW: MENW, WOMENW: WOMENW, GOLD_J: GOLD_J, SILVER_J: SILVER_J };
   var box = null, forArticle = null, loading = false, picked = {};
 
   function store() { return window.twsReduxStore && window.twsReduxStore.getState ? window.twsReduxStore.getState() : null; }
@@ -2168,8 +2170,8 @@ window.prydligtImg = function (u, w, q) {
    - Visas bara när det fattas något till fri frakt och minst 2 relevanta varor räcker hela vägen.
    - Golv per valuta (FLOOR): inga billiga utfyllnadsvaror – den tappade fraktavgiften ska
      täckas med råge. Hellre ingen ruta än ett förslag som inte lönar sig.
-   - Relevans: herrklocka i korgen → herrklockor + Céleste, damklocka → Céleste,
-     bara smycken → smycken i samma färgton.
+   - Relevans: herrklocka i korgen → herrklockor + Céleste, damklocka → damklockor + Céleste,
+     bara smycken → smycken i samma färgton + damklockor, annat → klockor + Céleste.
    - Ett tryck lägger varan i ordern direkt (kunden lämnar aldrig kassan).
    =================================================================== */
 (function () {
@@ -2220,15 +2222,18 @@ window.prydligtImg = function (u, w, q) {
     var gap = whole ? Math.ceil(free - cart) : Math.ceil((free - cart) * 100) / 100;
     if (gap <= 0) { remove(); return; }
     // Relevans utifrån korgen
-    var inCart = {}, hasMen = false, hasWatch = false, silver = false;
+    var inCart = {}, hasMen = false, hasWatch = false, hasJewel = false, silver = false;
     items.forEach(function (it) {
       var a = it.article || {}, nr = String(a.articleNumber || it.articleNumber || '').toUpperCase();
       inCart[nr] = 1;
       var url = (a.url && (a.url[l] || a.url.sv || a.url.en)) || '';
       if (WATCH_NR.test(nr)) { hasWatch = true; if (MEN_URL.test(url)) hasMen = true; }
+      if (/^K-/.test(nr)) hasJewel = true;
       if (/silver|argent|silber|zilver|hopea|s[oø]lv/i.test(JSON.stringify(a.name || ''))) silver = true;
     });
-    var pool = hasWatch ? (hasMen ? L.MENW.concat(L.JEWEL) : L.JEWEL) : (silver ? L.SILVER_J : L.GOLD_J);
+    var pool = hasWatch ? (hasMen ? L.MENW : L.WOMENW).concat(L.JEWEL)
+      : hasJewel ? (silver ? L.SILVER_J : L.GOLD_J).concat(L.WOMENW)
+      : L.MENW.concat(L.WOMENW, L.JEWEL);
     var k = [cur, Math.round(gap), ratio.toFixed(3), Object.keys(inCart).sort().join(','), hasMen ? 'm' : '', silver ? 's' : ''].join('|');
     var anchor = null, slots = document.querySelectorAll('.slot--checkout-cart-summary');
     for (var i = 0; i < slots.length; i++) if (slots[i].offsetParent !== null) { anchor = slots[i]; break; }
@@ -2238,7 +2243,7 @@ window.prydligtImg = function (u, w, q) {
     if (loading) return;
     loading = true;
     var get = cache[pool.join(',')] ? Promise.resolve(cache[pool.join(',')]) :
-      rpc('Article.list', [['articleNumber', 'name', 'price', 'images', 'isBuyable'], { filters: { articleNumber: { 'in': pool } }, limit: 80 }])
+      rpc('Article.list', [['articleNumber', 'name', 'price', 'images', 'isBuyable'], { filters: { articleNumber: { 'in': pool } }, limit: 120 }])
         .then(function (r) { cache[pool.join(',')] = r || []; return cache[pool.join(',')]; });
     get.then(function (res) {
       var by = {};
