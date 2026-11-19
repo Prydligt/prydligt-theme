@@ -2271,7 +2271,7 @@ body.checkout .p-fill__b { flex: none; border: 1px solid #111; background: #fff;
 body.checkout .p-fill__b:disabled { opacity: .7; cursor: default; }
 /* Smal spalt (kassans sidokolumn på dator): knappen under namn/pris i stället för bredvid */
 body.checkout .p-fill { container-type: inline-size; }
-@container (max-width: 340px) {
+@container (max-width: 300px) {
   body.checkout .p-fill__r { flex-wrap: wrap; row-gap: 6px; }
   body.checkout .p-fill__t { flex-basis: calc(100% - 62px); }
   body.checkout .p-fill__b { margin-left: 62px; }
