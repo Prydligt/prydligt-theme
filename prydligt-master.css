@@ -2269,3 +2269,10 @@ body.checkout .p-fill__t { flex: 1 1 0; min-width: 0; font-size: 12.5px; line-he
 body.checkout .p-fill__t b { display: block; font-size: 13px; margin-top: 2px; }
 body.checkout .p-fill__b { flex: none; border: 1px solid #111; background: #fff; color: #111; border-radius: 6px; padding: 7px 10px; font: 600 12px/1.2 inherit; white-space: nowrap; cursor: pointer; }
 body.checkout .p-fill__b:disabled { opacity: .7; cursor: default; }
+/* Smal spalt (kassans sidokolumn på dator): knappen under namn/pris i stället för bredvid */
+body.checkout .p-fill { container-type: inline-size; }
+@container (max-width: 340px) {
+  body.checkout .p-fill__r { flex-wrap: wrap; row-gap: 6px; }
+  body.checkout .p-fill__t { flex-basis: calc(100% - 62px); }
+  body.checkout .p-fill__b { margin-left: 62px; }
+}
