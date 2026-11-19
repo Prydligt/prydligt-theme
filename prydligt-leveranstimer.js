@@ -2071,7 +2071,7 @@ window.prydligtImg = function (u, w, q) {
   /* --- Aktuella serier: colors.json byggs varje natt i GitHub (tools/build-colors.mjs) --- */
   var DYN = null;
   function loadGroups() {
-    fetch('https://cdn.jsdelivr.net/gh/Prydligt/prydligt-theme@main/colors.json')
+    fetch('https://cdn.jsdelivr.net/gh/Prydligt/prydligt-theme@main/colors.json', { cache: 'no-cache' })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) {
         if (!j || !j.groups || j.groups.length < 50) return;
