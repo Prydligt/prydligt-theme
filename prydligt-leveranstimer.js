@@ -2236,6 +2236,11 @@ window.prydligtImg = function (u, w, q) {
     var pool = hasWatch ? (hasMen ? L.MENW : L.WOMENW).concat(L.JEWEL)
       : hasJewel ? (silver ? L.SILVER_J : L.GOLD_J).concat(L.WOMENW)
       : L.MENW.concat(L.WOMENW, L.JEWEL);
+    // Reserv när gapet är stort (t.ex. Norge 800 NOK): dyrare klockor/smartklockor som ensamma räcker.
+    var BIG = ['X-1-25','X-1-26','X-1-27','X-1-28','C-2-6','XX-47-2','XX-47-4','XX-47-4-steel','FF-9-4','BB-3-11','P-5-1']
+      .concat(hasMen ? L.MENW : hasWatch ? L.WOMENW : L.MENW.concat(L.WOMENW))
+      .filter(function (n, i, arr) { return pool.indexOf(n) < 0 && arr.indexOf(n) === i; });
+    var all = pool.concat(BIG);
     var k = [cur, Math.round(gap), ratio.toFixed(3), Object.keys(inCart).sort().join(','), hasMen ? 'm' : '', silver ? 's' : ''].join('|');
     var anchor = null, slots = document.querySelectorAll('.slot--checkout-cart-summary');
     for (var i = 0; i < slots.length; i++) if (slots[i].offsetParent !== null) { anchor = slots[i]; break; }
@@ -2244,15 +2249,20 @@ window.prydligtImg = function (u, w, q) {
     if (box && key === k) { if (box.parentNode !== anchor) anchor.insertBefore(box, after ? after.nextSibling : anchor.firstChild); return; }
     if (loading) return;
     loading = true;
-    var get = cache[pool.join(',')] ? Promise.resolve(cache[pool.join(',')]) :
-      rpc('Article.list', [['articleNumber', 'name', 'price', 'images', 'isBuyable'], { filters: { articleNumber: { 'in': pool } }, limit: 120 }])
-        .then(function (r) { cache[pool.join(',')] = r || []; return cache[pool.join(',')]; });
+    var ck = all.join(',');
+    var get = cache[ck] ? Promise.resolve(cache[ck]) :
+      rpc('Article.list', [['articleNumber', 'name', 'price', 'images', 'isBuyable'], { filters: { articleNumber: { 'in': all } }, limit: 200 }])
+        .then(function (r) { cache[ck] = r || []; return cache[ck]; });
     get.then(function (res) {
       var by = {};
       res.forEach(function (a) { by[String(a.articleNumber).toUpperCase()] = a; });
       var need = Math.max(gap, floor), seen = {}, pick = [];
       for (var cs in cartSeries) seen[cs] = 1;   // inte samma modell i annan färg
-      pool.forEach(function (nr) {
+      function price(nr) { var a = by[nr.toUpperCase()]; return a && a.price && a.price.current && a.price.current[cur]; }
+      // Först de relevanta förslagen i ordning, sedan reserven – billigast som räcker först (minst överskott).
+      var order = pool.concat(BIG.filter(function (n) { return typeof price(n) === 'number'; })
+        .sort(function (x, y) { return price(x) - price(y); }));
+      order.forEach(function (nr) {
         var a = by[nr.toUpperCase()];
         if (!a || pick.length >= 3 || inCart[nr.toUpperCase()] || a.isBuyable === false || !a.images || !a.images[0]) return;
         var pr = a.price && a.price.current && a.price.current[cur];
