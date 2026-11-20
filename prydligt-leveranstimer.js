@@ -7,6 +7,10 @@
  * Visas bara när produkten finns i lager.
  */
 
+/* Gräns för fri frakt per marknad (sidans språk). ÄNDRA BARA HÄR – och samtidigt i Abicarts fraktinställningar,
+   annars visar mätare, korsförsäljning och kassans fyllare fel belopp. */
+window.PRYDLIGT_FREE = { sv: 600, nb: 700, no: 700, da: 449, fi: 59, de: 59, nl: 59 };
+
 /* Bildstorlek: Abicarts CDN skalar om bilder via ?max-width=…&fmt=webp.
    Originalen är 0,5–2 MB; en rund färgbild på 52 px behöver ~2 kB. Använd alltid denna. */
 window.prydligtImg = function (u, w, q) {
@@ -136,12 +140,12 @@ window.prydligtImg = function (u, w, q) {
   /* ---------- Leveransruta: fri frakt-mätare + nedräkning + beräknad leverans + öppet köp ---------- */
   // Per marknad (styrs av sidans språk): leveranstid i vardagar och gräns för fri frakt
   var MARKET = {
-    sv: { days: [1, 2], free: 600, cur: 'kr',  fmt: function (n) { return n + ' kr'; } },
-    nb: { days: [2, 4], free: 800, cur: 'kr',  fmt: function (n) { return n + ' kr'; } },
-    da: { days: [2, 4], free: 600, cur: 'kr',  fmt: function (n) { return n + ' kr'; } },
-    fi: { days: [2, 4], free: 80,  cur: 'EUR', fmt: function (n) { return n + ' €'; } },
-    de: { days: [2, 4], free: 80,  cur: 'EUR', fmt: function (n) { return n + ' €'; } },
-    nl: { days: [2, 4], free: 80,  cur: 'EUR', fmt: function (n) { return '€ ' + n; } }
+    sv: { days: [1, 2], free: window.PRYDLIGT_FREE.sv, cur: 'kr',  fmt: function (n) { return n + ' kr'; } },
+    nb: { days: [2, 4], free: window.PRYDLIGT_FREE.nb, cur: 'kr',  fmt: function (n) { return n + ' kr'; } },
+    da: { days: [2, 4], free: window.PRYDLIGT_FREE.da, cur: 'kr',  fmt: function (n) { return n + ' kr'; } },
+    fi: { days: [2, 4], free: window.PRYDLIGT_FREE.fi, cur: 'EUR', fmt: function (n) { return n + ' €'; } },
+    de: { days: [2, 4], free: window.PRYDLIGT_FREE.de, cur: 'EUR', fmt: function (n) { return n + ' €'; } },
+    nl: { days: [2, 4], free: window.PRYDLIGT_FREE.nl, cur: 'EUR', fmt: function (n) { return '€ ' + n; } }
   };
   var BOX = {
     sv: { free: 'Fri frakt', left: 'kvar', reached: 'Du har fri frakt', pre: 'Beställ inom', today: 'så skickas din order idag.', next: 'Beställ nu så skickas din order', est: 'Beräknad leverans mellan', and: 'och', ret: '99 dagars öppet köp', tomorrow: 'imorgon' ,
@@ -1090,7 +1094,7 @@ window.prydligtImg = function (u, w, q) {
       icons: ['Sendes fra Sverige', '99 dages fuld returret', '450.000+\nkunder'],
       head: 'Har du brug for mere information?',
       faq: [
-        ['Hvorn\u00e5r f\u00e5r jeg min ordre?', 'Bestiller du inden kl. 16 (svensk tid) p\u00e5 en hverdag, sender vi samme dag med PostNord. Levering tager 2\u20134 hverdage, og fragten er gratis over 600 kr. Ingen told inden for EU.'],
+        ['Hvorn\u00e5r f\u00e5r jeg min ordre?', 'Bestiller du inden kl. 16 (svensk tid) p\u00e5 en hverdag, sender vi samme dag med PostNord. Levering tager 2\u20134 hverdage, og fragten er gratis over ' + window.PRYDLIGT_FREE.da + ' kr. Ingen told inden for EU.'],
         ['Hvordan returnerer jeg?', 'Du har 99 dages fuld returret. Skriv til {mail} med dit ordrenummer, s\u00e5 hj\u00e6lper vi dig med returneringen.'],
         ['Hvilken garanti er inkluderet?', 'Alle produkter har 1 \u00e5rs garanti mod fabrikations- og materialefejl. Det p\u00e5virker ikke din lovpligtige reklamationsret.'],
       ]
@@ -1100,7 +1104,7 @@ window.prydligtImg = function (u, w, q) {
       head: 'Trenger du mer informasjon?',
       faq: [
         ['M\u00e5 jeg betale toll?', 'Nei. Vi er registrert i VOEC, s\u00e5 mva. er inkludert i prisen og du betaler ingen toll eller gebyrer ved levering.'],
-        ['N\u00e5r f\u00e5r jeg ordren min?', 'Bestiller du f\u00f8r kl. 16 (svensk tid) p\u00e5 en hverdag, sender vi samme dag med PostNord. Leveringen tar 2\u20134 virkedager, og frakten er gratis over 800 kr.'],
+        ['N\u00e5r f\u00e5r jeg ordren min?', 'Bestiller du f\u00f8r kl. 16 (svensk tid) p\u00e5 en hverdag, sender vi samme dag med PostNord. Leveringen tar 2\u20134 virkedager, og frakten er gratis over ' + window.PRYDLIGT_FREE.nb + ' kr.'],
         ['Hvordan returnerer jeg?', 'Du har 99 dagers \u00e5pent kj\u00f8p. Send en e-post til {mail} med ordrenummeret ditt, s\u00e5 hjelper vi deg med returen.'],
         ['Hvilken garanti er inkludert?', 'Alle produkter har 1 \u00e5rs garanti mot produksjons- og materialfeil. Det p\u00e5virker ikke reklamasjonsretten din etter loven.'],
       ]
@@ -1109,7 +1113,7 @@ window.prydligtImg = function (u, w, q) {
       icons: ['L\u00e4hetet\u00e4\u00e4n Ruotsista', '99 p\u00e4iv\u00e4n palautusoikeus', '450\u00a0000+\nasiakasta'],
       head: 'Tarvitsetko lis\u00e4tietoja?',
       faq: [
-        ['Milloin saan tilaukseni?', 'Kun tilaat arkip\u00e4iv\u00e4n\u00e4 ennen klo 16 (Ruotsin aikaa), l\u00e4het\u00e4mme saman p\u00e4iv\u00e4n aikana PostNordilla. Toimitus kest\u00e4\u00e4 2\u20134 arkip\u00e4iv\u00e4\u00e4, ja yli 80 \u20ac:n tilaukset toimitetaan ilmaiseksi. Ei tulleja EU:n sis\u00e4ll\u00e4.'],
+        ['Milloin saan tilaukseni?', 'Kun tilaat arkip\u00e4iv\u00e4n\u00e4 ennen klo 16 (Ruotsin aikaa), l\u00e4het\u00e4mme saman p\u00e4iv\u00e4n aikana PostNordilla. Toimitus kest\u00e4\u00e4 2\u20134 arkip\u00e4iv\u00e4\u00e4, ja yli ' + window.PRYDLIGT_FREE.fi + ' \u20ac:n tilaukset toimitetaan ilmaiseksi. Ei tulleja EU:n sis\u00e4ll\u00e4.'],
         ['Miten palautan tuotteen?', 'Sinulla on 99 p\u00e4iv\u00e4n palautusoikeus. L\u00e4het\u00e4 tilausnumerosi osoitteeseen {mail}, niin autamme palautuksessa.'],
         ['Mik\u00e4 takuu tuotteilla on?', 'Kaikilla tuotteilla on 1 vuoden takuu valmistus- ja materiaalivirheiden varalta. Se ei vaikuta lakis\u00e4\u00e4teisiin oikeuksiisi.'],
       ]
@@ -1118,7 +1122,7 @@ window.prydligtImg = function (u, w, q) {
       icons: ['Versand aus Schweden', '99 Tage R\u00fcckgaberecht', '450.000+\nKunden'],
       head: 'Brauchst du mehr Informationen?',
       faq: [
-        ['Wann kommt meine Bestellung?', 'Bestellst du werktags vor 16 Uhr, versenden wir noch am selben Tag mit PostNord. Die Lieferung dauert 2\u20134 Werktage, ab 80 \u20ac ist der Versand kostenlos. Kein Zoll innerhalb der EU.'],
+        ['Wann kommt meine Bestellung?', 'Bestellst du werktags vor 16 Uhr, versenden wir noch am selben Tag mit PostNord. Die Lieferung dauert 2\u20134 Werktage, ab ' + window.PRYDLIGT_FREE.de + ' \u20ac ist der Versand kostenlos. Kein Zoll innerhalb der EU.'],
         ['Wie funktioniert die R\u00fccksendung?', 'Du hast 99 Tage R\u00fcckgaberecht. Schreib uns mit deiner Bestellnummer an {mail}, dann helfen wir dir weiter.'],
         ['Welche Garantie ist enthalten?', 'Alle Produkte haben 1 Jahr Garantie auf Herstellungs- und Materialfehler. Deine gesetzlichen Gew\u00e4hrleistungsrechte bleiben davon unber\u00fchrt.'],
       ]
@@ -1127,7 +1131,7 @@ window.prydligtImg = function (u, w, q) {
       icons: ['Verzonden vanuit Zweden', '99 dagen bedenktijd', '450.000+\nklanten'],
       head: 'Meer informatie nodig?',
       faq: [
-        ['Wanneer krijg ik mijn bestelling?', 'Bestel je op een werkdag v\u00f3\u00f3r 16.00 uur, dan versturen we dezelfde dag met PostNord. Levering duurt 2\u20134 werkdagen en vanaf 80 \u20ac is de verzending gratis. Geen douanekosten binnen de EU.'],
+        ['Wanneer krijg ik mijn bestelling?', 'Bestel je op een werkdag v\u00f3\u00f3r 16.00 uur, dan versturen we dezelfde dag met PostNord. Levering duurt 2\u20134 werkdagen en vanaf ' + window.PRYDLIGT_FREE.nl + ' \u20ac is de verzending gratis. Geen douanekosten binnen de EU.'],
         ['Hoe stuur ik iets terug?', 'Je hebt 99 dagen bedenktijd. Mail je ordernummer naar {mail} en we helpen je met de retour.'],
         ['Welke garantie krijg ik?', 'Alle producten hebben 1 jaar garantie op fabricage- en materiaalfouten. Dit doet niets af aan je wettelijke rechten.'],
       ]
@@ -1661,7 +1665,7 @@ window.prydligtImg = function (u, w, q) {
   // Herrklockor att föreslå
   var MENW = 'KOM-12,NIB-19,NIB-105,NIB-14,KOM-4,KOM-2,KOM-133,G-38-6,NIB-116,KOM-5,NIB-2,KOM-277,NIB-12,NIB-16,G-35-5,NIB-23,NIB-17,KOM-276,NIB-15,KOM-275,NIB-34,KOM-274,NIB-106,KOM-7,KOM-3,NIB-18,KOM-278'.split(',');
   // Fri frakt-gräns per språk (samma som leveransrutan, avsnitt 1)
-  var FREE = { sv: 600, nb: 800, no: 800, da: 600, fi: 80, de: 80, nl: 80 };
+  var FREE = window.PRYDLIGT_FREE;
   var SHIP = {
     sv: ['Lägg till för %s till – då blir frakten gratis', 'Fri frakt på köpet', 'Klocka'],
     nb: ['Legg til for %s til – da blir frakten gratis', 'Gratis frakt på kjøpet', 'Klokke'],
@@ -2176,7 +2180,7 @@ window.prydligtImg = function (u, w, q) {
    =================================================================== */
 (function () {
   'use strict';
-  var FREE = { sv: 600, nb: 800, no: 800, da: 600, fi: 80, de: 80, nl: 80 };
+  var FREE = window.PRYDLIGT_FREE;
   var FLOOR = { SEK: 130, NOK: 130, DKK: 90, EUR: 13 };
   var T = {
     sv: ['Lägg till för %s till – då blir frakten gratis', 'Lägg till', 'Lägger till…', 'Tillagd ✓'],
@@ -2236,7 +2240,7 @@ window.prydligtImg = function (u, w, q) {
     var pool = hasWatch ? (hasMen ? L.MENW : L.WOMENW).concat(L.JEWEL)
       : hasJewel ? (silver ? L.SILVER_J : L.GOLD_J).concat(L.WOMENW)
       : L.MENW.concat(L.WOMENW, L.JEWEL);
-    // Reserv när gapet är stort (t.ex. Norge 800 NOK): dyrare klockor/smartklockor som ensamma räcker.
+    // Reserv när gapet är stort (t.ex. Norge): dyrare klockor/smartklockor som ensamma räcker.
     var BIG = ['X-1-25','X-1-26','X-1-27','X-1-28','C-2-6','XX-47-2','XX-47-4','XX-47-4-steel','FF-9-4','BB-3-11','P-5-1']
       .concat(hasMen ? L.MENW : hasWatch ? L.WOMENW : L.MENW.concat(L.WOMENW))
       .filter(function (n, i, arr) { return pool.indexOf(n) < 0 && arr.indexOf(n) === i; });
